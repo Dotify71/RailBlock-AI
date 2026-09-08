@@ -1,0 +1,14 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment & Secrets
+.env
+.venv
+env/
+venv/
+
+# System files
+.DS_Store
+*.log
