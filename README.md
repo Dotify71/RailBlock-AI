@@ -17,7 +17,7 @@ Currently, these requests are submitted independently into the **Block Deduction
 
 ---
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### 1. Run Python Optimizer Core (CLI Test)
 ```bash
