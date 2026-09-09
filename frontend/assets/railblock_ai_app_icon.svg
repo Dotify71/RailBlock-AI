@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#C8102E"/>
+  <g transform="translate(0, 0)">
+    <!-- Unified Shield Contour -->
+    <path d="M256 70 C340 70 410 100 410 180 C410 320 256 430 256 430 C256 430 102 320 102 180 C102 100 172 70 256 70 Z" fill="none" stroke="#FFFFFF" stroke-width="28" stroke-linejoin="round"/>
+    
+    <!-- Railway Tracks forming the core of shield -->
+    <!-- Left Rail -->
+    <path d="M185 150 L205 350" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
+    <!-- Right Rail -->
+    <path d="M327 150 L307 350" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
+    
+    <!-- Sleepers (Track Crossbars) -->
+    <line x1="192" y1="200" x2="320" y2="200" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"/>
+    <line x1="197" y1="250" x2="315" y2="250" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"/>
+    <line x1="201" y1="300" x2="311" y2="300" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"/>
+
+    <!-- Subtle AI Integrated Nodes on Tracks -->
+    <circle cx="197" cy="250" r="14" fill="#0D2B45" stroke="#FFFFFF" stroke-width="6"/>
+    <circle cx="315" cy="250" r="14" fill="#0D2B45" stroke="#FFFFFF" stroke-width="6"/>
+    <circle cx="256" cy="300" r="14" fill="#0D2B45" stroke="#FFFFFF" stroke-width="6"/>
+    
+    <!-- Subtle Connecting AI Vector Line -->
+    <path d="M197 250 L256 300 L315 250" fill="none" stroke="#0D2B45" stroke-width="8"/>
+  </g>
+</svg>
