@@ -21,7 +21,7 @@
     <!-- ========================================================================= -->
     <!-- 1. WELCOME LANDING PORTAL VIEW (DEFAULT SCREEN ON LOGIN / OPENING)        -->
     <!-- ========================================================================= -->
-    <div id="welcome-portal-view" class="min-h-screen flex flex-col justify-between bg-slate-900 text-white">
+    <div id="welcome-portal-view" class="min-h-screen flex flex-col justify-between bg-slate-100 text-slate-900">
         
         <!-- Welcome Top Header -->
         <header class="ir-header-blue py-4 px-6 border-b border-slate-800 shadow-md">
@@ -45,13 +45,13 @@
         <main class="max-w-6xl mx-auto px-4 py-12 flex-1 flex flex-col justify-center items-center text-center space-y-10">
             
             <div class="space-y-4 max-w-3xl">
-                <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/40 text-amber-400 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> RailBlock-AI Portal
+                <div class="inline-flex items-center gap-2 bg-amber-100 border border-amber-300 text-amber-900 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i> RailBlock-AI Portal
                 </div>
-                <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-white">
-                    Welcome to <span class="text-amber-400">RailBlock-AI</span>
+                <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-slate-900">
+                    Welcome to <span class="text-blue-800">RailBlock-AI</span>
                 </h1>
-                <p class="text-slate-300 text-sm sm:text-base font-semibold max-w-2xl mx-auto leading-relaxed">
+                <p class="text-slate-600 text-sm sm:text-base font-semibold max-w-2xl mx-auto leading-relaxed">
                     AI-Powered Automatic Railway Block Deduction & Train-by-Train Dispatch Optimization Engine for Indian Railways.
                 </p>
             </div>
@@ -60,64 +60,64 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full text-left">
                 
                 <!-- FEATURE 1 CHOICE CARD -->
-                <div onclick="openFeature('feature1')" class="bg-slate-800/90 hover:bg-slate-800 border-2 border-slate-700 hover:border-blue-500 rounded-3xl p-8 shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between space-y-6 group">
+                <div onclick="openFeature('feature1')" class="bg-white hover:bg-slate-50 border-2 border-slate-200 hover:border-blue-500 rounded-3xl p-8 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between space-y-6 group">
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
-                            <div class="w-14 h-14 bg-blue-600/20 border border-blue-500/40 rounded-2xl flex items-center justify-center text-blue-400 text-2xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <div class="w-14 h-14 bg-blue-100 border border-blue-200 rounded-2xl flex items-center justify-center text-blue-700 text-2xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                 <i class="fa-solid fa-layer-group"></i>
                             </div>
-                            <span class="bg-blue-500/10 text-blue-300 text-xs px-3 py-1 rounded-full font-bold border border-blue-500/30">
+                            <span class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-bold border border-blue-200">
                                 Feature 01
                             </span>
                         </div>
                         <div>
-                            <h2 class="text-2xl font-black text-white group-hover:text-amber-400 transition-colors">
+                            <h2 class="text-2xl font-black text-slate-900 group-hover:text-blue-700 transition-colors">
                                 Joint Maintenance Windows & Capacity Recovery
                             </h2>
-                            <p class="text-slate-300 text-xs mt-2.5 leading-relaxed">
-                                Groups multi-department track closure requests (<strong class="text-white">P-Way, TRD, & S&T</strong>) into unified joint windows. Eliminates redundant track shutdowns and recovers <strong class="text-emerald-400">40%+ lost line capacity</strong>.
+                            <p class="text-slate-600 text-xs mt-2.5 leading-relaxed">
+                                Groups multi-department track closure requests (<strong class="text-slate-900">P-Way, TRD, & S&T</strong>) into unified joint windows. Eliminates redundant track shutdowns and recovers <strong class="text-emerald-700 font-extrabold">40%+ lost line capacity</strong>.
                             </p>
                         </div>
                         <div class="flex flex-wrap gap-2 pt-2">
-                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">P-Way Track</span>
-                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">TRD Wires</span>
-                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">S&T Signals</span>
+                            <span class="bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-200">P-Way Track</span>
+                            <span class="bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-200">TRD Wires</span>
+                            <span class="bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-200">S&T Signals</span>
                         </div>
                     </div>
 
-                    <button class="w-full bg-blue-600 group-hover:bg-amber-500 group-hover:text-slate-950 text-white font-black py-3.5 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-lg">
+                    <button class="w-full bg-blue-700 group-hover:bg-amber-500 group-hover:text-slate-950 text-white font-black py-3.5 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-md">
                         <span>Launch Feature 1 Dashboard</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
 
                 <!-- FEATURE 2 CHOICE CARD -->
-                <div onclick="openFeature('feature2')" class="bg-slate-800/90 hover:bg-slate-800 border-2 border-slate-700 hover:border-amber-500 rounded-3xl p-8 shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between space-y-6 group">
+                <div onclick="openFeature('feature2')" class="bg-white hover:bg-slate-50 border-2 border-slate-200 hover:border-amber-500 rounded-3xl p-8 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between space-y-6 group">
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
-                            <div class="w-14 h-14 bg-amber-500/20 border border-amber-500/40 rounded-2xl flex items-center justify-center text-amber-400 text-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+                            <div class="w-14 h-14 bg-amber-100 border border-amber-300 rounded-2xl flex items-center justify-center text-amber-700 text-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
                                 <i class="fa-solid fa-train"></i>
                             </div>
-                            <span class="bg-amber-500/10 text-amber-300 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
+                            <span class="bg-amber-50 text-amber-800 text-xs px-3 py-1 rounded-full font-bold border border-amber-200">
                                 Feature 02
                             </span>
                         </div>
                         <div>
-                            <h2 class="text-2xl font-black text-white group-hover:text-amber-400 transition-colors">
+                            <h2 class="text-2xl font-black text-slate-900 group-hover:text-amber-600 transition-colors">
                                 Train-by-Train Maintenance Time Impact & Siding
                             </h2>
-                            <p class="text-slate-300 text-xs mt-2.5 leading-relaxed">
-                                Real-time <strong class="text-amber-300">"Where Is My Train"</strong> dispatcher engine. Analyzes exact maintenance zones, calculates loop line siding at Palwal (<strong class="text-white">PWL</strong>), and prevents cascading train delays.
+                            <p class="text-slate-600 text-xs mt-2.5 leading-relaxed">
+                                Real-time <strong class="text-slate-900">"Where Is My Train"</strong> dispatcher engine. Analyzes exact maintenance zones, calculates loop line siding at Palwal (<strong class="text-slate-900">PWL</strong>), and prevents cascading train delays.
                             </p>
                         </div>
                         <div class="flex flex-wrap gap-2 pt-2">
-                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">WIMT Style</span>
-                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">Loop Siding</span>
-                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">Overtake Directives</span>
+                            <span class="bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-200">WIMT Style</span>
+                            <span class="bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-200">Loop Siding</span>
+                            <span class="bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-200">Overtake Directives</span>
                         </div>
                     </div>
 
-                    <button class="w-full bg-amber-500 group-hover:bg-amber-400 text-slate-950 font-black py-3.5 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-lg">
+                    <button class="w-full bg-amber-500 group-hover:bg-amber-400 text-slate-950 font-black py-3.5 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-md">
                         <span>Launch Feature 2 Dashboard</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -128,7 +128,7 @@
         </main>
 
         <!-- Welcome Footer -->
-        <footer class="py-4 border-t border-slate-800 text-center text-xs text-slate-400 font-medium">
+        <footer class="py-4 bg-slate-200 border-t border-slate-300 text-center text-xs text-slate-600 font-semibold">
             Smart India Hackathon 2026 • Problem Statement SIH26027 • Ministry of Railways
         </footer>
 
