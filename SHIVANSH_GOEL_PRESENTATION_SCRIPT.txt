@@ -1,0 +1,84 @@
+================================================================================
+  RAILBLOCK-AI (SIH26027) — 4 to 5 MINUTE PRESENTATION PITCH SCRIPT
+  Presenter: Shivansh Goel | Team: NST | Category: Software (Ministry of Railways)
+================================================================================
+
+TIMING BREAKDOWN:
+- Screen 1 (Welcome Portal & Introduction): 45 Seconds (0:00 - 0:45)
+- Screen 2 (Feature 1 - Joint Windows & Capacity): 1 Minute 30 Seconds (0:45 - 2:15)
+- Screen 3 (Feature 2 - Where Is My Train Siding Engine): 1 Minute 45 Seconds (2:15 - 4:00)
+- Conclusion & Q&A Transition: 30 Seconds (4:00 - 4:30)
+
+--------------------------------------------------------------------------------
+SCREEN 1: WELCOME PORTAL LANDING SCREEN (0:00 - 0:45)
+--------------------------------------------------------------------------------
+[ACTION: Show Screen 1 - Welcome to RailBlock-AI Landing Portal]
+
+"Respected Judges and Evaluators, good morning. 
+
+I am Shivansh Goel, representing team NST. Today, we are proud to present RailBlock-AI—an Intelligent Automatic Railway Block Deduction & Train-by-Train Dispatch Optimization Engine built for Problem Statement SIH26027 under the Ministry of Railways.
+
+Indian Railways is the backbone of our nation's logistics, carrying millions of passengers and millions of tons of freight daily. However, track maintenance scheduling currently suffers from uncoordinated, departmental silos. 
+
+As you can see on our Welcome Portal, RailBlock-AI solves this through two powerful integrated engines:
+1. Joint Maintenance Window Clustering (Feature 1)
+2. Train-by-Train Impact & AI Siding Dispatcher (Feature 2)
+
+Let me now take you directly into Feature 1."
+
+
+--------------------------------------------------------------------------------
+SCREEN 2: FEATURE 1 — JOINT MAINTENANCE WINDOWS & CAPACITY (0:45 - 2:15)
+--------------------------------------------------------------------------------
+[ACTION: Click 'Launch Feature 1 Dashboard']
+
+"Here on Feature 1, we address the root cause of lost line capacity on Indian Railways.
+
+Currently, three distinct departments demand track maintenance:
+- P-Way for track and rail repair,
+- TRD for overhead electrification wires, and
+- S&T for signals and interlocking.
+
+Under the current Block Deduction Management System (BDMS), each department requests separate track closures at different times of the day. As shown on the left under 'Unoptimized Requests', this results in 5 separate shutdowns totalling 14 hours of blocked track on a single section.
+
+RailBlock-AI uses AI Constraint Optimization to merge these overlapping requests. Look at the green card on the right: RailBlock-AI consolidates all three departments into unified 'Joint Maintenance Windows'. 
+
+The real-world impact is massive:
+- We achieve a 42.9% Recovery in Section Track Capacity.
+- We eliminate 6.0 Hours of unnecessary track downtime.
+- Maintenance crews complete track, electrical, and signal repairs simultaneously during a single block window instead of stopping traffic three separate times.
+
+Now, let us proceed to Feature 2 to see how this impacts individual train movements."
+
+
+--------------------------------------------------------------------------------
+SCREEN 3: FEATURE 2 — TRAIN-BY-TRAIN IMPACT & SIDING ENGINE (2:15 - 4:00)
+--------------------------------------------------------------------------------
+[ACTION: Click 'Proceed to Feature 2' or 'Launch Feature 2']
+
+"Feature 2 is our 'Where Is My Train' styled live operational dispatcher engine. It answers the critical question: 'How does track maintenance affect every individual train on this route?'
+
+At the top, our Section Track Maintenance Map visualizes the active maintenance zones—such as BLK-001 on the Delhi-Mathura section and BLK-002 on the Agra-Gwalior corridor.
+
+Below, RailBlock-AI tracks every train in real time. Notice the contrast between manual dispatching and RailBlock-AI:
+
+1. For High-Priority Express Trains—like Train 12952 Rajdhani Express and Train 12004 Shatabdi Express—manual BDMS would cause 30 to 45 minutes of cascading delay due to repeated signal holds. RailBlock-AI assigns green-wave precedence, keeping them ON TIME with 0 minutes delay.
+
+2. How do we achieve this? Look at Train G-501, a Goods Freight train. When RailBlock-AI detects high-priority express trains trailing behind a slower freight train near an active maintenance zone, our AI Engine automatically issues a loop-line siding directive.
+
+As highlighted in our live directive badge: Train G-501 is instructed to hold on Palwal Loop Line 2 for 12 minutes. This single automated move allows the Rajdhani and Shatabdi express trains to overtake on Main Line 1, preventing 50 minutes of cascading delay across the entire corridor.
+
+Furthermore, evaluators can click '+ Add Track Block' or 'Simulate Train Delay' to test live AI recalculations in real time during testing."
+
+
+--------------------------------------------------------------------------------
+CONCLUSION & Q&A TRANSITION (4:00 - 4:30)
+--------------------------------------------------------------------------------
+[ACTION: Return to Welcome Screen or show Summary Metrics]
+
+"To summarize: RailBlock-AI moves Indian Railways from reactive, manual block allocation to dynamic, AI-driven track optimization.
+
+We recover 42.9% of lost line capacity, eliminate 6 hours of daily track detention, and prevent cascading train delays without spending billions on new physical track infrastructure.
+
+Thank you for your time, and we are now ready for your questions!"
+================================================================================
