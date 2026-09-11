@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Where Is My Track | Indian Railways Dual-Engine AI</title>
+    <title>RailBlock-AI Portal | Indian Railways AI Block Optimization</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,228 +12,368 @@
     <style>
         body { font-family: 'Public Sans', sans-serif; background-color: #f1f5f9; color: #0f172a; }
         .ir-header-blue { background-color: #0b2545; }
-        .tab-active { border-bottom: 3.5px solid #f59e0b; color: #0b2545; font-weight: 800; }
         .glow-green { box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); }
+        .glow-amber { box-shadow: 0 0 20px rgba(245, 158, 11, 0.25); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Top Indian Railways Header -->
-    <header class="ir-header-blue text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
-            
-            <!-- Logo & Title -->
-            <div class="flex items-center gap-3">
-                <div class="bg-amber-500 text-slate-950 p-2.5 rounded-xl font-black text-xl shadow">
-                    <i class="fa-solid fa-train"></i>
-                </div>
-                <div>
-                    <div class="flex items-center gap-2">
+    <!-- ========================================================================= -->
+    <!-- 1. WELCOME LANDING PORTAL VIEW (DEFAULT SCREEN ON LOGIN / OPENING)        -->
+    <!-- ========================================================================= -->
+    <div id="welcome-portal-view" class="min-h-screen flex flex-col justify-between bg-slate-900 text-white">
+        
+        <!-- Welcome Top Header -->
+        <header class="ir-header-blue py-4 px-6 border-b border-slate-800 shadow-md">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-amber-500 text-slate-950 p-2.5 rounded-xl font-black text-xl shadow glow-amber">
+                        <i class="fa-solid fa-train"></i>
+                    </div>
+                    <div>
                         <h1 class="text-xl font-black tracking-wider uppercase text-white">INDIAN RAILWAYS</h1>
-                        <span class="bg-amber-500/20 text-amber-300 text-xs px-2 py-0.5 rounded font-bold border border-amber-500/40">SIH26027</span>
-                    </div>
-                    <p class="text-slate-300 text-xs font-semibold">RailBlock-AI • Train-by-Train Maintenance Impact Engine</p>
-                </div>
-            </div>
-
-            <!-- Where is my train Station Selector -->
-            <div class="flex items-center bg-slate-900/90 rounded-xl p-2 border border-slate-700 text-xs gap-2 flex-wrap shadow-inner">
-                <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-                    <i class="fa-solid fa-circle-dot text-emerald-400 text-xs"></i>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">From (Source)</span>
-                        <select id="select-from" onchange="onRouteChanged()" class="bg-transparent font-black text-xs text-white focus:outline-none cursor-pointer pr-1">
-                            <option value="NDLS" class="bg-slate-900 text-white">[NDLS] New Delhi</option>
-                            <option value="MTJ" class="bg-slate-900 text-white">[MTJ] Mathura Jn</option>
-                            <option value="AGC" class="bg-slate-900 text-white">[AGC] Agra Cantt</option>
-                        </select>
+                        <p class="text-slate-300 text-xs font-semibold">Ministry of Railways • SIH26027</p>
                     </div>
                 </div>
+                <span class="bg-amber-500/20 text-amber-300 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/40">
+                    Smart India Hackathon 2026
+                </span>
+            </div>
+        </header>
 
-                <div class="text-amber-400 px-1 font-bold text-sm">
-                    <i class="fa-solid fa-arrow-right-long"></i>
+        <!-- Welcome Hero Body & Option Cards -->
+        <main class="max-w-6xl mx-auto px-4 py-12 flex-1 flex flex-col justify-center items-center text-center space-y-10">
+            
+            <div class="space-y-4 max-w-3xl">
+                <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/40 text-amber-400 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> RailBlock-AI Portal
                 </div>
+                <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-white">
+                    Welcome to <span class="text-amber-400">RailBlock-AI</span>
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base font-semibold max-w-2xl mx-auto leading-relaxed">
+                    AI-Powered Automatic Railway Block Deduction & Train-by-Train Dispatch Optimization Engine for Indian Railways.
+                </p>
+            </div>
 
-                <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-                    <i class="fa-solid fa-location-dot text-red-400 text-xs"></i>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">To (Destination)</span>
-                        <select id="select-to" onchange="onRouteChanged()" class="bg-transparent font-black text-xs text-white focus:outline-none cursor-pointer pr-1">
-                            <option value="GWL" class="bg-slate-900 text-white" selected>[GWL] Gwalior Jn</option>
-                            <option value="MTJ" class="bg-slate-900 text-white">[MTJ] Mathura Jn</option>
-                            <option value="JHS" class="bg-slate-900 text-white">[JHS] Jhansi Jn</option>
-                        </select>
+            <!-- 2 FEATURE CHOICE CARDS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full text-left">
+                
+                <!-- FEATURE 1 CHOICE CARD -->
+                <div onclick="openFeature('feature1')" class="bg-slate-800/90 hover:bg-slate-800 border-2 border-slate-700 hover:border-blue-500 rounded-3xl p-8 shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between space-y-6 group">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="w-14 h-14 bg-blue-600/20 border border-blue-500/40 rounded-2xl flex items-center justify-center text-blue-400 text-2xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <span class="bg-blue-500/10 text-blue-300 text-xs px-3 py-1 rounded-full font-bold border border-blue-500/30">
+                                Feature 01
+                            </span>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black text-white group-hover:text-amber-400 transition-colors">
+                                Joint Maintenance Windows & Capacity Recovery
+                            </h2>
+                            <p class="text-slate-300 text-xs mt-2.5 leading-relaxed">
+                                Groups multi-department track closure requests (<strong class="text-white">P-Way, TRD, & S&T</strong>) into unified joint windows. Eliminates redundant track shutdowns and recovers <strong class="text-emerald-400">40%+ lost line capacity</strong>.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">P-Way Track</span>
+                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">TRD Wires</span>
+                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">S&T Signals</span>
+                        </div>
                     </div>
+
+                    <button class="w-full bg-blue-600 group-hover:bg-amber-500 group-hover:text-slate-950 text-white font-black py-3.5 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-lg">
+                        <span>Launch Feature 1 Dashboard</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                 </div>
 
-                <button onclick="onRouteChanged()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-3 py-2 rounded-lg font-black text-xs transition-all flex items-center gap-1 shadow">
-                    <i class="fa-solid fa-magnifying-glass"></i> Calculate Route
-                </button>
+                <!-- FEATURE 2 CHOICE CARD -->
+                <div onclick="openFeature('feature2')" class="bg-slate-800/90 hover:bg-slate-800 border-2 border-slate-700 hover:border-amber-500 rounded-3xl p-8 shadow-2xl transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer flex flex-col justify-between space-y-6 group">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="w-14 h-14 bg-amber-500/20 border border-amber-500/40 rounded-2xl flex items-center justify-center text-amber-400 text-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-colors">
+                                <i class="fa-solid fa-train"></i>
+                            </div>
+                            <span class="bg-amber-500/10 text-amber-300 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/30">
+                                Feature 02
+                            </span>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-black text-white group-hover:text-amber-400 transition-colors">
+                                Train-by-Train Maintenance Time Impact & Siding
+                            </h2>
+                            <p class="text-slate-300 text-xs mt-2.5 leading-relaxed">
+                                Real-time <strong class="text-amber-300">"Where Is My Train"</strong> dispatcher engine. Analyzes exact maintenance zones, calculates loop line siding at Palwal (<strong class="text-white">PWL</strong>), and prevents cascading train delays.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">WIMT Style</span>
+                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">Loop Siding</span>
+                            <span class="bg-slate-900 text-slate-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700">Overtake Directives</span>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-amber-500 group-hover:bg-amber-400 text-slate-950 font-black py-3.5 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-lg">
+                        <span>Launch Feature 2 Dashboard</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
             </div>
 
-        </div>
-    </header>
+        </main>
 
-    <!-- Sub Status Bar -->
-    <div class="bg-amber-500 text-slate-950 font-bold text-xs py-2 px-4 shadow-sm border-b border-amber-600">
-        <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-2">
-            <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></span>
-                <span>SELECTED ROUTE: <strong id="route-title-bar">New Delhi (NDLS) → Gwalior Jn (GWL)</strong></span>
-            </div>
-            <div class="flex gap-4">
-                <span>Route Capacity Saved: <strong id="bar-capacity" class="underline">42.9%</strong></span>
-                <span>Detention Prevented: <strong id="bar-detention" class="underline">6.0 Hours</strong></span>
-            </div>
-        </div>
+        <!-- Welcome Footer -->
+        <footer class="py-4 border-t border-slate-800 text-center text-xs text-slate-400 font-medium">
+            Smart India Hackathon 2026 • Problem Statement SIH26027 • Ministry of Railways
+        </footer>
+
     </div>
 
-    <!-- Navigation Tabs -->
-    <div class="bg-white border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 flex gap-8">
-            <button id="tab-btn-feature1" onclick="switchTab('feature1')" class="py-3.5 px-2 text-sm font-bold text-slate-600 tab-active flex items-center gap-2 transition-all">
-                <i class="fa-solid fa-layer-group text-blue-700"></i> Feature 1: Joint Maintenance Windows & Capacity Recovery
-            </button>
-            <button id="tab-btn-feature2" onclick="switchTab('feature2')" class="py-3.5 px-2 text-sm font-bold text-slate-600 flex items-center gap-2 transition-all">
-                <i class="fa-solid fa-train text-amber-600"></i> Feature 2: Train-by-Train Maintenance Time Impact & Siding
-            </button>
-        </div>
-    </div>
+    <!-- ========================================================================= -->
+    <!-- 2. MAIN DASHBOARD VIEW (FEATURE 1 / FEATURE 2)                            -->
+    <!-- ========================================================================= -->
+    <div id="main-dashboard-view" class="min-h-screen flex flex-col hidden">
 
-    <!-- Main Content Body -->
-    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
+        <!-- Top Indian Railways Header -->
+        <header class="ir-header-blue text-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+                
+                <!-- Logo & Title & Back to Welcome Portal Button -->
+                <div class="flex items-center gap-3">
+                    <button onclick="showWelcomePortal()" class="bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-amber-200 border border-slate-700 px-3 py-2 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow">
+                        <i class="fa-solid fa-arrow-left"></i> Welcome Portal
+                    </button>
+                    
+                    <div class="flex items-center gap-2">
+                        <div class="bg-amber-500 text-slate-950 p-2 rounded-lg font-black text-lg shadow">
+                            <i class="fa-solid fa-train"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-lg font-black tracking-wider uppercase text-white">INDIAN RAILWAYS</h1>
+                                <span class="bg-amber-500/20 text-amber-300 text-[10px] px-2 py-0.5 rounded font-bold border border-amber-500/40">SIH26027</span>
+                            </div>
+                            <p id="dashboard-subtitle" class="text-slate-300 text-[11px] font-semibold">RailBlock-AI Engine</p>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- ========================================== -->
-        <!-- CLEAN SECTION TRACK ROUTE MAP              -->
-        <!-- ========================================== -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <!-- Where is my train Station Selector -->
+                <div class="flex items-center bg-slate-900/90 rounded-xl p-2 border border-slate-700 text-xs gap-2 flex-wrap shadow-inner">
+                    <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
+                        <i class="fa-solid fa-circle-dot text-emerald-400 text-xs"></i>
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">From (Source)</span>
+                            <select id="select-from" onchange="onRouteChanged()" class="bg-transparent font-black text-xs text-white focus:outline-none cursor-pointer pr-1">
+                                <option value="NDLS" class="bg-slate-900 text-white">[NDLS] New Delhi</option>
+                                <option value="MTJ" class="bg-slate-900 text-white">[MTJ] Mathura Jn</option>
+                                <option value="AGC" class="bg-slate-900 text-white">[AGC] Agra Cantt</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-amber-400 px-1 font-bold text-sm">
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                    </div>
+
+                    <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
+                        <i class="fa-solid fa-location-dot text-red-400 text-xs"></i>
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">To (Destination)</span>
+                            <select id="select-to" onchange="onRouteChanged()" class="bg-transparent font-black text-xs text-white focus:outline-none cursor-pointer pr-1">
+                                <option value="GWL" class="bg-slate-900 text-white" selected>[GWL] Gwalior Jn</option>
+                                <option value="MTJ" class="bg-slate-900 text-white">[MTJ] Mathura Jn</option>
+                                <option value="JHS" class="bg-slate-900 text-white">[JHS] Jhansi Jn</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="onRouteChanged()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-3 py-2 rounded-lg font-black text-xs transition-all flex items-center gap-1 shadow">
+                        <i class="fa-solid fa-magnifying-glass"></i> Calculate Route
+                    </button>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- Sub Status Bar -->
+        <div class="bg-amber-500 text-slate-950 font-bold text-xs py-2 px-4 shadow-sm border-b border-amber-600">
+            <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-2">
                 <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-route text-blue-700 text-lg"></i>
-                    <h2 class="font-bold text-slate-800 text-base">Section Track Maintenance Map</h2>
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></span>
+                    <span>SELECTED ROUTE: <strong id="route-title-bar">New Delhi (NDLS) → Gwalior Jn (GWL)</strong></span>
                 </div>
-                <span id="route-badge-text" class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-bold border border-blue-200">NDLS → GWL Route Map</span>
-            </div>
-
-            <!-- Crisp Clean Section Line -->
-            <div id="dynamic-track-map" class="bg-slate-50 p-6 rounded-xl border border-slate-200 overflow-x-auto">
-                <!-- Dynamically rendered via JS -->
+                <div class="flex gap-4">
+                    <span>Route Capacity Saved: <strong id="bar-capacity" class="underline">42.9%</strong></span>
+                    <span>Detention Prevented: <strong id="bar-detention" class="underline">6.0 Hours</strong></span>
+                </div>
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- FEATURE 1 CONTENT TAB                      -->
-        <!-- ========================================== -->
-        <div id="feature1-content" class="space-y-6">
+        <!-- Main Content Body -->
+        <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
 
-            <!-- Metrics Overview Cards -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-emerald-600">
-                    <p class="text-xs text-slate-500 font-bold uppercase">Section Capacity Recovery</p>
-                    <h2 id="metric-capacity" class="text-2xl md:text-3xl font-extrabold text-emerald-700 mt-1">42.9%</h2>
-                    <p class="text-xs text-slate-500 mt-1 font-medium"><i class="fa-solid fa-circle-up text-emerald-600"></i> vs manual BDMS</p>
-                </div>
-                
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-blue-600">
-                    <p class="text-xs text-slate-500 font-bold uppercase">Track Shutdown Saved</p>
-                    <h2 id="metric-detention" class="text-2xl md:text-3xl font-extrabold text-blue-800 mt-1">6.0 Hours</h2>
-                    <p class="text-xs text-slate-500 mt-1 font-medium"><i class="fa-solid fa-clock text-blue-600"></i> Section downtime eliminated</p>
-                </div>
-
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-amber-500">
-                    <p class="text-xs text-slate-500 font-bold uppercase">Joint Maintenance Blocks</p>
-                    <h2 id="metric-blocks" class="text-2xl md:text-3xl font-extrabold text-amber-700 mt-1">2 Joint Blocks</h2>
-                    <p class="text-xs text-slate-500 mt-1 font-medium">Grouped across selected route</p>
-                </div>
-
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-purple-600">
-                    <p class="text-xs text-slate-500 font-bold uppercase">Route Distance & Stops</p>
-                    <h2 id="metric-distance" class="text-lg md:text-xl font-bold text-purple-900 mt-2">259 KM • 3 Stations</h2>
-                    <p class="text-xs text-slate-500 mt-1 font-medium">Active Track Sections</p>
-                </div>
-            </div>
-
-            <!-- Before vs After Schedule View -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                
-                <!-- BEFORE: Unoptimized BDMS -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
-                    <div class="flex justify-between items-center border-b border-slate-200 pb-3">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-triangle-exclamation text-red-600 text-lg"></i>
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-base">Unoptimized Requests (BDMS)</h3>
-                                <p class="text-xs text-slate-500">Individual department entries on selected route</p>
-                            </div>
-                        </div>
-                        <span id="unopt-summary-badge" class="bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded font-bold border border-red-300">5 Shutdowns (14h)</span>
+            <!-- ========================================== -->
+            <!-- CLEAN SECTION TRACK ROUTE MAP              -->
+            <!-- ========================================== -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-route text-blue-700 text-lg"></i>
+                        <h2 class="font-bold text-slate-800 text-base">Section Track Maintenance Map</h2>
                     </div>
-
-                    <div id="unoptimized-container" class="space-y-2.5"></div>
+                    <span id="route-badge-text" class="bg-blue-50 text-blue-700 text-xs px-3 py-1 rounded-full font-bold border border-blue-200">NDLS → GWL Route Map</span>
                 </div>
 
-                <!-- AFTER: AI Consolidated Schedule -->
-                <div class="bg-white rounded-xl shadow-sm border-2 border-emerald-400 p-5 space-y-4">
-                    <div class="flex justify-between items-center border-b border-slate-200 pb-3">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
-                            <div>
-                                <h3 class="font-bold text-emerald-900 text-base">RailBlock-AI Joint Schedule</h3>
-                                <p class="text-xs text-emerald-700">Unified consolidated maintenance blocks</p>
-                            </div>
-                        </div>
-                        <span id="opt-summary-badge" class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded font-bold border border-emerald-300">2 Joint Blocks (8h)</span>
-                    </div>
-
-                    <div id="optimized-container" class="space-y-2.5"></div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- ========================================================================= -->
-        <!-- FEATURE 2 CONTENT TAB: TRAIN-BY-TRAIN MAINTENANCE TIME IMPACT & SIDING    -->
-        <!-- ========================================================================= -->
-        <div id="feature2-content" class="hidden space-y-6">
-
-            <!-- Banner -->
-            <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 rounded-2xl shadow-md border-l-4 border-amber-500 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <span class="bg-amber-500 text-slate-950 text-xs font-black px-2.5 py-1 rounded uppercase tracking-wider">Train-by-Train Impact Engine</span>
-                    <h2 class="text-2xl font-black mt-2 text-white">How Track Maintenance Affects Every Train on This Route</h2>
-                    <p class="text-slate-300 text-xs mt-1">Shows exact maintenance zone location, time delay cost per train, and AI overtake siding directives.</p>
-                </div>
-                <div class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 p-4 rounded-xl text-center min-w-[180px]">
-                    <p class="text-xs font-bold uppercase text-slate-300">Cascading Delay Prevented</p>
-                    <h3 id="feature2-metric-saved" class="text-3xl font-black text-emerald-400 mt-0.5">50 Mins</h3>
-                    <p class="text-[11px] text-slate-300">Saved across express trains</p>
-                </div>
-            </div>
-
-            <!-- TRAIN-BY-TRAIN INDIVIDUAL CARDS LIST (WHERE IS MY TRAIN STYLE) -->
-            <div class="space-y-4">
-                <div class="flex justify-between items-center px-1">
-                    <h3 class="font-black text-slate-800 text-base flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-blue-700"></i> Individual Train Maintenance Impact Breakdown
-                    </h3>
-                    <span class="text-xs font-bold text-slate-500">Selected Route: New Delhi → Gwalior</span>
-                </div>
-
-                <div id="train-cards-list" class="space-y-4">
+                <!-- Crisp Clean Section Line -->
+                <div id="dynamic-track-map" class="bg-slate-50 p-6 rounded-xl border border-slate-200 overflow-x-auto">
                     <!-- Dynamically rendered via JS -->
                 </div>
             </div>
 
-        </div>
+            <!-- ========================================== -->
+            <!-- FEATURE 1 CONTENT PAGE                     -->
+            <!-- ========================================== -->
+            <div id="feature1-content" class="space-y-6">
 
-    </main>
+                <!-- Metrics Overview Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-emerald-600">
+                        <p class="text-xs text-slate-500 font-bold uppercase">Section Capacity Recovery</p>
+                        <h2 id="metric-capacity" class="text-2xl md:text-3xl font-extrabold text-emerald-700 mt-1">42.9%</h2>
+                        <p class="text-xs text-slate-500 mt-1 font-medium"><i class="fa-solid fa-circle-up text-emerald-600"></i> vs manual BDMS</p>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-blue-600">
+                        <p class="text-xs text-slate-500 font-bold uppercase">Track Shutdown Saved</p>
+                        <h2 id="metric-detention" class="text-2xl md:text-3xl font-extrabold text-blue-800 mt-1">6.0 Hours</h2>
+                        <p class="text-xs text-slate-500 mt-1 font-medium"><i class="fa-solid fa-clock text-blue-600"></i> Section downtime eliminated</p>
+                    </div>
 
-    <!-- Footer -->
-    <footer class="bg-slate-800 text-slate-300 py-3 text-center text-xs font-semibold border-t border-slate-700">
-        Smart India Hackathon 2026 • SIH26027 • Ministry of Railways • Indian Railways Dynamic Route Optimizer
-    </footer>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-amber-500">
+                        <p class="text-xs text-slate-500 font-bold uppercase">Joint Maintenance Blocks</p>
+                        <h2 id="metric-blocks" class="text-2xl md:text-3xl font-extrabold text-amber-700 mt-1">2 Joint Blocks</h2>
+                        <p class="text-xs text-slate-500 mt-1 font-medium">Grouped across selected route</p>
+                    </div>
 
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-t-4 border-t-purple-600">
+                        <p class="text-xs text-slate-500 font-bold uppercase">Route Distance & Stops</p>
+                        <h2 id="metric-distance" class="text-lg md:text-xl font-bold text-purple-900 mt-2">259 KM • 3 Stations</h2>
+                        <p class="text-xs text-slate-500 mt-1 font-medium">Active Track Sections</p>
+                    </div>
+                </div>
+
+                <!-- Before vs After Schedule View -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- BEFORE: Unoptimized BDMS -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-triangle-exclamation text-red-600 text-lg"></i>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-base">Unoptimized Requests (BDMS)</h3>
+                                    <p class="text-xs text-slate-500">Individual department entries on selected route</p>
+                                </div>
+                            </div>
+                            <span id="unopt-summary-badge" class="bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded font-bold border border-red-300">5 Shutdowns (14h)</span>
+                        </div>
+
+                        <div id="unoptimized-container" class="space-y-2.5"></div>
+                    </div>
+
+                    <!-- AFTER: AI Consolidated Schedule -->
+                    <div class="bg-white rounded-xl shadow-sm border-2 border-emerald-400 p-5 space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
+                                <div>
+                                    <h3 class="font-bold text-emerald-900 text-base">RailBlock-AI Joint Schedule</h3>
+                                    <p class="text-xs text-emerald-700">Unified consolidated maintenance blocks</p>
+                                </div>
+                            </div>
+                            <span id="opt-summary-badge" class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded font-bold border border-emerald-300">2 Joint Blocks (8h)</span>
+                        </div>
+
+                        <div id="optimized-container" class="space-y-2.5"></div>
+                    </div>
+
+                </div>
+
+                <!-- BOTTOM NAV BUTTON: SWITCH TO FEATURE 2 -->
+                <div class="pt-4 flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <button onclick="showWelcomePortal()" class="text-slate-600 hover:text-slate-900 font-bold text-xs flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-left"></i> Return to Welcome Screen
+                    </button>
+                    <button onclick="switchFeature('feature2')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow transition-all">
+                        <span>Proceed to Feature 2: Train-by-Train Impact & Siding</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- ========================================================================= -->
+            <!-- FEATURE 2 CONTENT PAGE: TRAIN-BY-TRAIN MAINTENANCE TIME IMPACT & SIDING   -->
+            <!-- ========================================================================= -->
+            <div id="feature2-content" class="hidden space-y-6">
+
+                <!-- Banner -->
+                <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 rounded-2xl shadow-md border-l-4 border-amber-500 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <span class="bg-amber-500 text-slate-950 text-xs font-black px-2.5 py-1 rounded uppercase tracking-wider">Train-by-Train Impact Engine</span>
+                        <h2 class="text-2xl font-black mt-2 text-white">How Track Maintenance Affects Every Train on This Route</h2>
+                        <p class="text-slate-300 text-xs mt-1">Shows exact maintenance zone location, time delay cost per train, and AI overtake siding directives.</p>
+                    </div>
+                    <div class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 p-4 rounded-xl text-center min-w-[180px]">
+                        <p class="text-xs font-bold uppercase text-slate-300">Cascading Delay Prevented</p>
+                        <h3 id="feature2-metric-saved" class="text-3xl font-black text-emerald-400 mt-0.5">50 Mins</h3>
+                        <p class="text-[11px] text-slate-300">Saved across express trains</p>
+                    </div>
+                </div>
+
+                <!-- TRAIN-BY-TRAIN INDIVIDUAL CARDS LIST (WHERE IS MY TRAIN STYLE) -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center px-1">
+                        <h3 class="font-black text-slate-800 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-blue-700"></i> Individual Train Maintenance Impact Breakdown
+                        </h3>
+                        <span class="text-xs font-bold text-slate-500">Selected Route: New Delhi → Gwalior</span>
+                    </div>
+
+                    <div id="train-cards-list" class="space-y-4">
+                        <!-- Dynamically rendered via JS -->
+                    </div>
+                </div>
+
+                <!-- BOTTOM NAV BUTTON: SWITCH TO FEATURE 1 -->
+                <div class="pt-4 flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <button onclick="switchFeature('feature1')" class="bg-blue-600 hover:bg-blue-500 text-white font-black px-5 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow transition-all">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Switch to Feature 1: Joint Maintenance Windows & Capacity Recovery</span>
+                    </button>
+                    <button onclick="showWelcomePortal()" class="text-slate-600 hover:text-slate-900 font-bold text-xs flex items-center gap-1">
+                        Return to Welcome Screen <i class="fa-solid fa-house"></i>
+                    </button>
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-slate-800 text-slate-300 py-3 text-center text-xs font-semibold border-t border-slate-700">
+            Smart India Hackathon 2026 • SIH26027 • Ministry of Railways • Indian Railways Dynamic Route Optimizer
+        </footer>
+
+    </div>
+
+    <!-- SCRIPT DATA & CORE LOGIC -->
     <script>
         const STATIONS = {
             "NDLS": { code: "NDLS", name: "New Delhi" },
@@ -258,7 +398,6 @@
                     { block_id: "BLK-001", section: "Delhi-Mathura Section", start_hour: 10, end_hour: 14, departments_covered: ["P-Way (Engineering)", "TRD (Electrification)", "S&T (Signals)"], time_saved_hours: 3 },
                     { block_id: "BLK-002", section: "Agra-Gwalior Section", start_hour: 14, end_hour: 18, departments_covered: ["P-Way (Engineering)", "TRD (Electrification)"], time_saved_hours: 3 }
                 ],
-                // TRAIN-BY-TRAIN INDIVIDUAL CARDS DATA
                 train_impacts: [
                     {
                         no: "12952",
@@ -334,18 +473,29 @@
             }
         };
 
-        function switchTab(tab) {
-            if (tab === 'feature1') {
+        function showWelcomePortal() {
+            document.getElementById('welcome-portal-view').classList.remove('hidden');
+            document.getElementById('main-dashboard-view').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openFeature(feature) {
+            document.getElementById('welcome-portal-view').classList.add('hidden');
+            document.getElementById('main-dashboard-view').classList.remove('hidden');
+            switchFeature(feature);
+        }
+
+        function switchFeature(feature) {
+            if (feature === 'feature1') {
                 document.getElementById('feature1-content').classList.remove('hidden');
                 document.getElementById('feature2-content').classList.add('hidden');
-                document.getElementById('tab-btn-feature1').classList.add('tab-active');
-                document.getElementById('tab-btn-feature2').classList.remove('tab-active');
+                document.getElementById('dashboard-subtitle').innerText = "Feature 1 • Joint Maintenance Windows & Capacity Recovery";
             } else {
                 document.getElementById('feature1-content').classList.add('hidden');
                 document.getElementById('feature2-content').classList.remove('hidden');
-                document.getElementById('tab-btn-feature1').classList.remove('tab-active');
-                document.getElementById('tab-btn-feature2').classList.add('tab-active');
+                document.getElementById('dashboard-subtitle').innerText = "Feature 2 • Train-by-Train Maintenance Time Impact & Siding";
             }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function onRouteChanged() {
@@ -381,7 +531,7 @@
             document.getElementById('unopt-summary-badge').innerText = `${data.unoptimized.length} Shutdowns (${unoptHours}h)`;
             document.getElementById('opt-summary-badge').innerText = `${data.optimized.length} Joint Blocks (${optHours}h)`;
 
-            // Crisp Clean Section Line Visualizer (Original light design)
+            // Track Map
             document.getElementById('dynamic-track-map').innerHTML = `
                 <div class="flex justify-between items-center relative z-10 min-w-[500px]">
                     <div class="flex flex-col items-center gap-1">
@@ -440,12 +590,10 @@
                 </div>
             `).join('');
 
-            // RENDER FEATURE 2: TRAIN-BY-TRAIN INDIVIDUAL CARDS LIST
+            // RENDER FEATURE 2: TRAIN-BY-TRAIN CARDS LIST
             const trainCardsContainer = document.getElementById('train-cards-list');
             trainCardsContainer.innerHTML = data.train_impacts.map(t => `
                 <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4 hover:border-blue-400 transition-colors">
-                    
-                    <!-- Card Top Line: Train Name & Status Badge -->
                     <div class="flex flex-wrap justify-between items-center border-b border-slate-200 pb-3 gap-2">
                         <div class="flex items-center gap-3">
                             <div class="p-3 ${t.no.startsWith('G') ? 'bg-amber-500' : 'bg-blue-800'} text-white rounded-xl font-black text-lg">
@@ -464,12 +612,11 @@
                         </span>
                     </div>
 
-                    <!-- Middle Line: Active Maintenance Zone on Path -->
                     <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 flex flex-wrap justify-between items-center gap-2 text-xs">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-person-digging text-amber-600 text-base"></i>
                             <div>
-                                <span class="font-bold text-slate-700">Active Track Construction / Maintenance Zone:</span>
+                                <span class="font-bold text-slate-700">Active Track Maintenance Zone:</span>
                                 <p class="font-extrabold text-slate-900">${t.maint_section}</p>
                             </div>
                         </div>
@@ -479,10 +626,9 @@
                         </div>
                     </div>
 
-                    <!-- Bottom Line: Before vs After Delay Mismatch -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                         <div class="bg-red-50 border border-red-200 p-3 rounded-lg">
-                            <span class="font-bold text-red-700 uppercase tracking-wider text-[10px]">❌ Before (Unoptimized Manual BDMS):</span>
+                            <span class="font-bold text-red-700 uppercase tracking-wider text-[10px]">❌ Before (Unoptimized BDMS):</span>
                             <p class="font-bold text-red-900 mt-1">${t.before_delay}</p>
                         </div>
                         <div class="bg-emerald-50 border border-emerald-300 p-3 rounded-lg">
@@ -491,12 +637,10 @@
                         </div>
                     </div>
 
-                    <!-- AI Directive Line -->
                     <div class="bg-blue-50 border border-blue-200 p-2.5 rounded-lg text-xs font-bold text-blue-900 flex items-center gap-2">
                         <i class="fa-solid fa-wand-magic-sparkles text-blue-600"></i>
                         <span>${t.ai_action}</span>
                     </div>
-
                 </div>
             `).join('');
         }

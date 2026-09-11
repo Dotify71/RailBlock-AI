@@ -1,5 +1,5 @@
 ================================================================================
-RAILBLOCK-AI: CANVA PPT SLIDE-BY-SLIDE COPY-PASTE TEXT (SIH 2026 TEMPLATE)
+RAILBLOCK-AI: CANVA PPT SLIDE-BY-SLIDE COMPLETE MASTER TEXT & ASSET GUIDE
 ================================================================================
 
 --------------------------------------------------------------------------------
@@ -11,124 +11,138 @@ Problem Statement ID : SIH26027
 Problem Statement Title : AI-Powered Automatic Block Planning to Maximize Asset Availability for Train Operations on Indian Railways
 Theme: Transportation & Logistics
 Category: Software
-Team ID : [Your Team ID]
+Team ID : NST
 Team Name : RailBlock-AI
+
+Logo Asset:
+file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/railblock_ai_logo_square_highres.jpg
 
 --------------------------------------------------------------------------------
 SLIDE 2: DETAILED EXPLANATION, PROBLEM ADDRESSED & INNOVATION
 --------------------------------------------------------------------------------
-RailBlock-AI: Smart Railway Block Planning & Dispatch Engine
+Title: RailBlock-AI: Smart Railway Block Planning & Dispatch Engine
 
 Detailed Explanation
-• AI-powered master coordinator for Indian Railways track maintenance & train dispatching.
-• Combines P-Way (Tracks), TRD (Electrification), and S&T (Signals) block requests into single joint maintenance windows.
-• Features real-time AI train dispatching and automated loop-line siding to prevent domino delays.
+• AI Master Coordinator for track maintenance & dispatching.
+• Combines P-Way, TRD & S&T into 1 joint block window.
+• Auto-sides slow trains on loop lines to prevent delays.
 
 How it Addresses the Problem
-• Reduces 3 to 4 separate daily track closures per section into 1 consolidated block.
-• Holds slow freight trains on loop lines, isolating delays to single trains.
-• Recovers 42.9% of lost track capacity and saves 6+ hours of train detention daily.
+• Reduces 4 track closures into 1 joint daily block.
+• Isolates train delays to single loop lines.
+• Recovers 42.9% lost track capacity on heavy corridors.
 
 Innovation & Uniqueness
-• Constraint-Based Joint Window Optimizer (Google OR-Tools MILP).
-• Dynamic Overtake & Speed Profile Predictor for Indian Railways tracks.
-• "Where Is My Track" style live station-by-station visualization dashboard.
+• Google OR-Tools MILP core for joint window clustering.
+• Dynamic speed & overtake predictor engine.
+• Live station-by-station track dashboard visualizer.
 
-[COMPARISON BOX TEXT]
-Existing Systems (Missing):
-- Manual, siloed department requests in BDMS
-- 3-4 separate track shutdowns per day
-- Phone-based manual loop line siding decisions
-- Domino/cascading delays across trailing trains
-
-RailBlock-AI (Included):
-- AI Single-Window Joint Clustering (P-Way + TRD + S&T)
-- 1 Consolidated 4h Joint Maintenance Window
-- Automated AI Loop Line Siding & Overtake Directive
-- Zero Cascading Delay — Fast trains maintain full speed
+Right-Side Graphic Asset (4K Card):
+file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/slide2_comparison_card_4k.png
 
 --------------------------------------------------------------------------------
 SLIDE 3: TECHNICAL APPROACH AND METHODOLOGY
 --------------------------------------------------------------------------------
-TECHNICAL APPROACH
+Title: TECHNICAL APPROACH
+Subtitle: TECHNOLOGY USED AND METHODOLOGY
 
-Technology Used and Methodology
+Table Content (5 Columns):
+Feature: Joint Block Optimizer
+Input: P-Way, TRD & S&T maintenance requests
+Output: 1 Consolidated 4h Joint Maintenance Window
+How We Do It: MILP constraint solver algorithm grouping overlapping section requests across departments.
+APIs / Tools: Google OR-Tools, PuLP, Python
 
-Feature: Joint Maintenance Clustering
-Input: BDMS Requests (P-Way, TRD, S&T)
-Output: Consolidated Joint Window (BLK-001)
-How We Do It (Methodology): MILP constraint optimization algorithm grouping overlapping section requests
-APIs / Tools: Python, Google OR-Tools, PuLP
-
-Feature: AI Train Dispatching
-Input: Live Train Telemetry & Speeds
-Output: Loop Line Siding Directive (PWL Siding)
-How We Do It (Methodology): Spatio-temporal graph ML & priority-based speed vector analysis
+Feature: AI Train Dispatcher
+Input: Live train speeds, priority & telemetry feeds
+Output: Loop Line Overtake Directive (PWL Siding)
+How We Do It: Spatio-temporal graph modeling & priority speed vector analysis to hold slow freight trains.
 APIs / Tools: FastAPI, NetworkX, Redis
 
-Feature: Track Capacity Analytics
-Input: Section Downtime Logs
-Output: Capacity Saved % & Detention Hours Saved
-How We Do It (Methodology): Section uptime calculation & detention reduction formulas
-APIs / Tools: Pandas, D3.js, Chart.js
+Feature: Track Capacity Engine
+Input: Section downtime logs & historical timetable
+Output: 42.9% Capacity Recovery & Zero Domino Delay
+How We Do It: Dynamic track availability modeling & section uptime calculation formulas.
+APIs / Tools: Pandas, NumPy, SciPy
 
-Feature: Passenger Advisory Portal
+Feature: Live Route Dashboard
 Input: Route Selection (NDLS -> GWL)
-Output: Real-time Maintenance & Delay Warnings
-How We Do It (Methodology): REST API & PWA notification engine
-APIs / Tools: React, Tailwind CSS
+Output: Live 'Where Is My Track' Interactive Portal
+How We Do It: Real-time web portal rendering section tracks, loop siding status & timetable alerts.
+APIs / Tools: HTML5, Tailwind CSS, Chart.js
+
+Feature: CRIS System Gateway
+Input: COA & BDMS railway system feeds
+Output: Automated Controller Approval Directive
+How We Do It: REST API synchronization with Human-in-the-Loop controller click approval workflow.
+APIs / Tools: CRIS Open APIs, WebSocket, JSON
+
+Table-Only Graphic Asset (High-Res):
+file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/slide3_table_only.png
 
 --------------------------------------------------------------------------------
 SLIDE 4: FEASIBILITY AND VIABILITY
 --------------------------------------------------------------------------------
-FEASIBILITY AND VIABILITY
+Title: FEASIBILITY AND VIABILITY
+Subtitle: Implementation Feasibility, Operational Risks & Mitigation Strategies
 
 Feasibility Analysis
-• 100% Software Solution: Requires zero physical hardware modifications to tracks or trains.
-• Scalable Architecture: Easily deployable across all 68 Indian Railway divisions.
-• High Performance Engine: Runs complex constraint solvers in seconds on standard server hardware.
+• 100% Software: Zero track hardware changes needed.
+• High Scalability: Covers all 68 railway divisions.
+• Low Latency: MILP solver computes in seconds.
 
 Challenges & Risks
-• High operational complexity across multi-department workflows.
-• Varying section speeds and signal block lengths.
-• Resistance to moving from manual BDMS scheduling to automated AI directives.
+• Siloed Depts: Coordinating P-Way, TRD & S&T.
+• Track Speeds: Handling varying section limits.
+• Change Management: Shifting controller workflows.
 
 Strategies to Overcome
-• Seamless CRIS Integration: Connects directly with CRIS (COA & BDMS) APIs.
-• Human-in-the-Loop Approval: Section Controllers and Station Masters retain final click approval.
-• Phased Corridors Rollout: Starting with high-density trunk routes (e.g. Delhi-Mathura line).
+• CRIS Sync: Direct API hooks to COA & BDMS.
+• Human Control: Controllers retain click-approval.
+• Phased Rollout: Starting on Delhi-Mathura route.
+
+Right-Side Graphic Asset (4K Card):
+file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/slide4_feasibility_card_4k.png
 
 --------------------------------------------------------------------------------
 SLIDE 5: IMPACT AND BENEFITS
 --------------------------------------------------------------------------------
-IMPACT AND BENEFITS
+Title: IMPACT AND BENEFITS
+Subtitle: Operational, Economic, Social & Environmental Value Creation
 
-• Target Impact: Eliminate 40%+ wasted track capacity and end cascading train delays across Indian Railways.
-• Social: Millions of daily Indian commuters enjoy predictable, on-time journeys with zero surprise delays.
-• Economic: Saves billions of rupees in fuel waste, freight detention costs, and locomotive idle time.
-• Environmental: Reduces diesel freight idling emissions and optimizes electric energy utilization across electrified routes.
-• Long-Term: Scalable AI brain for nationwide Indian Railways network optimization under PM Gati Shakti.
+• Target Impact: Reclaim 42.9% lost track capacity and eliminate domino delays across Indian Railways.
+• Social: Millions of daily passengers enjoy predictable, on-time journeys with zero surprise delays.
+• Economic: Saves ₹100s Cr in fuel waste, freight detention costs, and locomotive idle hours.
+• Environmental: Cuts diesel freight idling emissions and optimizes electric traction power use.
+• Long-Term: Scalable AI brain for nationwide rail network optimization under PM Gati Shakti.
+
+Right-Side Graphic Asset (Minimalist 4K Cards):
+file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/slide5_impact_sleek_cards_only_4k.png
 
 --------------------------------------------------------------------------------
 SLIDE 6: RESEARCH AND REFERENCES
 --------------------------------------------------------------------------------
-RESEARCH AND REFERENCES
+Title: RESEARCH AND REFERENCES
+Subtitle: Academic Papers, Railway Manuals & System Benchmarks
 
 Government & Policy Reports
-• Ministry of Agriculture & Farmers Welfare – AgriStack Initiative
-• Ministry of Railways – CRIS (Centre for Railway Information Systems) BDMS & COA Operational Manuals
-• PM Gati Shakti National Master Plan for Infrastructure & Logistics
+• Ministry of Railways (NRP 2030) - National Rail Plan Capacity Guidelines
+👉 https://indianrailways.gov.in
+• IRPWM Manual - Indian Railways Permanent Way Block Protocols
 
-AI & Smart Operations Research
-• IEEE Research Papers on Railway Track Block Scheduling & Operations Research
-• Mixed Integer Linear Programming (MILP) for Train Timetabling & Conflict Resolution
+AI & Railway Research
+• Google OR-Tools - Constraint Solver for Train & Track Block Scheduling
+👉 https://developers.google.com/optimization
+• IEEE Transactions (2023) - Dynamic Train Rescheduling & Block Planning
 
-Existing Platforms & Case Studies
-• BDMS (Block Deduction Management System) – Indian Railways
-• COA (Control Office Application) – CRIS
-• FOIS (Freight Operations Information System) – Indian Railways
+Existing Systems & Case Studies
+• CRIS COA System - Control Office Application Live Dispatch Feeds
+• CRIS BDMS Portal - Block Demand Management System Workflows
 
 Technical References
-• Research on AI/ML Models for Smart Track Monitoring & Delay Prediction
-• Google OR-Tools & Python Optimization Frameworks
+• Spatio-Temporal Graph Neural Networks - Railway Bottleneck Models
+• Python NetworkX & PuLP - Network Routing & MILP Optimization Core
+
+Right-Side Graphic Asset (Official Integrated Dispatch Engine Flowchart):
+file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/uploaded_media_1789146001293.png
 ================================================================================
