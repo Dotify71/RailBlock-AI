@@ -11,16 +11,13 @@ draw = ImageDraw.Draw(img)
 
 # Fonts setup
 font_bold_path = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
-font_italic_path = "/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf"
 font_reg_path = "/System/Library/Fonts/Supplemental/Arial.ttf"
 
 if not os.path.exists(font_bold_path):
     font_bold_path = "/System/Library/Fonts/Helvetica.ttc"
-    font_italic_path = font_bold_path
     font_reg_path = font_bold_path
 
 # 8K Scaled font sizes
-font_title = ImageFont.truetype(font_italic_path, 110)
 font_header = ImageFont.truetype(font_bold_path, 68)
 font_cell_bold = ImageFont.truetype(font_bold_path, 58)
 font_cell_reg = ImageFont.truetype(font_reg_path, 56)
@@ -75,8 +72,8 @@ rows = [
 padding_x = 45
 padding_y = 50
 header_height = 200
-margin_left = 340
-margin_top = 280
+margin_left = 40
+margin_top = 40
 
 def wrap_text(text, width_px, font):
     lines = []
@@ -116,12 +113,6 @@ for row in rows:
             max_h = h
     row_data_wrapped.append(cell_lines_list)
     row_heights.append(max_h)
-
-# Title Text: TECHNOLOGY USED AND METHODOLOGY
-title_text = "TECHNOLOGY USED AND METHODOLOGY"
-title_bbox = font_title.getbbox(title_text)
-title_w = title_bbox[2] - title_bbox[0]
-draw.text(((WIDTH - title_w) // 2, 120), title_text, font=font_title, fill="#2E7D32")
 
 # Draw Header Row
 x_offset = margin_left
@@ -187,15 +178,15 @@ for row_idx, cell_lines_list in enumerate(row_data_wrapped):
         x_offset += w
     y_offset += rh
 
-# Crop image tightly around title and table
-total_table_height = y_offset + 80
-cropped_img = img.crop((margin_left - 80, 60, margin_left + sum(c["width"] for c in columns) + 80, total_table_height))
+# Crop image tightly around table only
+table_total_width = sum(c["width"] for c in columns)
+cropped_img = img.crop((margin_left, margin_top, margin_left + table_total_width, y_offset))
 
-# Save 8K Table PNG
-out_workspace = "/Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/slide3_technology_table_8k.png"
-out_artifacts = "/Users/dushyantacharya/.gemini/antigravity/brain/3e27fecf-19d5-4c17-9432-ffa2ce99e25f/slide3_technology_table_8k.png"
+# Save Table-Only PNGs
+out_workspace = "/Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/slide3_table_only_8k.png"
+out_artifacts = "/Users/dushyantacharya/.gemini/antigravity/brain/3e27fecf-19d5-4c17-9432-ffa2ce99e25f/slide3_table_only_8k.png"
 
 cropped_img.save(out_workspace, "PNG", dpi=(300, 300))
 cropped_img.save(out_artifacts, "PNG", dpi=(300, 300))
 
-print(f"✅ 8K Table Image successfully saved to:\n1. {out_workspace}\n2. {out_artifacts}")
+print(f"✅ Table-Only 8K Image successfully saved to:\n1. {out_workspace}\n2. {out_artifacts}")
