@@ -12,7 +12,7 @@ Provides endpoints for:
 import json
 import os
 import sys
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, ThreadingHTTPServer, BaseHTTPRequestHandler
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if BASE_DIR not in sys.path:
@@ -228,19 +228,32 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(data).encode('utf-8'))
 
 def run_server(start_port=8080):
+    """Start the server, trying successive ports if the preferred one is in use.
+
+    ThreadingHTTPServer spawns a new thread for every incoming request, so
+    slow optimizer calls or concurrent dashboard refreshes no longer block
+    each other.
+    """
+
+    # Set allow_reuse_address on our own subclass so we do not mutate the
+    # standard-library class directly.
+    class _Server(ThreadingHTTPServer):
+        allow_reuse_address = True
+
+    # Port-in-use errno values differ across platforms.
+    PORT_IN_USE_ERRNOS = {48, 98}  # 48 = macOS/BSD, 98 = Linux
+
     for port in range(start_port, start_port + 20):
         try:
             server_address = ('', port)
-            HTTPServer.allow_reuse_address = True
-            httpd = HTTPServer(server_address, RequestHandler)
-            print(f"🚆 RailBlock-AI Server running at http://localhost:{port}")
+            httpd = _Server(server_address, RequestHandler)
+            print(f"RailBlock-AI server running at http://localhost:{port}")
             httpd.serve_forever()
             break
         except OSError as e:
-            if e.errno == 48:
+            if e.errno in PORT_IN_USE_ERRNOS:
                 continue
-            else:
-                raise e
+            raise
 
 if __name__ == '__main__':
     run_server()
