@@ -27,8 +27,9 @@ class ConsolidatedBlock:
     block_id: str
     section: str
     start_hour: int
-    end_hour: int
+    end_hour: int          # Always 0-23.  Read spans_midnight to know if this is next-day.
     duration_hours: int
+    spans_midnight: bool   # True when the block crosses 00:00 into the following day.
     departments_covered: List[str]
     original_requests: List[str]
     time_saved_hours: float
@@ -112,6 +113,15 @@ class RailBlockDualEngine:
         start hour.  This ensures that high-priority (emergency) requests anchor
         the consolidated window time rather than being pushed into a slot dictated
         by a lower-priority request that happens to start earlier.
+
+        Midnight rollover handling
+        --------------------------
+        All arithmetic inside the merge loop uses linear hours (e.g. 25, 26)
+        rather than clock hours (1, 2).  This keeps the overlap comparison
+        ``preferred_start_hour <= max_end + 1`` correct across the day boundary.
+        The clock-hour ``end_hour`` is derived with ``% 24`` only when writing
+        the final ConsolidatedBlock.  ``spans_midnight`` is set to True whenever
+        the raw end exceeds 24 so consumers can display the block correctly.
         """
         sections: Dict[str, List[MaintenanceRequest]] = {}
         for req in self.maintenance_reqs:
@@ -131,29 +141,54 @@ class RailBlockDualEngine:
             while i < len(reqs):
                 current_group = [reqs[i]]
                 start = reqs[i].preferred_start_hour
+
+                # Keep max_end in linear hours throughout the merge loop.
+                # Wrapping it here would corrupt the overlap comparison below.
                 max_end = start + reqs[i].duration_hours
-                
+
                 j = i + 1
                 while j < len(reqs):
-                    if reqs[j].preferred_start_hour <= (max_end + 1):
+                    candidate_start = reqs[j].preferred_start_hour
+
+                    # Normalise the candidate to linear space relative to the
+                    # cluster anchor.  A request that starts earlier in clock
+                    # time than the anchor (e.g. hour 10 when anchor is 23)
+                    # actually belongs to the *next* calendar day from the
+                    # anchor's perspective, so add 24 to keep it in the correct
+                    # linear position for the overlap test.
+                    if candidate_start < start:
+                        candidate_start_linear = candidate_start + 24
+                    else:
+                        candidate_start_linear = candidate_start
+
+                    if candidate_start_linear <= (max_end + 1):
                         current_group.append(reqs[j])
-                        max_end = max(max_end, reqs[j].preferred_start_hour + reqs[j].duration_hours)
+                        max_end = max(
+                            max_end,
+                            candidate_start_linear + reqs[j].duration_hours
+                        )
                         j += 1
                     else:
                         break
-                
+
                 consolidated_duration = max_end - start
-                dept_list = sorted(list(set(r.department for r in current_group)))
+                dept_list = sorted({r.department for r in current_group})
                 req_ids = [r.id for r in current_group]
                 sum_individual = sum(r.duration_hours for r in current_group)
                 time_saved = sum_individual - consolidated_duration if len(current_group) > 1 else 0.5
 
+                # Apply midnight rollover only at the point of writing the block.
+                # spans_midnight tells the caller that end_hour is a next-day time.
+                crosses_midnight = max_end >= 24
+                end_hour_clock = max_end % 24
+
                 optimized_blocks.append(ConsolidatedBlock(
                     block_id=f"BLK-{block_counter:03d}",
                     section=section_name,
-                    start_hour=start,
-                    end_hour=max_end,
+                    start_hour=start % 24,
+                    end_hour=end_hour_clock,
                     duration_hours=consolidated_duration,
+                    spans_midnight=crosses_midnight,
                     departments_covered=dept_list,
                     original_requests=req_ids,
                     time_saved_hours=round(time_saved, 1)
