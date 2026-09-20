@@ -106,7 +106,13 @@ class RailBlockDualEngine:
         self.trains = trains
 
     def optimize_maintenance(self) -> Dict:
-        """Feature 1: Cluster multi-department maintenance requests into joint windows."""
+        """Feature 1: Cluster multi-department maintenance requests into joint windows.
+
+        Requests are sorted by priority first (1 = highest), then by preferred
+        start hour.  This ensures that high-priority (emergency) requests anchor
+        the consolidated window time rather than being pushed into a slot dictated
+        by a lower-priority request that happens to start earlier.
+        """
         sections: Dict[str, List[MaintenanceRequest]] = {}
         for req in self.maintenance_reqs:
             sections.setdefault(req.section, []).append(req)
@@ -117,7 +123,9 @@ class RailBlockDualEngine:
 
         block_counter = 1
         for section_name, reqs in sections.items():
-            # Sort by priority first (1 = High/Emergency) then start hour to anchor optimal slots
+            # Sort by priority first so Priority 1 (emergency) requests lead each
+            # cluster and set the window anchor. Within the same priority level,
+            # order by preferred start hour to keep the window as tight as possible.
             reqs.sort(key=lambda r: (r.priority, r.preferred_start_hour))
             i = 0
             while i < len(reqs):
