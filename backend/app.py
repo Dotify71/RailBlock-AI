@@ -99,19 +99,44 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
-    def do_POST(self):
-        if self.path == '/api/requests':
-            content_length = int(self.headers['Content-Length'])
+    def _parse_json_body(self):
+        """Safely read and parse incoming JSON request body."""
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            if content_length <= 0:
+                self._respond_json({"error": "Invalid JSON payload"}, status_code=400)
+                return None
             body = self.rfile.read(content_length)
             data = json.loads(body)
-            
+            if not isinstance(data, dict):
+                self._respond_json({"error": "Invalid JSON payload"}, status_code=400)
+                return None
+            return data
+        except (ValueError, json.JSONDecodeError):
+            self._respond_json({"error": "Invalid JSON payload"}, status_code=400)
+            return None
+
+    def do_POST(self):
+        if self.path == '/api/requests':
+            data = self._parse_json_body()
+            if data is None:
+                return
+
+            try:
+                preferred_start = int(data.get("preferred_start_hour", 10))
+                duration = int(data.get("duration_hours", 2))
+                priority = int(data.get("priority", 1))
+            except (ValueError, TypeError):
+                self._respond_json({"error": "Invalid numeric values in request payload"}, status_code=400)
+                return
+
             new_req = MaintenanceRequest(
                 id=f"REQ-{len(DEMO_MAINTENANCE_REQUESTS)+1:02d}",
                 department=data.get("department", "P-Way (Engineering)"),
                 section=data.get("section", "Delhi-Mathura Section"),
-                preferred_start_hour=int(data.get("preferred_start_hour", 10)),
-                duration_hours=int(data.get("duration_hours", 2)),
-                priority=int(data.get("priority", 1))
+                preferred_start_hour=preferred_start,
+                duration_hours=duration,
+                priority=priority
             )
             DEMO_MAINTENANCE_REQUESTS.append(new_req)
             
@@ -120,12 +145,22 @@ class RequestHandler(BaseHTTPRequestHandler):
             self._respond_json(result, status_code=201)
 
         elif self.path == '/api/trains':
-            content_length = int(self.headers['Content-Length'])
-            body = self.rfile.read(content_length)
-            data = json.loads(body)
+            data = self._parse_json_body()
+            if data is None:
+                return
 
             train_no = data.get("train_number")
-            delay = int(data.get("delay_minutes", 0))
+            if not train_no:
+                self._respond_json({"error": "train_number is required"}, status_code=400)
+                return
+
+            try:
+                delay = int(data.get("delay_minutes", 0))
+                speed = int(data.get("speed_kmh", 80))
+                priority = int(data.get("priority", 2))
+            except (ValueError, TypeError):
+                self._respond_json({"error": "Invalid numeric values in request payload"}, status_code=400)
+                return
 
             found = False
             for t in DEMO_LIVE_TRAINS:
@@ -142,8 +177,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                     current_station=data.get("current_station", "Faridabad (FDB)"),
                     next_station=data.get("next_station", "Palwal (PWL)"),
                     delay_minutes=delay,
-                    speed_kmh=int(data.get("speed_kmh", 80)),
-                    priority=int(data.get("priority", 2))
+                    speed_kmh=speed,
+                    priority=priority
                 ))
 
             engine = RailBlockDualEngine(DEMO_MAINTENANCE_REQUESTS, DEMO_LIVE_TRAINS)
