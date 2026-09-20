@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RailBlock-AI B&W Architecture Large Font</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            width: 1840px;
+            background-color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+
+        /* MAIN CONTENT AREA - OPTIMIZED FOR CANVA 1840x780 ASPECT RATIO */
+        .main-content {
+            width: 1840px;
+            padding: 16px 20px;
+            display: flex;
+            gap: 30px;
+            background: #ffffff;
+            position: relative;
+        }
+
+        /* LEFT SIDE: PLATFORM ARCHITECTURE (64%) */
+        .left-panel {
+            flex: 1.8;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .panel-title {
+            font-size: 30px;
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-left: 8px solid #000000;
+            padding-left: 14px;
+            line-height: 1.0;
+            margin-bottom: 2px;
+        }
+
+        /* ROW 1: USER PORTALS */
+        .portals-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .portal-card {
+            background: #ffffff;
+            border: 3px solid #000000;
+            border-radius: 14px;
+            padding: 14px 12px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 185px;
+        }
+
+        .portal-card .card-icon {
+            font-size: 28px;
+            margin-bottom: 2px;
+        }
+
+        .portal-card .card-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .portal-card .card-badge {
+            display: inline-block;
+            background: #EAEAEA;
+            color: #000000;
+            border: 1.5px solid #000000;
+            font-size: 13.5px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            align-self: center;
+        }
+
+        .portal-card .card-desc {
+            font-size: 14.5px;
+            font-weight: 600;
+            color: #1A1A1A;
+            line-height: 1.35;
+        }
+
+        /* CONNECTOR ARROWS */
+        .arrows-row {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 40px;
+            margin: -4px 0;
+        }
+
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 16px solid #000000;
+        }
+
+        /* MIDDLE ENGINE LAYER */
+        .engine-box {
+            background: #F9F9F9;
+            border: 4px solid #000000;
+            border-radius: 18px;
+            padding: 18px 24px;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .engine-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .engine-subtitle {
+            font-size: 18px;
+            font-weight: 700;
+            color: #222222;
+            margin-bottom: 12px;
+        }
+
+        .engine-pills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 12px;
+        }
+
+        .engine-pill {
+            background: #ffffff;
+            border: 2.5px solid #000000;
+            color: #000000;
+            font-size: 15px;
+            font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 20px;
+        }
+
+        /* ROW 3: BACKEND SERVICES */
+        .backend-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .backend-card {
+            background: #ffffff;
+            border: 3px solid #000000;
+            border-radius: 14px;
+            padding: 16px 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            min-height: 200px;
+        }
+
+        .backend-card .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .backend-card .card-icon {
+            font-size: 28px;
+        }
+
+        .backend-card .card-title {
+            font-size: 21px;
+            font-weight: 800;
+            color: #000000;
+        }
+
+        .backend-card .card-tech {
+            font-size: 15px;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 8px;
+            background: #F0F0F0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            align-self: flex-start;
+        }
+
+        .backend-card .card-desc {
+            font-size: 14.5px;
+            font-weight: 600;
+            color: #1A1A1A;
+            line-height: 1.4;
+        }
+
+        /* PROTOTYPE CALLOUT CLOUD */
+        .prototype-callout {
+            position: absolute;
+            bottom: 25px;
+            left: 54%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .prototype-label {
+            font-size: 18px;
+            font-weight: 900;
+            color: #000000;
+        }
+
+        .cloud-bubble {
+            background: #ffffff;
+            border: 3.5px solid #000000;
+            border-radius: 30px;
+            padding: 8px 22px;
+            color: #000000;
+            font-size: 19px;
+            font-weight: 900;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* RIGHT SIDE: BLOCK PLANNING RULE (36%) */
+        .right-panel {
+            flex: 1.05;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-left: 20px;
+            border-left: 3px stroke #000000;
+        }
+
+        .rule-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            margin-top: 6px;
+        }
+
+        .rule-card {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: #FDFDFD;
+            border: 2.5px solid #000000;
+            border-radius: 14px;
+            padding: 16px 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .rule-number {
+            width: 52px;
+            height: 52px;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 900;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .rule-content {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .rule-title {
+            font-size: 21px;
+            font-weight: 900;
+            color: #000000;
+            letter-spacing: 0.5px;
+        }
+
+        .rule-desc {
+            font-size: 15.5px;
+            font-weight: 600;
+            color: #1A1A1A;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MAIN CONTENT ONLY (NO HEADER BANNER, NO FOOTER BANNER) -->
+    <div class="main-content">
+
+        <!-- LEFT PANEL: PLATFORM ARCHITECTURE -->
+        <div class="left-panel">
+            <div class="panel-title">PLATFORM ARCHITECTURE</div>
+
+            <!-- ROW 1: USER PORTALS -->
+            <div class="portals-grid">
+                <div class="portal-card">
+                    <div class="card-icon">🖥️</div>
+                    <div class="card-title">Section Controller App</div>
+                    <div class="card-badge">React Web</div>
+                    <div class="card-desc">Real-time section track overview & automated block approval workflow.</div>
+                </div>
+
+                <div class="portal-card">
+                    <div class="card-icon">📱</div>
+                    <div class="card-title">Departmental App</div>
+                    <div class="card-badge">React Native</div>
+                    <div class="card-desc">P-Way, TRD & S&T field engineers submit maintenance block requests.</div>
+                </div>
+
+                <div class="portal-card">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-title">AI Dispatcher Console</div>
+                    <div class="card-badge">React Web</div>
+                    <div class="card-desc">Live train telemetry feeds, speed priority & loop line overtake directives.</div>
+                </div>
+
+                <div class="portal-card">
+                    <div class="card-icon">🏛️</div>
+                    <div class="card-title">CRIS System Gateway</div>
+                    <div class="card-badge">React Web</div>
+                    <div class="card-desc">COA & BDMS system feeds integration & controller approval sync.</div>
+                </div>
+            </div>
+
+            <!-- CONNECTOR ARROWS -->
+            <div class="arrows-row">
+                <div class="arrow-down"></div>
+                <div class="arrow-down"></div>
+                <div class="arrow-down"></div>
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- MIDDLE ENGINE LAYER -->
+            <div class="engine-box">
+                <div class="engine-title">RAILBLOCK-AI CORE ENGINE</div>
+                <div class="engine-subtitle">Application & Optimization Layer (Python FastAPI + MILP Solver)</div>
+                <div class="engine-pills">
+                    <span class="engine-pill">REST & WebSockets</span>
+                    <span class="engine-pill">MILP Constraint Solver</span>
+                    <span class="engine-pill">Joint Maintenance Window Consolidation</span>
+                    <span class="engine-pill">Spatio-Temporal Graph Engine</span>
+                    <span class="engine-pill">CRIS COA / BDMS Sync</span>
+                </div>
+            </div>
+
+            <!-- CONNECTOR ARROWS -->
+            <div class="arrows-row" style="margin-top: -2px;">
+                <div class="arrow-down"></div>
+                <div class="arrow-down"></div>
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- ROW 3: BACKEND SERVICES -->
+            <div class="backend-grid">
+                <div class="backend-card">
+                    <div class="card-header">
+                        <span class="card-icon">🧠</span>
+                        <span class="card-title">AI Service</span>
+                    </div>
+                    <div class="card-tech">Google OR-Tools, PuLP</div>
+                    <div class="card-desc">MILP constraint solver algorithm grouping overlapping track section requests across P-Way, TRD & S&T.</div>
+                </div>
+
+                <div class="backend-card">
+                    <div class="card-header">
+                        <span class="card-icon">🗄️</span>
+                        <span class="card-title">Data & Spatial Layer</span>
+                    </div>
+                    <div class="card-tech">PostgreSQL + PostGIS</div>
+                    <div class="card-desc">Spatial track network topology, Redis telemetry cache, NumPy downtime & section capacity formulas.</div>
+                </div>
+
+                <div class="backend-card">
+                    <div class="card-header">
+                        <span class="card-icon">🔗</span>
+                        <span class="card-title">Railway Integrations</span>
+                    </div>
+                    <div class="card-tech">CRIS Open APIs, WebSocket</div>
+                    <div class="card-desc">COA (Control Office) & BDMS sync, automated controller click approval workflow & telemetry stream.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROTOTYPE CALLOUT CLOUD -->
+        <div class="prototype-callout">
+            <span class="prototype-label">Prototype ➔</span>
+            <div class="cloud-bubble">WEBSITE</div>
+        </div>
+
+        <!-- RIGHT PANEL: BLOCK PLANNING RULE -->
+        <div class="right-panel">
+            <div class="panel-title">MILP BLOCK PLANNING RULE</div>
+
+            <div class="rule-cards">
+                <div class="rule-card">
+                    <div class="rule-number">1</div>
+                    <div class="rule-content">
+                        <div class="rule-title">FILTER & CONSOLIDATE</div>
+                        <div class="rule-desc">Groups overlapping P-Way, TRD & S&T track section requests into a single 4h joint maintenance window to eliminate repeated section closures.</div>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">2</div>
+                    <div class="rule-content">
+                        <div class="rule-title">RANK & SOLVE (MILP)</div>
+                        <div class="rule-desc">Formulates Mixed-Integer Linear Programming to minimize total train delay while prioritizing high-speed express trains over slow freight traffic.</div>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-number">3</div>
+                    <div class="rule-content">
+                        <div class="rule-title">DYNAMIC DISPATCH</div>
+                        <div class="rule-desc">Spatio-temporal graph rerouting dispatches loop line overtakes and dynamically updates section capacity with zero domino delay.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
