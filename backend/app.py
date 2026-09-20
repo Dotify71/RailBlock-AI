@@ -38,6 +38,43 @@ except ImportError:
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 FRONTEND_INDEX = os.path.join(FRONTEND_DIR, "index.html")
 
+# Maps file extensions to their correct Content-Type values.
+# Keeping this as a plain dictionary makes it easy to extend
+# without touching any conditional logic elsewhere.
+MIME_TYPES = {
+    # Images
+    ".svg":   "image/svg+xml",
+    ".png":   "image/png",
+    ".jpg":   "image/jpeg",
+    ".jpeg":  "image/jpeg",
+    ".gif":   "image/gif",
+    ".webp":  "image/webp",
+    ".ico":   "image/x-icon",
+    # Scripts and styles
+    ".js":    "application/javascript",
+    ".css":   "text/css; charset=utf-8",
+    # Data and markup
+    ".json":  "application/json",
+    ".xml":   "application/xml",
+    ".html":  "text/html; charset=utf-8",
+    ".txt":   "text/plain; charset=utf-8",
+    # Fonts
+    ".woff":  "font/woff",
+    ".woff2": "font/woff2",
+    ".ttf":   "font/ttf",
+    ".otf":   "font/otf",
+}
+
+def _get_mime_type(path: str) -> str:
+    """Return the Content-Type for a given file path.
+
+    Falls back to application/octet-stream so the browser always receives
+    a valid Content-Type header, even for unrecognised file types.
+    """
+    _, ext = os.path.splitext(path)
+    return MIME_TYPES.get(ext.lower(), "application/octet-stream")
+
+
 class RequestHandler(BaseHTTPRequestHandler):
     def _send_cors_headers(self):
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -70,12 +107,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             if os.path.exists(asset_path) and os.path.isfile(asset_path):
                 self.send_response(200)
                 self._send_cors_headers()
-                if asset_path.endswith('.svg'):
-                    self.send_header('Content-Type', 'image/svg+xml')
-                elif asset_path.endswith('.jpg') or asset_path.endswith('.jpeg'):
-                    self.send_header('Content-Type', 'image/jpeg')
-                elif asset_path.endswith('.png'):
-                    self.send_header('Content-Type', 'image/png')
+                self.send_header('Content-Type', _get_mime_type(asset_path))
                 self.end_headers()
                 with open(asset_path, 'rb') as f:
                     self.wfile.write(f.read())
