@@ -281,89 +281,10 @@ html_content = """<!DOCTYPE html>
 <body>
 
     <!-- ========================================== -->
-    <!-- SLIDE 1: TITLE SLIDE (FIXED & CLEAN)       -->
+    <!-- SLIDE 1: TITLE SLIDE (USER FIXED IMAGE)    -->
     <!-- ========================================== -->
-    <div class="slide">
-        <div class="header">
-            <div class="header-logo-left">
-                <svg width="65" height="65" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="100" height="100" rx="20" fill="#C0392B"/>
-                    <path d="M50 15 L85 30 V55 C85 75 50 90 50 90 C50 90 15 75 15 55 V30 L50 15 Z" fill="#922B21" stroke="#FFFFFF" stroke-width="3"/>
-                    <path d="M25 65 L75 65 M30 50 L70 50 M35 35 L65 35" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
-                    <circle cx="50" cy="50" r="12" fill="#F1C40F"/>
-                </svg>
-            </div>
-            <div class="header-title-main">SMART INDIA HACKATHON 2026</div>
-            <div class="header-logo-right">
-                <svg width="180" height="65" viewBox="0 0 300 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="35" fill="#E67E22"/>
-                    <path d="M50 20 V80 M20 50 H80 M30 30 L70 70 M30 70 L70 30" stroke="#FFFFFF" stroke-width="4"/>
-                    <text x="95" y="45" fill="#1F4E79" font-size="22" font-weight="800">SMART INDIA</text>
-                    <text x="95" y="70" fill="#27AE60" font-size="20" font-weight="800">HACKATHON 2026</text>
-                </svg>
-            </div>
-        </div>
-
-        <div class="slide1-body">
-            <div class="slide1-info">
-                <div class="info-row">
-                    <span class="bullet">■</span>
-                    <span class="label-green">Problem Statement ID :</span>
-                    <span class="value">SIH26027</span>
-                </div>
-                <div class="info-row">
-                    <span class="bullet">■</span>
-                    <span class="label-orange">Problem Statement Title :</span>
-                    <span class="value">AI-Powered Automatic Block Planning to Maximize Asset Availability for Train Operations on Indian Railways</span>
-                </div>
-                <div class="info-row">
-                    <span class="bullet">■</span>
-                    <span class="label-green">Theme:</span>
-                    <span class="value">Transportation & Logistics</span>
-                </div>
-                <div class="info-row">
-                    <span class="bullet">■</span>
-                    <span class="label-orange">Category:</span>
-                    <span class="value">Software</span>
-                </div>
-                <div class="info-row">
-                    <span class="bullet">■</span>
-                    <span class="label-green">Team ID :</span>
-                    <span class="value">NST</span>
-                </div>
-                <div class="info-row">
-                    <span class="bullet">■</span>
-                    <span class="label-orange">Team Name :</span>
-                    <span class="value">RailBlock-AI</span>
-                </div>
-            </div>
-
-            <!-- CRISP VECTOR BRAIN LIGHTBULB GRAPHIC -->
-            <div class="slide1-graphic">
-                <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Left Brain Hemisphere (Orange) -->
-                    <path d="M200 60 C140 60 90 100 90 160 C90 200 110 230 140 250 L140 290 H200 V60 Z" fill="#E67E22"/>
-                    <!-- Right Brain Hemisphere (Green) -->
-                    <path d="M200 60 C260 60 310 100 310 160 C310 200 290 230 260 250 L260 290 H200 V60 Z" fill="#27AE60"/>
-                    <!-- Binary Matrix Lines on Right -->
-                    <text x="215" y="110" fill="#FFFFFF" font-size="20" font-family="monospace" font-weight="bold">1010</text>
-                    <text x="215" y="140" fill="#FFFFFF" font-size="20" font-family="monospace" font-weight="bold">01010</text>
-                    <text x="215" y="170" fill="#FFFFFF" font-size="20" font-family="monospace" font-weight="bold">101010</text>
-                    <text x="215" y="200" fill="#FFFFFF" font-size="20" font-family="monospace" font-weight="bold">010101</text>
-                    <text x="215" y="230" fill="#FFFFFF" font-size="20" font-family="monospace" font-weight="bold">10101</text>
-                    <!-- Circuit Tracks on Left -->
-                    <circle cx="130" cy="110" r="6" fill="#FFFFFF"/>
-                    <circle cx="160" cy="150" r="6" fill="#FFFFFF"/>
-                    <circle cx="120" cy="190" r="6" fill="#FFFFFF"/>
-                    <path d="M130 110 L160 150 M160 150 L120 190 M120 190 L170 230" stroke="#FFFFFF" stroke-width="4"/>
-                    <!-- Base Socket -->
-                    <rect x="150" y="300" width="100" height="15" rx="4" fill="#5D6D7E"/>
-                    <rect x="160" y="320" width="80" height="12" rx="4" fill="#34495E"/>
-                    <path d="M170 335 L200 360 L230 335 Z" fill="#2C3E50"/>
-                    <text x="200" y="390" fill="#34495E" font-size="32" font-weight="900" text-anchor="middle">SIH</text>
-                </svg>
-            </div>
-        </div>
+    <div class="slide" style="padding: 0; margin: 0; background: #ffffff;">
+        <img src="file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/slide1_fixed_user.png" style="width: 1920px; height: 1080px; object-fit: fill; display: block;">
     </div>
 
     <!-- ========================================== -->
