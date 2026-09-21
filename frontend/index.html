@@ -120,6 +120,26 @@
     <div class="max-w-4xl mx-auto w-full px-3 py-4">
         <div class="bg-white rounded-xl p-4 shadow-md border border-slate-300 space-y-3">
             
+            <!-- Zonal Railway Division Selector -->
+            <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-300 flex items-center gap-3">
+                <i class="fa-solid fa-map-location-dot text-amber-600 text-sm"></i>
+                <div class="flex-1">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase block">Zonal Railway & Division</label>
+                    <select id="wimt-division" onchange="onDivisionChange()" class="bg-transparent font-black text-sm text-slate-900 w-full focus:outline-none cursor-pointer">
+                        <option value="NR-DLI" selected>Northern Railway (NR) - Delhi Division</option>
+                        <option value="NCR-AGC">North Central Railway (NCR) - Agra Division</option>
+                        <option value="WR-MMCT">Western Railway (WR) - Mumbai Central Division</option>
+                        <option value="ER-HWH">Eastern Railway (ER) - Howrah Division</option>
+                        <option value="SR-MAS">Southern Railway (SR) - Chennai Division</option>
+                        <option value="CR-PUNE">Central Railway (CR) - Pune Division</option>
+                        <option value="SER-KGP">South Eastern Railway (SER) - Kharagpur Division</option>
+                        <option value="SCR-SC">South Central Railway (SCR) - Secunderabad Division</option>
+                        <option value="SWR-SBC">South Western Railway (SWR) - Bengaluru Division</option>
+                        <option value="NWR-JP">North Western Railway (NWR) - Jaipur Division</option>
+                    </select>
+                </div>
+            </div>
+
             <!-- From & To Station Row -->
             <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
                 
@@ -423,6 +443,15 @@
 
     <!-- INTERACTIVE JAVASCRIPT LOGIC -->
     <script>
+        function onDivisionChange() {
+            const select = document.getElementById('wimt-division');
+            const selectedText = select.options[select.selectedIndex].text;
+            console.log("Active Zonal Division updated:", selectedText);
+            if (typeof updateWimtRoute === 'function') {
+                updateWimtRoute();
+            }
+        }
+
         function switchWimtTab(tab) {
             document.getElementById('view-spot').classList.add('hidden');
             document.getElementById('view-blocks').classList.add('hidden');
