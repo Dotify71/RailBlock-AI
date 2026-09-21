@@ -38,6 +38,43 @@ except ImportError:
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 FRONTEND_INDEX = os.path.join(FRONTEND_DIR, "index.html")
 
+# Maps file extensions to their correct Content-Type values.
+# Keeping this as a plain dictionary makes it easy to extend
+# without touching any conditional logic elsewhere.
+MIME_TYPES = {
+    # Images
+    ".svg":   "image/svg+xml",
+    ".png":   "image/png",
+    ".jpg":   "image/jpeg",
+    ".jpeg":  "image/jpeg",
+    ".gif":   "image/gif",
+    ".webp":  "image/webp",
+    ".ico":   "image/x-icon",
+    # Scripts and styles
+    ".js":    "application/javascript",
+    ".css":   "text/css; charset=utf-8",
+    # Data and markup
+    ".json":  "application/json",
+    ".xml":   "application/xml",
+    ".html":  "text/html; charset=utf-8",
+    ".txt":   "text/plain; charset=utf-8",
+    # Fonts
+    ".woff":  "font/woff",
+    ".woff2": "font/woff2",
+    ".ttf":   "font/ttf",
+    ".otf":   "font/otf",
+}
+
+def _get_mime_type(path: str) -> str:
+    """Return the Content-Type for a given file path.
+
+    Falls back to application/octet-stream so the browser always receives
+    a valid Content-Type header, even for unrecognised file types.
+    """
+    _, ext = os.path.splitext(path)
+    return MIME_TYPES.get(ext.lower(), "application/octet-stream")
+
+
 class RequestHandler(BaseHTTPRequestHandler):
     def _send_cors_headers(self):
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -70,12 +107,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             if os.path.exists(asset_path) and os.path.isfile(asset_path):
                 self.send_response(200)
                 self._send_cors_headers()
-                if asset_path.endswith('.svg'):
-                    self.send_header('Content-Type', 'image/svg+xml')
-                elif asset_path.endswith('.jpg') or asset_path.endswith('.jpeg'):
-                    self.send_header('Content-Type', 'image/jpeg')
-                elif asset_path.endswith('.png'):
-                    self.send_header('Content-Type', 'image/png')
+                self.send_header('Content-Type', _get_mime_type(asset_path))
                 self.end_headers()
                 with open(asset_path, 'rb') as f:
                     self.wfile.write(f.read())
@@ -99,19 +131,44 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
-    def do_POST(self):
-        if self.path == '/api/requests':
-            content_length = int(self.headers['Content-Length'])
+    def _parse_json_body(self):
+        """Safely read and parse incoming JSON request body."""
+        try:
+            content_length = int(self.headers.get('Content-Length', 0))
+            if content_length <= 0:
+                self._respond_json({"error": "Invalid JSON payload"}, status_code=400)
+                return None
             body = self.rfile.read(content_length)
             data = json.loads(body)
-            
+            if not isinstance(data, dict):
+                self._respond_json({"error": "Invalid JSON payload"}, status_code=400)
+                return None
+            return data
+        except (ValueError, json.JSONDecodeError):
+            self._respond_json({"error": "Invalid JSON payload"}, status_code=400)
+            return None
+
+    def do_POST(self):
+        if self.path == '/api/requests':
+            data = self._parse_json_body()
+            if data is None:
+                return
+
+            try:
+                preferred_start = int(data.get("preferred_start_hour", 10))
+                duration = int(data.get("duration_hours", 2))
+                priority = int(data.get("priority", 1))
+            except (ValueError, TypeError):
+                self._respond_json({"error": "Invalid numeric values in request payload"}, status_code=400)
+                return
+
             new_req = MaintenanceRequest(
                 id=f"REQ-{len(DEMO_MAINTENANCE_REQUESTS)+1:02d}",
                 department=data.get("department", "P-Way (Engineering)"),
                 section=data.get("section", "Delhi-Mathura Section"),
-                preferred_start_hour=int(data.get("preferred_start_hour", 10)),
-                duration_hours=int(data.get("duration_hours", 2)),
-                priority=int(data.get("priority", 1))
+                preferred_start_hour=preferred_start,
+                duration_hours=duration,
+                priority=priority
             )
             DEMO_MAINTENANCE_REQUESTS.append(new_req)
             
@@ -120,12 +177,22 @@ class RequestHandler(BaseHTTPRequestHandler):
             self._respond_json(result, status_code=201)
 
         elif self.path == '/api/trains':
-            content_length = int(self.headers['Content-Length'])
-            body = self.rfile.read(content_length)
-            data = json.loads(body)
+            data = self._parse_json_body()
+            if data is None:
+                return
 
             train_no = data.get("train_number")
-            delay = int(data.get("delay_minutes", 0))
+            if not train_no:
+                self._respond_json({"error": "train_number is required"}, status_code=400)
+                return
+
+            try:
+                delay = int(data.get("delay_minutes", 0))
+                speed = int(data.get("speed_kmh", 80))
+                priority = int(data.get("priority", 2))
+            except (ValueError, TypeError):
+                self._respond_json({"error": "Invalid numeric values in request payload"}, status_code=400)
+                return
 
             found = False
             for t in DEMO_LIVE_TRAINS:
@@ -142,8 +209,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                     current_station=data.get("current_station", "Faridabad (FDB)"),
                     next_station=data.get("next_station", "Palwal (PWL)"),
                     delay_minutes=delay,
-                    speed_kmh=int(data.get("speed_kmh", 80)),
-                    priority=int(data.get("priority", 2))
+                    speed_kmh=speed,
+                    priority=priority
                 ))
 
             engine = RailBlockDualEngine(DEMO_MAINTENANCE_REQUESTS, DEMO_LIVE_TRAINS)
