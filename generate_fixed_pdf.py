@@ -281,10 +281,54 @@ html_content = """<!DOCTYPE html>
 <body>
 
     <!-- ========================================== -->
-    <!-- SLIDE 1: TITLE SLIDE (USER FIXED IMAGE)    -->
+    <!-- SLIDE 1: TITLE SLIDE (ULTRA CRISP 4K/8K)   -->
     <!-- ========================================== -->
-    <div class="slide" style="padding: 0; margin: 0; background: #ffffff;">
-        <img src="file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/slide1_fixed_user.png" style="width: 1920px; height: 1080px; object-fit: fill; display: block;">
+    <div class="slide" style="padding: 40px 60px; display: flex; flex-direction: column; justify-content: space-between; background: #ffffff;">
+        <!-- HEADER -->
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; height: 90px;">
+            <div style="font-family: 'Times New Roman', 'Cinzel', serif; font-size: 50px; font-weight: 700; color: #2C5282; letter-spacing: 1px;">
+                SMART INDIA HACKATHON 2026
+            </div>
+            <div>
+                <img src="file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/sih_logo_topright_4k.png" style="height: 85px; object-fit: contain;">
+            </div>
+        </div>
+
+        <!-- BODY -->
+        <div style="flex: 1; display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+            <!-- LEFT BULLETS (NATIVE VECTOR TEXT) -->
+            <div style="display: flex; flex-direction: column; gap: 24px; max-width: 1000px; font-size: 30px; line-height: 1.35; color: #000000;">
+                <div style="display: flex; align-items: flex-start;">
+                    <span style="font-size: 22px; margin-right: 14px; margin-top: 6px; color: #222222;">■</span>
+                    <div><span style="color: #27AE60; font-weight: 800;">Problem Statement ID :</span> &nbsp;<span style="font-weight: 500;">SIH26027</span></div>
+                </div>
+                <div style="display: flex; align-items: flex-start;">
+                    <span style="font-size: 22px; margin-right: 14px; margin-top: 6px; color: #222222;">■</span>
+                    <div><span style="color: #E67E22; font-weight: 800;">Problem Statement Title :</span> &nbsp;<span style="font-weight: 500;">AI-Powered Automatic Block<br>Planning to Maximize Asset<br>Availability for Train Operations<br>on Indian Railways</span></div>
+                </div>
+                <div style="display: flex; align-items: flex-start;">
+                    <span style="font-size: 22px; margin-right: 14px; margin-top: 6px; color: #222222;">■</span>
+                    <div><span style="color: #27AE60; font-weight: 800;">Theme:</span> &nbsp;<span style="font-weight: 500;">Transportation & Logistics</span></div>
+                </div>
+                <div style="display: flex; align-items: flex-start;">
+                    <span style="font-size: 22px; margin-right: 14px; margin-top: 6px; color: #222222;">■</span>
+                    <div><span style="color: #E67E22; font-weight: 800;">Category:</span> &nbsp;<span style="font-weight: 500;">Software</span></div>
+                </div>
+                <div style="display: flex; align-items: flex-start;">
+                    <span style="font-size: 22px; margin-right: 14px; margin-top: 6px; color: #222222;">■</span>
+                    <div><span style="color: #27AE60; font-weight: 800;">Team ID :</span> &nbsp;<span style="font-weight: 500;">NST</span></div>
+                </div>
+                <div style="display: flex; align-items: flex-start;">
+                    <span style="font-size: 22px; margin-right: 14px; margin-top: 6px; color: #222222;">■</span>
+                    <div><span style="color: #E67E22; font-weight: 800;">Team Name :</span> &nbsp;<span style="font-weight: 500;">RailBlock-AI</span></div>
+                </div>
+            </div>
+
+            <!-- RIGHT SIH GRAPHIC (4K HIGH-RES RENDER) -->
+            <div style="width: 750px; display: flex; justify-content: center; align-items: center;">
+                <img src="file:///Users/dushyantacharya/Documents/PROJECTS/Fighter/antigravity-game/railblock-ai/sih_graphic_right_4k.png" style="width: 100%; max-height: 800px; object-fit: contain;">
+            </div>
+        </div>
     </div>
 
     <!-- ========================================== -->
