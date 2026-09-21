@@ -64,6 +64,42 @@ class DispatcherRecommendation:
 # DUAL OPTIMIZER ENGINE CLASS
 # ==========================================
 
+# Standard Indian Railways main-line block section length used as the headway
+# distance.  A following train that is one block section behind the slow train
+# would be held for the duration it takes the slow train to clear that section.
+# Overriding this constant lets the engine adapt to other network geometries.
+BLOCK_SECTION_KM = 10.0
+
+def _cascading_delay_prevented_mins(slow_speed_kmh: int, fast_speed_kmh: int) -> int:
+    """Estimate cascading delay (in minutes) prevented for one overtaking train.
+
+    When a high-priority train is trailing a slow train by one block section,
+    it is effectively speed-restricted to the slow train's pace until it can
+    overtake.  The delay it absorbs is the difference between the time needed
+    to traverse one block section at the slow train's speed and the time it
+    would have taken at its own speed.
+
+    Formula:
+        prevented_delay = (BLOCK_SECTION_KM / slow_speed - BLOCK_SECTION_KM / fast_speed) * 60
+
+    Edge cases:
+    - If the slow train's speed is 0 or negative the calculation falls back to
+      a conservative 5-minute floor to avoid division by zero.
+    - The result is clamped to a minimum of 1 minute so we never report zero
+      or negative savings for a legitimate overtake action.
+    """
+    if slow_speed_kmh <= 0:
+        return 5  # conservative floor when speed data is missing
+
+    time_at_slow_speed  = BLOCK_SECTION_KM / slow_speed_kmh   # hours
+    time_at_fast_speed  = BLOCK_SECTION_KM / max(fast_speed_kmh, 1)  # guard /0
+    delay_hours = max(time_at_slow_speed - time_at_fast_speed, 0.0)
+    delay_mins  = round(delay_hours * 60)
+
+    # Return at least 1 minute so callers always see a non-zero saving.
+    return max(delay_mins, 1)
+
+
 class RailBlockDualEngine:
     def __init__(self, maintenance_reqs: List[MaintenanceRequest], trains: List[TrainStatus]):
         self.maintenance_reqs = maintenance_reqs
@@ -149,8 +185,26 @@ class RailBlockDualEngine:
             
             if following_trains:
                 overtaking_names = [f"{t.train_number} ({t.train_name})" for t in following_trains]
-                delay_saved = len(following_trains) * 25  # Estimated 25 mins saved per train
-                
+
+                # Compute delay savings individually per overtaking train based on
+                # the speed differential over one block section.  This replaces the
+                # previous flat 25-minute estimate with a value grounded in each
+                # train's reported speed.
+                per_train_savings = [
+                    _cascading_delay_prevented_mins(slow_train.speed_kmh, t.speed_kmh)
+                    for t in following_trains
+                ]
+                total_delay_saved = sum(per_train_savings)
+
+                # The siding hold duration is the time the slow train needs to clear
+                # one block section at its current speed, rounded to the nearest
+                # minute.  This is the minimum time the overtaking trains must wait
+                # before the main line is free.  Clamped at 1 minute.
+                if slow_train.speed_kmh > 0:
+                    wait_mins = max(round((BLOCK_SECTION_KM / slow_train.speed_kmh) * 60), 1)
+                else:
+                    wait_mins = 15  # conservative default when speed is unknown
+
                 recommendations.append(DispatcherRecommendation(
                     recommendation_id=f"DISP-{rec_id:03d}",
                     section="Delhi-Mathura Section",
@@ -158,9 +212,13 @@ class RailBlockDualEngine:
                     overtaking_trains=overtaking_names,
                     action_station="Palwal (PWL)",
                     siding_track="Loop Line 2",
-                    wait_duration_mins=12,
-                    cascading_delay_prevented_mins=delay_saved,
-                    status_message=f"Hold {slow_train.train_name} on PWL Loop Line 2 for 12 mins to allow {', '.join(overtaking_names)} to overtake on Main Line 1."
+                    wait_duration_mins=wait_mins,
+                    cascading_delay_prevented_mins=total_delay_saved,
+                    status_message=(
+                        f"Hold {slow_train.train_name} on PWL Loop Line 2 for "
+                        f"{wait_mins} min(s) to allow "
+                        f"{', '.join(overtaking_names)} to overtake on Main Line 1."
+                    )
                 ))
                 rec_id += 1
 
