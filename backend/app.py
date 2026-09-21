@@ -78,7 +78,45 @@ def _get_mime_type(path: str) -> str:
 # This value is read once at startup so all requests share the same policy.
 ALLOWED_ORIGIN: str = os.getenv("ALLOWED_ORIGIN", "*")
 
+import time
+from collections import defaultdict
+
+# Rate Limiter Configuration: 60 requests per 60 seconds per IP
+RATE_LIMIT_REQUESTS = 60
+RATE_LIMIT_WINDOW_SECONDS = 60
+
+class RateLimiter:
+    def __init__(self, max_requests: int = RATE_LIMIT_REQUESTS, window_seconds: int = RATE_LIMIT_WINDOW_SECONDS):
+        self.max_requests = max_requests
+        self.window_seconds = window_seconds
+        self.requests = defaultdict(list)
+
+    def is_allowed(self, ip: str) -> bool:
+        now = time.time()
+        # Filter timestamps within current window
+        cutoff = now - self.window_seconds
+        self.requests[ip] = [ts for ts in self.requests[ip] if ts > cutoff]
+
+        if len(self.requests[ip]) >= self.max_requests:
+            return False
+
+        self.requests[ip].append(now)
+        return True
+
+RATE_LIMITER = RateLimiter()
+
+
 class RequestHandler(BaseHTTPRequestHandler):
+    def _check_rate_limit(self) -> bool:
+        client_ip = self.client_address[0] if self.client_address else "127.0.0.1"
+        if not RATE_LIMITER.is_allowed(client_ip):
+            self._respond_json(
+                {"error": "Too Many Requests", "message": "Rate limit exceeded. Maximum 60 requests per minute allowed."},
+                status_code=429
+            )
+            return False
+        return True
+
     def _send_cors_headers(self):
         self.send_header("Access-Control-Allow-Origin", ALLOWED_ORIGIN)
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
@@ -175,6 +213,9 @@ class RequestHandler(BaseHTTPRequestHandler):
             return None
 
     def do_POST(self):
+        if not self._check_rate_limit():
+            return
+
         if self.path == '/api/requests':
             data = self._parse_json_body()
             if data is None:
