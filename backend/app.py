@@ -4,7 +4,7 @@ Provides endpoints for:
 1. Joint Maintenance Window Clustering (/api/optimize)
 2. AI Train Dispatcher & Overtake Engine (/api/dispatch)
 3. Combined Pipeline (/api/full-pipeline)
-4. Where Is My Train Web Dashboard UI (/)
+4. Health Check (/healthz or /api/health)
 5. Add/Update Maintenance Request (/api/requests)
 6. Add/Update Train Status (/api/trains)
 """
@@ -38,9 +38,6 @@ except ImportError:
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 FRONTEND_INDEX = os.path.join(FRONTEND_DIR, "index.html")
 
-# Maps file extensions to their correct Content-Type values.
-# Keeping this as a plain dictionary makes it easy to extend
-# without touching any conditional logic elsewhere.
 MIME_TYPES = {
     # Images
     ".svg":   "image/svg+xml",
@@ -66,11 +63,6 @@ MIME_TYPES = {
 }
 
 def _get_mime_type(path: str) -> str:
-    """Return the Content-Type for a given file path.
-
-    Falls back to application/octet-stream so the browser always receives
-    a valid Content-Type header, even for unrecognised file types.
-    """
     _, ext = os.path.splitext(path)
     return MIME_TYPES.get(ext.lower(), "application/octet-stream")
 
@@ -116,16 +108,16 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self.end_headers()
 
         elif self.path == '/api/optimize':
-            result = engine.optimize_maintenance()
-            self._respond_json(result)
+            self._respond_json(engine.optimize_maintenance())
 
         elif self.path == '/api/dispatch':
-            result = engine.optimize_dispatching()
-            self._respond_json(result)
+            self._respond_json(engine.optimize_dispatching())
 
         elif self.path.startswith('/api/full-pipeline'):
-            result = engine.run_full_pipeline()
-            self._respond_json(result)
+            self._respond_json(engine.run_full_pipeline())
+
+        elif self.path == '/healthz' or self.path == '/api/health':
+            self._respond_json({"status": "healthy", "service": "RailBlock-AI Core Engine"}, status_code=200)
 
         else:
             self.send_response(404)
@@ -162,10 +154,14 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self._respond_json({"error": "Invalid numeric values in request payload"}, status_code=400)
                 return
 
+            if not (0 <= preferred_start <= 23) or duration <= 0 or not (1 <= priority <= 3):
+                self._respond_json({"error": "preferred_start_hour must be 0-23, duration_hours > 0, priority 1-3"}, status_code=400)
+                return
+
             new_req = MaintenanceRequest(
                 id=f"REQ-{len(DEMO_MAINTENANCE_REQUESTS)+1:02d}",
-                department=data.get("department", "P-Way (Engineering)"),
-                section=data.get("section", "Delhi-Mathura Section"),
+                department=str(data.get("department", "P-Way (Engineering)")),
+                section=str(data.get("section", "Delhi-Mathura Section")),
                 preferred_start_hour=preferred_start,
                 duration_hours=duration,
                 priority=priority
@@ -181,10 +177,11 @@ class RequestHandler(BaseHTTPRequestHandler):
             if data is None:
                 return
 
-            train_no = data.get("train_number")
-            if not train_no:
+            raw_train_no = data.get("train_number")
+            if not raw_train_no:
                 self._respond_json({"error": "train_number is required"}, status_code=400)
                 return
+            train_no = str(raw_train_no).strip()
 
             try:
                 delay = int(data.get("delay_minutes", 0))
@@ -198,16 +195,18 @@ class RequestHandler(BaseHTTPRequestHandler):
             for t in DEMO_LIVE_TRAINS:
                 if t.train_number == train_no:
                     t.delay_minutes = delay
+                    t.speed_kmh = speed
+                    t.priority = priority
                     found = True
                     break
             
             if not found:
                 DEMO_LIVE_TRAINS.append(TrainStatus(
                     train_number=train_no,
-                    train_name=data.get("train_name", "Express Special"),
-                    category=data.get("category", "Superfast Express"),
-                    current_station=data.get("current_station", "Faridabad (FDB)"),
-                    next_station=data.get("next_station", "Palwal (PWL)"),
+                    train_name=str(data.get("train_name", "Express Special")),
+                    category=str(data.get("category", "Superfast Express")),
+                    current_station=str(data.get("current_station", "Faridabad (FDB)")),
+                    next_station=str(data.get("next_station", "Palwal (PWL)")),
                     delay_minutes=delay,
                     speed_kmh=speed,
                     priority=priority

@@ -81,7 +81,8 @@ class RailBlockDualEngine:
 
         block_counter = 1
         for section_name, reqs in sections.items():
-            reqs.sort(key=lambda r: r.preferred_start_hour)
+            # Sort by priority first (1 = High/Emergency) then start hour to anchor optimal slots
+            reqs.sort(key=lambda r: (r.priority, r.preferred_start_hour))
             i = 0
             while i < len(reqs):
                 current_group = [reqs[i]]
@@ -117,7 +118,7 @@ class RailBlockDualEngine:
                 block_counter += 1
                 i = j if j > i else i + 1
 
-        capacity_saved_pct = round(((total_original_duration - total_consolidated_duration) / total_original_duration) * 100, 1) if total_original_duration else 0
+        capacity_saved_pct = round(((total_original_duration - total_consolidated_duration) / total_original_duration) * 100, 1) if total_original_duration else 0.0
 
         return {
             "summary": {
@@ -136,13 +137,11 @@ class RailBlockDualEngine:
         """Feature 2: Detect delayed trains and calculate loop line siding & overtake routing."""
         recommendations: List[DispatcherRecommendation] = []
         
-        # Sort trains by track section position and priority
         delayed_trains = [t for t in self.trains if t.delay_minutes > 10 or t.category == "Goods Freight"]
         high_priority_trains = [t for t in self.trains if t.priority == 1]
 
         rec_id = 1
         for slow_train in delayed_trains:
-            # Check if higher priority trains are trailing behind
             following_trains = [
                 t for t in high_priority_trains 
                 if t.train_number != slow_train.train_number and t.priority < slow_train.priority
