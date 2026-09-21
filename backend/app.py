@@ -10,9 +10,17 @@ Provides endpoints for:
 """
 
 import json
+import logging
 import os
 import sys
 from http.server import HTTPServer, BaseHTTPRequestHandler
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger("RailBlock-AI")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if BASE_DIR not in sys.path:
@@ -234,7 +242,7 @@ def run_server(start_port=8080):
             server_address = ('', port)
             HTTPServer.allow_reuse_address = True
             httpd = HTTPServer(server_address, RequestHandler)
-            print(f"🚆 RailBlock-AI Server running at http://localhost:{port}")
+            logger.info(f"🚆 RailBlock-AI Server running at http://localhost:{port}")
             httpd.serve_forever()
             break
         except OSError as e:
