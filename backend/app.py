@@ -70,12 +70,26 @@ def _get_mime_type(path: str) -> str:
     _, ext = os.path.splitext(path)
     return MIME_TYPES.get(ext.lower(), "application/octet-stream")
 
+# CORS origin policy.
+# In development the wildcard default allows any browser to reach the API.
+# For production, set the ALLOWED_ORIGIN environment variable to the specific
+# origin of your dashboard host, e.g.:
+#   export ALLOWED_ORIGIN=https://dashboard.railblock.internal
+# This value is read once at startup so all requests share the same policy.
+ALLOWED_ORIGIN: str = os.getenv("ALLOWED_ORIGIN", "*")
 
 class RequestHandler(BaseHTTPRequestHandler):
     def _send_cors_headers(self):
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header("Access-Control-Allow-Origin", ALLOWED_ORIGIN)
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+
+        # When a specific origin is configured (not the wildcard), tell caching
+        # proxies that the response varies by origin.  Without this header, a
+        # proxy could serve a cached response intended for one origin to a
+        # completely different one, bypassing the restriction entirely.
+        if ALLOWED_ORIGIN != "*":
+            self.send_header("Vary", "Origin")
 
     def do_OPTIONS(self):
         self.send_response(200)
