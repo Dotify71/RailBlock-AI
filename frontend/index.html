@@ -259,6 +259,88 @@
                 </div>
             </div>
 
+            <!-- 24-HOUR INTERACTIVE GANTT CHART TIMELINE VISUALIZER -->
+            <div class="cris-card rounded-2xl p-6 space-y-5 shadow-xl">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-700 pb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-500/20 text-sky-300 text-xs font-black px-2.5 py-0.5 rounded border border-sky-500/40 uppercase tracking-wider">24-Hour Timeline</span>
+                            <h3 class="font-black text-white text-lg">Joint Block Schedule Gantt Visualizer</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">Interactive comparison of isolated BDMS shutdowns vs AI Consolidated joint windows across 24 hours.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
+                        <span class="flex items-center gap-1.5 text-slate-300">
+                            <span class="w-3 h-3 rounded bg-red-500 inline-block"></span> Isolated BDMS Blocks (Unoptimized)
+                        </span>
+                        <span class="flex items-center gap-1.5 text-slate-300">
+                            <span class="w-3 h-3 rounded bg-emerald-500 inline-block glow-green"></span> AI Consolidated Joint Windows
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 24-Hour Timeline Header & Rows Container -->
+                <div class="space-y-4 overflow-x-auto pb-2">
+                    <!-- Time Axis Header (00:00 to 24:00) -->
+                    <div class="min-w-[700px]">
+                        <div class="flex justify-between text-[11px] font-extrabold text-slate-400 px-1 border-b border-slate-700 pb-1.5">
+                            <span>00:00</span>
+                            <span>02:00</span>
+                            <span>04:00</span>
+                            <span>06:00</span>
+                            <span>08:00</span>
+                            <span>10:00</span>
+                            <span>12:00</span>
+                            <span>14:00</span>
+                            <span>16:00</span>
+                            <span>18:00</span>
+                            <span>20:00</span>
+                            <span>22:00</span>
+                            <span>24:00</span>
+                        </div>
+
+                        <!-- Gantt Rows Container -->
+                        <div class="mt-3 space-y-4">
+                            <!-- Row 1: Unoptimized Isolated Requests -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between items-center text-xs font-bold text-slate-300">
+                                    <span class="flex items-center gap-1.5 text-red-400">
+                                        <i class="fa-solid fa-triangle-exclamation text-red-500"></i> Unoptimized Isolated Shutdowns (14 Hours Downtime)
+                                    </span>
+                                    <span class="text-[11px] text-slate-400 font-medium">Multiple redundant track closures</span>
+                                </div>
+                                <div id="gantt-unoptimized-bar" class="relative h-9 bg-slate-900/80 rounded-xl border border-slate-700 overflow-hidden min-w-[700px]">
+                                    <!-- Dynamic Unoptimized Bars Injected Here -->
+                                </div>
+                            </div>
+
+                            <!-- Row 2: AI Consolidated Joint Windows -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between items-center text-xs font-bold text-slate-300">
+                                    <span class="flex items-center gap-1.5 text-emerald-400">
+                                        <i class="fa-solid fa-circle-check text-emerald-500"></i> RailBlock-AI Consolidated Joint Windows (8 Hours Downtime)
+                                    </span>
+                                    <span class="text-xs font-black text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40">
+                                        <i class="fa-solid fa-bolt"></i> 42.9% Line Capacity Reclaimed
+                                    </span>
+                                </div>
+                                <div id="gantt-optimized-bar" class="relative h-10 bg-slate-900/80 rounded-xl border border-emerald-500/50 overflow-hidden min-w-[700px]">
+                                    <!-- Dynamic Optimized Bars Injected Here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gantt Hover / Click Info Banner -->
+                <div id="gantt-info-banner" class="bg-slate-900/70 border border-slate-700 rounded-xl p-3 text-xs flex flex-wrap justify-between items-center gap-2 text-slate-300">
+                    <span class="font-bold text-slate-300">
+                        <i class="fa-solid fa-circle-info text-sky-400 mr-1"></i> Hover or tap any bar in the Gantt timeline to inspect schedule details.
+                    </span>
+                    <span class="text-[11px] text-slate-400 font-medium">24-Hour Time Window Scale</span>
+                </div>
+            </div>
+
             <!-- SCHEDULE COMPARISON GRID -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
@@ -451,6 +533,36 @@
             onRouteChanged();
         }
 
+        function showGanttDetail(id, dept, section, start, end, duration, isOptimized) {
+            const banner = document.getElementById('gantt-info-banner');
+            if (!banner) return;
+            if (isOptimized) {
+                banner.className = "bg-emerald-950/60 border border-emerald-500/50 rounded-xl p-3 text-xs flex flex-wrap justify-between items-center gap-2";
+                banner.innerHTML = `
+                    <div class="flex items-center gap-2 text-emerald-200 font-bold">
+                        <span class="bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px] font-black">${id} JOINT BLOCK</span>
+                        <span>${section}</span>
+                        <span class="text-emerald-400">(${start}:00 to ${end}:00 • ${duration} Hours)</span>
+                    </div>
+                    <span class="text-xs font-black text-emerald-300 bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-500/40">
+                        Departments Covered: ${dept}
+                    </span>
+                `;
+            } else {
+                banner.className = "bg-red-950/60 border border-red-500/50 rounded-xl p-3 text-xs flex flex-wrap justify-between items-center gap-2";
+                banner.innerHTML = `
+                    <div class="flex items-center gap-2 text-red-200 font-bold">
+                        <span class="bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-black">${id} UNOPTIMIZED</span>
+                        <span>${section}</span>
+                        <span class="text-red-400">(${start}:00 to ${end}:00 • ${duration} Hours)</span>
+                    </div>
+                    <span class="text-xs font-bold text-red-300 bg-red-900/60 px-2 py-0.5 rounded border border-red-500/40">
+                        Department: ${dept}
+                    </span>
+                `;
+            }
+        }
+
         function onRouteChanged() {
             const fromCode = document.getElementById('select-from').value;
             const toCode = document.getElementById('select-to').value;
@@ -638,6 +750,49 @@
                     `;
                 }).join('')}
             `;
+
+            // Render Gantt Chart Bars
+            const ganttUnopt = document.getElementById('gantt-unoptimized-bar');
+            if (ganttUnopt) {
+                ganttUnopt.innerHTML = unoptimizedData.map(r => {
+                    const startH = (r.preferred_start_hour !== undefined ? r.preferred_start_hour : r.start) || 0;
+                    const durH = (r.duration_hours !== undefined ? r.duration_hours : r.duration) || 1;
+                    const leftPct = (startH / 24) * 100;
+                    const widthPct = (durH / 24) * 100;
+                    const endHour = startH + durH;
+                    const color = r.department.includes('P-Way') ? 'bg-red-500' : (r.department.includes('TRD') ? 'bg-rose-500' : 'bg-amber-500');
+                    return `
+                        <div class="absolute top-1 bottom-1 ${color} text-white text-[10px] font-bold rounded-lg px-2 flex items-center justify-between border border-white/40 shadow-sm cursor-pointer hover:brightness-110 transition-all"
+                             style="left: ${leftPct}%; width: ${widthPct}%;"
+                             onclick="showGanttDetail('${r.id}', '${r.department}', '${r.section}', ${startH}, ${endHour}, ${durH}, false)"
+                             title="${r.department}: ${startH}:00 - ${endHour}:00 (${durH}h)">
+                            <span class="truncate">${r.department.split(' ')[0]}</span>
+                            <span class="hidden sm:inline font-mono">${startH}-${endHour}h</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const ganttOpt = document.getElementById('gantt-optimized-bar');
+            if (ganttOpt) {
+                ganttOpt.innerHTML = optimizedData.map(b => {
+                    const startH = (b.start_hour !== undefined ? b.start_hour : b.start) || 0;
+                    const endH = (b.end_hour !== undefined ? b.end_hour : b.end) || (startH + 1);
+                    const duration = (b.duration_hours !== undefined ? b.duration_hours : (endH - startH));
+                    const deptsStr = Array.isArray(b.departments_covered) ? b.departments_covered.join(', ') : (Array.isArray(b.depts) ? b.depts.join(', ') : '');
+                    const leftPct = (startH / 24) * 100;
+                    const widthPct = (duration / 24) * 100;
+                    return `
+                        <div class="absolute top-1 bottom-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-black rounded-lg px-2.5 flex items-center justify-between border-2 border-emerald-400 shadow-md cursor-pointer glow-green transition-all"
+                             style="left: ${leftPct}%; width: ${widthPct}%;"
+                             onclick="showGanttDetail('${b.block_id}', '${deptsStr}', '${b.section}', ${startH}, ${endH}, ${duration}, true)"
+                             title="${b.block_id}: ${startH}:00 - ${endH}:00 (${duration}h Joint Block)">
+                            <span class="truncate"><i class="fa-solid fa-layer-group text-amber-300 mr-1"></i> ${b.block_id}</span>
+                            <span class="font-mono text-[10px] bg-emerald-800/80 px-1.5 py-0.5 rounded border border-emerald-400/50">${startH}:00 - ${endH}:00</span>
+                        </div>
+                    `;
+                }).join('');
+            }
 
             // Render Feature 1 Lists
             document.getElementById('unoptimized-container').innerHTML = unoptimizedData.map(r => `
