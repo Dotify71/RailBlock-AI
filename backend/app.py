@@ -12,7 +12,11 @@ Provides endpoints for:
 import json
 import os
 import sys
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import threading
+from http.server import HTTPServer, ThreadingHTTPServer, BaseHTTPRequestHandler
+
+# Mutex lock protecting shared in-memory state across concurrent request threads
+DATA_LOCK = threading.Lock()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if BASE_DIR not in sys.path:
@@ -79,20 +83,24 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        engine = RailBlockDualEngine(DEMO_MAINTENANCE_REQUESTS, DEMO_LIVE_TRAINS)
-
         if self.path == '/' or self.path == '/index.html' or self.path.startswith('/?'):
             if os.path.exists(FRONTEND_INDEX):
                 self.send_response(200)
                 self._send_cors_headers()
                 self.send_header('Content-Type', 'text/html; charset=utf-8')
                 self.end_headers()
-                with open(FRONTEND_INDEX, 'rb') as f:
-                    self.wfile.write(f.read())
+                try:
+                    with open(FRONTEND_INDEX, 'rb') as f:
+                        self.wfile.write(f.read())
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
             else:
                 self.send_response(404)
                 self.end_headers()
-                self.wfile.write(b"Frontend index.html not found.")
+                try:
+                    self.wfile.write(b"Frontend index.html not found.")
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
 
         elif self.path.startswith('/assets/'):
             asset_path = os.path.join(FRONTEND_DIR, self.path.lstrip('/'))
@@ -101,20 +109,32 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self._send_cors_headers()
                 self.send_header('Content-Type', _get_mime_type(asset_path))
                 self.end_headers()
-                with open(asset_path, 'rb') as f:
-                    self.wfile.write(f.read())
+                try:
+                    with open(asset_path, 'rb') as f:
+                        self.wfile.write(f.read())
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
             else:
                 self.send_response(404)
                 self.end_headers()
 
         elif self.path == '/api/optimize':
-            self._respond_json(engine.optimize_maintenance())
+            with DATA_LOCK:
+                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                result = engine.optimize_maintenance()
+            self._respond_json(result)
 
         elif self.path == '/api/dispatch':
-            self._respond_json(engine.optimize_dispatching())
+            with DATA_LOCK:
+                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                result = engine.optimize_dispatching()
+            self._respond_json(result)
 
         elif self.path.startswith('/api/full-pipeline'):
-            self._respond_json(engine.run_full_pipeline())
+            with DATA_LOCK:
+                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                result = engine.run_full_pipeline()
+            self._respond_json(result)
 
         elif self.path == '/healthz' or self.path == '/api/health':
             self._respond_json({"status": "healthy", "service": "RailBlock-AI Core Engine"}, status_code=200)
@@ -158,18 +178,19 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self._respond_json({"error": "preferred_start_hour must be 0-23, duration_hours > 0, priority 1-3"}, status_code=400)
                 return
 
-            new_req = MaintenanceRequest(
-                id=f"REQ-{len(DEMO_MAINTENANCE_REQUESTS)+1:02d}",
-                department=str(data.get("department", "P-Way (Engineering)")),
-                section=str(data.get("section", "Delhi-Mathura Section")),
-                preferred_start_hour=preferred_start,
-                duration_hours=duration,
-                priority=priority
-            )
-            DEMO_MAINTENANCE_REQUESTS.append(new_req)
-            
-            engine = RailBlockDualEngine(DEMO_MAINTENANCE_REQUESTS, DEMO_LIVE_TRAINS)
-            result = engine.run_full_pipeline()
+            with DATA_LOCK:
+                new_req = MaintenanceRequest(
+                    id=f"REQ-{len(DEMO_MAINTENANCE_REQUESTS)+1:02d}",
+                    department=str(data.get("department", "P-Way (Engineering)")),
+                    section=str(data.get("section", "Delhi-Mathura Section")),
+                    preferred_start_hour=preferred_start,
+                    duration_hours=duration,
+                    priority=priority
+                )
+                DEMO_MAINTENANCE_REQUESTS.append(new_req)
+                
+                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                result = engine.run_full_pipeline()
             self._respond_json(result, status_code=201)
 
         elif self.path == '/api/trains':
@@ -191,29 +212,30 @@ class RequestHandler(BaseHTTPRequestHandler):
                 self._respond_json({"error": "Invalid numeric values in request payload"}, status_code=400)
                 return
 
-            found = False
-            for t in DEMO_LIVE_TRAINS:
-                if t.train_number == train_no:
-                    t.delay_minutes = delay
-                    t.speed_kmh = speed
-                    t.priority = priority
-                    found = True
-                    break
-            
-            if not found:
-                DEMO_LIVE_TRAINS.append(TrainStatus(
-                    train_number=train_no,
-                    train_name=str(data.get("train_name", "Express Special")),
-                    category=str(data.get("category", "Superfast Express")),
-                    current_station=str(data.get("current_station", "Faridabad (FDB)")),
-                    next_station=str(data.get("next_station", "Palwal (PWL)")),
-                    delay_minutes=delay,
-                    speed_kmh=speed,
-                    priority=priority
-                ))
+            with DATA_LOCK:
+                found = False
+                for t in DEMO_LIVE_TRAINS:
+                    if t.train_number == train_no:
+                        t.delay_minutes = delay
+                        t.speed_kmh = speed
+                        t.priority = priority
+                        found = True
+                        break
+                
+                if not found:
+                    DEMO_LIVE_TRAINS.append(TrainStatus(
+                        train_number=train_no,
+                        train_name=str(data.get("train_name", "Express Special")),
+                        category=str(data.get("category", "Superfast Express")),
+                        current_station=str(data.get("current_station", "Faridabad (FDB)")),
+                        next_station=str(data.get("next_station", "Palwal (PWL)")),
+                        delay_minutes=delay,
+                        speed_kmh=speed,
+                        priority=priority
+                    ))
 
-            engine = RailBlockDualEngine(DEMO_MAINTENANCE_REQUESTS, DEMO_LIVE_TRAINS)
-            result = engine.run_full_pipeline()
+                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                result = engine.run_full_pipeline()
             self._respond_json(result, status_code=200)
 
         else:
@@ -221,26 +243,42 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def _respond_json(self, data: dict, status_code: int = 200):
-        self.send_response(status_code)
-        self._send_cors_headers()
-        self.send_header('Content-Type', 'application/json')
-        self.end_headers()
-        self.wfile.write(json.dumps(data).encode('utf-8'))
+        try:
+            self.send_response(status_code)
+            self._send_cors_headers()
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(data).encode('utf-8'))
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
 def run_server(start_port=8080):
+    """Start the server, trying successive ports if the preferred one is in use.
+
+    ThreadingHTTPServer spawns a new thread for every incoming request, so
+    slow optimizer calls or concurrent dashboard refreshes no longer block
+    each other.
+    """
+
+    # Set allow_reuse_address on our own subclass so we do not mutate the
+    # standard-library class directly.
+    class _Server(ThreadingHTTPServer):
+        allow_reuse_address = True
+
+    # Port-in-use errno values differ across platforms.
+    PORT_IN_USE_ERRNOS = {48, 98}  # 48 = macOS/BSD, 98 = Linux
+
     for port in range(start_port, start_port + 20):
         try:
             server_address = ('', port)
-            HTTPServer.allow_reuse_address = True
-            httpd = HTTPServer(server_address, RequestHandler)
-            print(f"🚆 RailBlock-AI Server running at http://localhost:{port}")
+            httpd = _Server(server_address, RequestHandler)
+            print(f"RailBlock-AI server running at http://localhost:{port}")
             httpd.serve_forever()
             break
         except OSError as e:
-            if e.errno == 48:
+            if e.errno in PORT_IN_USE_ERRNOS:
                 continue
-            else:
-                raise e
+            raise
 
 if __name__ == '__main__':
     run_server()
