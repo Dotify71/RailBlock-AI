@@ -642,7 +642,12 @@
                         <span class="font-black text-red-400 text-xs uppercase tracking-wider flex items-center gap-2">
                             <i class="fa-solid fa-triangle-exclamation text-red-500"></i> Unoptimized BDMS Requests
                         </span>
-                        <span id="unopt-badge" class="bg-red-500/20 text-red-300 text-xs px-2.5 py-0.5 rounded font-bold border border-red-500/40">5 Shutdowns (14h)</span>
+                        <div class="flex items-center gap-2">
+                            <span id="unopt-badge" class="bg-red-500/20 text-red-300 text-xs px-2.5 py-0.5 rounded font-bold border border-red-500/40">5 Shutdowns (14h)</span>
+                            <button onclick="openRequestDrawer()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-2.5 py-1 rounded-lg shadow flex items-center gap-1.5 transition-colors cursor-pointer border border-blue-400/40" title="Submit new departmental track closure request">
+                                <i class="fa-solid fa-plus text-amber-300"></i> New Request
+                            </button>
+                        </div>
                     </div>
                     <div id="unoptimized-container" class="space-y-3"></div>
                 </div>
@@ -1028,6 +1033,163 @@
         /* TRACK MAP ZOOM LOGIC */
         let trackMapZoom = 1.0;
 
+        let currentFromCode = "NDLS";
+        let currentToCode = "GWL";
+        let activeUnoptimizedData = [
+            { id: "REQ-01", department: "P-Way (Engineering)", section: "Delhi-Mathura Section", start: 10, duration: 3, preferred_start_hour: 10, duration_hours: 3 },
+            { id: "REQ-02", department: "TRD (Electrification)", section: "Delhi-Mathura Section", start: 11, duration: 2, preferred_start_hour: 11, duration_hours: 2 },
+            { id: "REQ-03", department: "S&T (Signals)", section: "Delhi-Mathura Section", start: 12, duration: 2, preferred_start_hour: 12, duration_hours: 2 },
+            { id: "REQ-04", department: "P-Way (Engineering)", section: "Agra-Gwalior Section", start: 14, duration: 4, preferred_start_hour: 14, duration_hours: 4 },
+            { id: "REQ-05", department: "TRD (Electrification)", section: "Agra-Gwalior Section", start: 15, duration: 3, preferred_start_hour: 15, duration_hours: 3 }
+        ];
+        let activeOptimizedData = null;
+
+        const ROUTE_DATA = {
+            "NDLS-GWL": {
+                get unoptimized() { return activeUnoptimizedData; },
+                set unoptimized(val) { activeUnoptimizedData = val; },
+                get optimized() { return activeOptimizedData; },
+                set optimized(val) { activeOptimizedData = val; }
+            }
+        };
+
+        function openRequestDrawer() {
+            const backdrop = document.getElementById('request-drawer-backdrop');
+            const drawer = document.getElementById('request-drawer');
+            if (backdrop && drawer) {
+                backdrop.classList.remove('hidden');
+                setTimeout(() => {
+                    backdrop.classList.remove('opacity-0');
+                    drawer.classList.remove('translate-x-full');
+                }, 10);
+            }
+        }
+
+        function closeRequestDrawer() {
+            const backdrop = document.getElementById('request-drawer-backdrop');
+            const drawer = document.getElementById('request-drawer');
+            if (backdrop && drawer) {
+                drawer.classList.add('translate-x-full');
+                backdrop.classList.add('opacity-0');
+                setTimeout(() => {
+                    backdrop.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function updateStartSliderLabel(val) {
+            const label = document.getElementById('slider-start-label');
+            if (label) {
+                const hour = String(val).padStart(2, '0');
+                label.innerText = `${hour}:00 IST`;
+            }
+        }
+
+        function submitDepartmentalRequest(e) {
+            e.preventDefault();
+            const form = document.getElementById('dept-request-form');
+            const dept = form.querySelector('input[name="req_dept"]:checked').value;
+            const section = document.getElementById('req-section').value;
+            const start = parseInt(document.getElementById('req-start-slider').value) || 10;
+            const duration = parseInt(form.querySelector('input[name="req_duration"]:checked').value) || 2;
+            const priority = parseInt(document.getElementById('req-priority').value) || 2;
+
+            const newId = `REQ-0${activeUnoptimizedData.length + 1}`;
+
+            activeUnoptimizedData.push({
+                id: newId,
+                department: dept,
+                section: section,
+                start: start,
+                duration: duration,
+                preferred_start_hour: start,
+                duration_hours: duration,
+                priority: priority
+            });
+
+            reoptimizeLocalRouteData();
+            renderDynamicRoute(currentFromCode, currentToCode);
+            closeRequestDrawer();
+
+            if (typeof showCrisToast === 'function') {
+                showCrisToast(`New ${dept} request submitted (${start}:00 - ${start + duration}:00). AI Joint Schedule re-optimized!`);
+            }
+            if (typeof addAuditLog === 'function') {
+                addAuditLog("NEW REQUEST", newId, section, `${dept} requested ${duration}h shutdown at ${start}:00 IST • AI Re-optimized`, "bg-purple-500/20 text-purple-300 border-purple-500/40");
+            }
+        }
+
+        function reoptimizeLocalRouteData(route) {
+            const unopt = (route && route.unoptimized) ? route.unoptimized : activeUnoptimizedData;
+            const sections = {};
+            unopt.forEach(r => {
+                const sec = r.section;
+                if (!sections[sec]) sections[sec] = [];
+                sections[sec].push(r);
+            });
+
+            const newOptimized = [];
+            let blockCounter = 1;
+
+            Object.keys(sections).forEach(sec => {
+                const reqs = sections[sec];
+                reqs.sort((a, b) => {
+                    const startA = a.preferred_start_hour !== undefined ? a.preferred_start_hour : a.start;
+                    const startB = b.preferred_start_hour !== undefined ? b.preferred_start_hour : b.start;
+                    return startA - startB;
+                });
+                let i = 0;
+                while (i < reqs.length) {
+                    const group = [reqs[i]];
+                    const start = reqs[i].preferred_start_hour !== undefined ? reqs[i].preferred_start_hour : reqs[i].start;
+                    const dur = reqs[i].duration_hours !== undefined ? reqs[i].duration_hours : reqs[i].duration;
+                    let maxEnd = start + dur;
+                    let j = i + 1;
+                    while (j < reqs.length) {
+                        const nextStart = reqs[j].preferred_start_hour !== undefined ? reqs[j].preferred_start_hour : reqs[j].start;
+                        const nextDur = reqs[j].duration_hours !== undefined ? reqs[j].duration_hours : reqs[j].duration;
+                        if (nextStart <= (maxEnd + 1)) {
+                            group.push(reqs[j]);
+                            maxEnd = Math.max(maxEnd, nextStart + nextDur);
+                            j++;
+                        } else {
+                            break;
+                        }
+                    }
+                    const consolidatedDuration = maxEnd - start;
+                    const depts = Array.from(new Set(group.map(g => g.department.split(' ')[0]))).sort();
+                    const sumIndividual = group.reduce((s, g) => s + (g.duration_hours !== undefined ? g.duration_hours : g.duration), 0);
+                    const timeSaved = group.length > 1 ? (sumIndividual - consolidatedDuration) : 0.5;
+
+                    newOptimized.push({
+                        block_id: `BLK-00${blockCounter}`,
+                        section: sec,
+                        start_hour: start,
+                        end_hour: maxEnd,
+                        start: start,
+                        end: maxEnd,
+                        duration_hours: consolidatedDuration,
+                        departments_covered: depts,
+                        depts: depts,
+                        time_saved_hours: parseFloat(timeSaved.toFixed(1)),
+                        saved: parseFloat(timeSaved.toFixed(1))
+                    });
+                    blockCounter++;
+                    i = j > i ? j : i + 1;
+                }
+            });
+
+            if (route) {
+                route.optimized = newOptimized;
+            }
+            activeOptimizedData = newOptimized;
+            return newOptimized;
+        }
+
+        function renderRoute(fromCode, toCode) {
+            renderDynamicRoute(fromCode, toCode);
+        }
+
         let activeBlockData = null;
         const controllerAuditLogs = [
             {
@@ -1311,6 +1473,11 @@
         }
 
         async function renderDynamicRoute(fromCode, toCode) {
+            fromCode = fromCode || currentFromCode;
+            toCode = toCode || currentToCode;
+            currentFromCode = fromCode;
+            currentToCode = toCode;
+
             const idx1 = STATION_ORDER.indexOf(fromCode);
             const idx2 = STATION_ORDER.indexOf(toCode);
             
@@ -1333,24 +1500,17 @@
             // Attempt to fetch from live Python backend API
             const apiData = await fetchLivePipeline();
 
-            // Dynamic Unoptimized vs Optimized calculations
-            const unoptimizedData = [
-                { id: "REQ-01", department: "P-Way (Engineering)", section: `${fromStn.code}-${toStn.code} Main Section`, start: 10, duration: 3 },
-                { id: "REQ-02", department: "TRD (Electrification)", section: `${fromStn.code}-${toStn.code} Main Section`, start: 11, duration: 2 },
-                { id: "REQ-03", department: "S&T (Signals)", section: `${fromStn.code}-${toStn.code} Main Section`, start: 12, duration: 2 },
-                { id: "REQ-04", department: "P-Way (Engineering)", section: `${toStn.code} Sub-Corridor`, start: 14, duration: 4 },
-                { id: "REQ-05", department: "TRD (Electrification)", section: `${toStn.code} Sub-Corridor`, start: 15, duration: 3 }
-            ];
+            if (!activeOptimizedData) {
+                reoptimizeLocalRouteData();
+            }
 
-            const optimizedData = [
-                { block_id: "BLK-001", section: `${fromStn.code}-${toStn.code} Main Section`, start: 10, end: 14, depts: ["P-Way", "TRD", "S&T"], saved: 3.0 },
-                { block_id: "BLK-002", section: `${toStn.code} Sub-Corridor`, start: 14, end: 18, depts: ["P-Way", "TRD"], saved: 3.0 }
-            ];
+            const unoptimizedData = activeUnoptimizedData;
+            const optimizedData = activeOptimizedData;
 
-            const totalUnoptHours = 14;
-            const totalOptHours = 8;
-            const savedHours = 6.0;
-            const capPercent = "42.9%";
+            const totalUnoptHours = unoptimizedData.reduce((acc, r) => acc + ((r.duration_hours !== undefined ? r.duration_hours : r.duration) || 0), 0);
+            const totalOptHours = optimizedData.reduce((acc, b) => acc + ((b.duration_hours !== undefined ? b.duration_hours : (b.end - b.start)) || 0), 0);
+            const savedHours = parseFloat(Math.max(0, totalUnoptHours - totalOptHours).toFixed(1));
+            const capPercent = totalUnoptHours > 0 ? `${((savedHours / totalUnoptHours) * 100).toFixed(1)}%` : "0.0%";
 
             // Update Metrics
             document.getElementById('metric-capacity').innerText = capPercent;
@@ -1467,15 +1627,19 @@
             }
 
             // Render Feature 1 Lists
-            document.getElementById('unoptimized-container').innerHTML = unoptimizedData.map(r => `
+            document.getElementById('unoptimized-container').innerHTML = unoptimizedData.map(r => {
+                const startH = (r.preferred_start_hour !== undefined ? r.preferred_start_hour : r.start) || 0;
+                const durH = (r.duration_hours !== undefined ? r.duration_hours : r.duration) || 1;
+                return `
                 <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
                     <div>
                         <span class="font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">${r.department}</span>
-                        <p class="font-bold text-slate-200 mt-1"><i class="fa-solid fa-train text-slate-400 mr-1"></i> ${r.section} (${r.start}:00 - ${r.start + r.duration}:00)</p>
+                        <p class="font-bold text-slate-200 mt-1"><i class="fa-solid fa-train text-slate-400 mr-1"></i> ${r.section} (${startH}:00 - ${startH + durH}:00)</p>
                     </div>
-                    <span class="font-bold bg-red-500/20 text-red-300 px-2.5 py-1 rounded border border-red-500/40">${r.duration}h Stop</span>
+                    <span class="font-bold bg-red-500/20 text-red-300 px-2.5 py-1 rounded border border-red-500/40">${durH}h Stop</span>
                 </div>
-            `).join('');
+            `;
+            }).join('');
 
             document.getElementById('optimized-container').innerHTML = optimizedData.map(b => {
                 const startH = b.start_hour !== undefined ? b.start_hour : b.start;
@@ -1744,7 +1908,6 @@
         renderDynamicRoute("NDLS", "GWL");
         initTheme();
     </script>
-
     <!-- ========================================================================= -->
     <!-- STATION OPERATIONS & TRACK DETAILS MODAL                                  -->
     <!-- ========================================================================= -->
@@ -1904,6 +2067,7 @@
         </div>
     </div>
 
+    <!-- ========================================================================= -->
     <!-- ========================================================================= -->
     <!-- OFFICIAL BLOCK SCHEDULE REPORT MODAL (FOR PDF EXPORT & SHIFT HANDOVER)   -->
     <!-- ========================================================================= -->
@@ -2065,6 +2229,132 @@
             </p>
 
         </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- DEPARTMENTAL REQUEST SUBMISSION SLIDE-OVER DRAWER FORM                    -->
+    <!-- ========================================================================= -->
+    <div id="request-drawer-backdrop" onclick="closeRequestDrawer()" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden transition-opacity duration-300 opacity-0"></div>
+    <div id="request-drawer" class="fixed inset-y-0 right-0 max-w-md w-full bg-slate-900 border-l border-slate-700 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between text-slate-100">
+        <!-- Drawer Header -->
+        <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-5 flex justify-between items-center border-b border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-lg shadow">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div>
+                    <span class="bg-amber-500/20 text-amber-300 text-[10px] font-extrabold px-2 py-0.5 rounded border border-amber-500/40 uppercase tracking-wider">BDMS Maintenance Input</span>
+                    <h3 class="text-base font-black">Submit Departmental Request</h3>
+                </div>
+            </div>
+            <button onclick="closeRequestDrawer()" class="text-slate-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Drawer Body & Form -->
+        <form id="dept-request-form" onsubmit="submitDepartmentalRequest(event)" class="p-6 space-y-5 flex-1 overflow-y-auto text-xs text-slate-100">
+            
+            <!-- Department Selection -->
+            <div class="space-y-2">
+                <label class="font-black text-slate-200 uppercase tracking-wider block">1. Maintenance Department</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_dept" value="P-Way (Engineering)" checked class="peer sr-only">
+                        <div class="p-2.5 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-bold peer-checked:border-blue-500 peer-checked:bg-blue-600/20 peer-checked:text-blue-300 transition-all shadow-xs">
+                            P-Way
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_dept" value="TRD (Electrification)" class="peer sr-only">
+                        <div class="p-2.5 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-bold peer-checked:border-amber-500 peer-checked:bg-amber-500/20 peer-checked:text-amber-300 transition-all shadow-xs">
+                            TRD
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_dept" value="S&T (Signals)" class="peer sr-only">
+                        <div class="p-2.5 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-bold peer-checked:border-purple-500 peer-checked:bg-purple-600/20 peer-checked:text-purple-300 transition-all shadow-xs">
+                            S&T
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Route Track Section -->
+            <div class="space-y-1.5">
+                <label class="font-black text-slate-200 uppercase tracking-wider block">2. Target Track Section</label>
+                <select id="req-section" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 font-bold text-white focus:outline-none focus:border-sky-500">
+                    <option value="Delhi-Mathura Section">Delhi-Mathura Section (KM 0 - KM 141)</option>
+                    <option value="Agra-Gwalior Section">Agra-Gwalior Section (KM 195 - KM 313)</option>
+                </select>
+            </div>
+
+            <!-- Preferred Start Hour Slider -->
+            <div class="space-y-2">
+                <div class="flex justify-between items-center">
+                    <label class="font-black text-slate-200 uppercase tracking-wider">3. Preferred Start Time</label>
+                    <span id="slider-start-label" class="font-black font-mono text-sky-300 bg-sky-950/80 px-2 py-0.5 rounded border border-sky-800">10:00 IST</span>
+                </div>
+                <input id="req-start-slider" type="range" min="0" max="23" value="10" oninput="updateStartSliderLabel(this.value)" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                <div class="flex justify-between text-[10px] font-bold text-slate-400">
+                    <span>00:00</span>
+                    <span>06:00</span>
+                    <span>12:00</span>
+                    <span>18:00</span>
+                    <span>23:00</span>
+                </div>
+            </div>
+
+            <!-- Requested Duration -->
+            <div class="space-y-1.5">
+                <label class="font-black text-slate-200 uppercase tracking-wider block">4. Shutdown Duration (Hours)</label>
+                <div class="grid grid-cols-4 gap-2">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_duration" value="1" class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-extrabold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-300">
+                            1 Hour
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_duration" value="2" checked class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-extrabold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-300">
+                            2 Hours
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_duration" value="3" class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-extrabold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-300">
+                            3 Hours
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_duration" value="4" class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-extrabold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-300">
+                            4 Hours
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Priority Selector -->
+            <div class="space-y-1.5">
+                <label class="font-black text-slate-200 uppercase tracking-wider block">5. Work Priority</label>
+                <select id="req-priority" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 font-bold text-white focus:outline-none focus:border-sky-500">
+                    <option value="1">Priority 1 (Emergency Track Work)</option>
+                    <option value="2" selected>Priority 2 (Routine Scheduled Maintenance)</option>
+                </select>
+            </div>
+
+            <!-- Drawer Submit Footer -->
+            <div class="pt-4 border-t border-slate-800 flex gap-2">
+                <button type="button" onclick="closeRequestDrawer()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl transition-colors cursor-pointer text-center border border-slate-700">
+                    Cancel
+                </button>
+                <button type="submit" class="flex-2 bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-xl shadow-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> Submit & Re-Optimize
+                </button>
+            </div>
+        </form>
     </div>
 </body>
 </html>
