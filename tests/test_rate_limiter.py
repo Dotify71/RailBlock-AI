@@ -3,7 +3,7 @@ import sys
 import time
 import unittest
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/backend')
 from app import RateLimiter
 
 class TestRateLimiter(unittest.TestCase):
