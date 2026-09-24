@@ -85,23 +85,37 @@ from collections import defaultdict
 RATE_LIMIT_REQUESTS = 60
 RATE_LIMIT_WINDOW_SECONDS = 60
 
+import threading
+
 class RateLimiter:
     def __init__(self, max_requests: int = RATE_LIMIT_REQUESTS, window_seconds: int = RATE_LIMIT_WINDOW_SECONDS):
         self.max_requests = max_requests
         self.window_seconds = window_seconds
         self.requests = defaultdict(list)
+        self._lock = threading.Lock()
+        self._counter = 0
 
     def is_allowed(self, ip: str) -> bool:
         now = time.time()
-        # Filter timestamps within current window
         cutoff = now - self.window_seconds
-        self.requests[ip] = [ts for ts in self.requests[ip] if ts > cutoff]
+        
+        with self._lock:
+            # Periodic cleanup to prevent unbounded memory leak
+            self._counter += 1
+            if self._counter > 1000:
+                self._counter = 0
+                stale = [k for k, v in self.requests.items() if not v or v[-1] <= cutoff]
+                for k in stale:
+                    self.requests.pop(k, None)
+                    
+            valid_ts = [ts for ts in self.requests[ip] if ts > cutoff]
+            if len(valid_ts) >= self.max_requests:
+                self.requests[ip] = valid_ts
+                return False
 
-        if len(self.requests[ip]) >= self.max_requests:
-            return False
-
-        self.requests[ip].append(now)
-        return True
+            valid_ts.append(now)
+            self.requests[ip] = valid_ts
+            return True
 
 RATE_LIMITER = RateLimiter()
 
