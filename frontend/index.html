@@ -504,6 +504,62 @@
                 </div>
             </div>
 
+            <!-- LIVE SIMULATION CONTROLS & TIMELINE CLOCK (ISSUE #15) -->
+            <div id="sim-control-bar" class="cris-card p-4 rounded-2xl border space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <span id="sim-status-dot" class="w-3.5 h-3.5 rounded-full bg-amber-500"></span>
+                        <div>
+                            <h3 class="font-black text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wide flex items-center gap-2">
+                                Live Rail Traffic Simulation
+                                <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-300 text-[10px] px-2 py-0.5 rounded font-extrabold border border-blue-300 dark:border-blue-700">SIH ACCELERATED</span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">Real-time clock progression & dynamic train movement playback</p>
+                        </div>
+                    </div>
+
+                    <!-- Real-Time Digital Clock -->
+                    <div class="bg-slate-900 text-white px-4 py-2 rounded-xl font-mono border border-slate-700 shadow flex items-center gap-2">
+                        <i class="fa-solid fa-clock text-amber-400 text-xs"></i>
+                        <span id="sim-clock-display" class="text-base font-black tracking-wider text-amber-300">10:00:00 IST</span>
+                        <span id="sim-speed-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-500/40">10x SPEED</span>
+                    </div>
+                </div>
+
+                <!-- Simulation Control Buttons & Progress Bar -->
+                <div class="flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <button id="sim-play-btn" onclick="toggleSimPlay()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition-colors cursor-pointer">
+                            <i id="sim-play-icon" class="fa-solid fa-play"></i>
+                            <span id="sim-play-text">Play Simulation</span>
+                        </button>
+                        <button onclick="setSimSpeed(1)" class="sim-speed-btn bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer">
+                            1x
+                        </button>
+                        <button onclick="setSimSpeed(10)" class="sim-speed-btn bg-amber-500 text-slate-950 font-black px-3 py-2 rounded-xl text-xs shadow border border-amber-400 transition-colors cursor-pointer">
+                            10x
+                        </button>
+                        <button onclick="setSimSpeed(60)" class="sim-speed-btn bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer">
+                            60x Max
+                        </button>
+                        <button onclick="resetSim()" class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer" title="Reset Simulation">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                        </button>
+                    </div>
+
+                    <!-- Overall Section Movement Progress Bar -->
+                    <div class="flex-1 min-w-[200px] space-y-1">
+                        <div class="flex justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                            <span>Simulated Section Progress</span>
+                            <span id="sim-pct-display" class="font-mono text-blue-700 dark:text-blue-400 font-black">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                            <div id="sim-progress-bar" class="bg-gradient-to-r from-blue-600 to-emerald-500 h-full w-0 transition-all duration-200 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- TRAIN LIST CONTAINER -->
             <div id="train-cards-list" class="space-y-4">
                 <!-- Dynamically rendered via JS -->
@@ -876,6 +932,86 @@
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-20', 'opacity-0');
             }, 4500);
+        }
+
+        /* LIVE TRAIN SIMULATION CONTROLS (ISSUE #15) */
+        let simRunning = false;
+        let simSpeed = 10;
+        let simTimer = null;
+        let simTimeSeconds = 36000; // 10:00:00 AM (10 * 3600)
+        const SIM_START_SECONDS = 36000; // 10:00 AM
+        const SIM_END_SECONDS = 50400;   // 02:00 PM (14 * 3600)
+
+        function toggleSimPlay() {
+            simRunning = !simRunning;
+            const playBtn = document.getElementById('sim-play-btn');
+            const playIcon = document.getElementById('sim-play-icon');
+            const playText = document.getElementById('sim-play-text');
+            const dot = document.getElementById('sim-status-dot');
+
+            if (simRunning) {
+                if (playBtn) playBtn.className = "bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition-colors cursor-pointer";
+                if (playIcon) playIcon.className = "fa-solid fa-pause";
+                if (playText) playText.innerText = "Pause Simulation";
+                if (dot) dot.className = "w-3.5 h-3.5 rounded-full bg-emerald-500 animate-pulse";
+                startSimTimer();
+            } else {
+                if (playBtn) playBtn.className = "bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition-colors cursor-pointer";
+                if (playIcon) playIcon.className = "fa-solid fa-play";
+                if (playText) playText.innerText = "Resume Simulation";
+                if (dot) dot.className = "w-3.5 h-3.5 rounded-full bg-amber-500";
+                stopSimTimer();
+            }
+        }
+
+        function setSimSpeed(speed) {
+            simSpeed = speed;
+            const speedBadge = document.getElementById('sim-speed-badge');
+            if (speedBadge) speedBadge.innerText = `${speed}x SPEED`;
+        }
+
+        function resetSim() {
+            simTimeSeconds = SIM_START_SECONDS;
+            if (simRunning) toggleSimPlay();
+            updateSimUI();
+        }
+
+        function startSimTimer() {
+            stopSimTimer();
+            simTimer = setInterval(() => {
+                simTimeSeconds += (simSpeed * 2);
+                if (simTimeSeconds >= SIM_END_SECONDS) {
+                    simTimeSeconds = SIM_END_SECONDS;
+                    toggleSimPlay();
+                }
+                updateSimUI();
+            }, 250);
+        }
+
+        function stopSimTimer() {
+            if (simTimer) {
+                clearInterval(simTimer);
+                simTimer = null;
+            }
+        }
+
+        function updateSimUI() {
+            const hours = Math.floor(simTimeSeconds / 3600);
+            const mins = Math.floor((simTimeSeconds % 3600) / 60);
+            const secs = Math.floor(simTimeSeconds % 60);
+            const clockStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')} IST`;
+            
+            const clockDisplay = document.getElementById('sim-clock-display');
+            if (clockDisplay) clockDisplay.innerText = clockStr;
+
+            const totalDuration = SIM_END_SECONDS - SIM_START_SECONDS;
+            const elapsed = simTimeSeconds - SIM_START_SECONDS;
+            const pct = Math.min(100, Math.max(0, Math.round((elapsed / totalDuration) * 100)));
+
+            const progressBar = document.getElementById('sim-progress-bar');
+            const pctDisplay = document.getElementById('sim-pct-display');
+            if (progressBar) progressBar.style.width = `${pct}%`;
+            if (pctDisplay) pctDisplay.innerText = `${pct}%`;
         }
 
         function zoomTrackMap(factor) {
