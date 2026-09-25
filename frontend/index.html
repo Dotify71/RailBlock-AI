@@ -9,16 +9,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Offline & Air-Gapped Presentation Fallbacks -->
+    <link href="/assets/fallback.css" rel="stylesheet">
     <style>
-        * { font-family: 'Public Sans', -apple-system, sans-serif; }
-        body { background-color: #0F172A; color: #F8FAFC; }
+        * { font-family: 'Public Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #0F172A; color: #F8FAFC; transition: background-color 0.3s ease, color 0.3s ease; }
         
         .cris-header { background-color: #0B2545; }
         .cris-sub-header { background-color: #132E4F; }
-        .cris-card { background-color: #1E293B; border: 1px solid #334155; }
+        .cris-card { background-color: #1E293B; border: 1px solid #334155; transition: background-color 0.3s ease, border-color 0.3s ease; }
         .cris-btn-primary { background-color: #0284C7; color: #FFFFFF; }
         .cris-btn-primary:hover { background-color: #0369A1; }
         
+        .glow-green { box-shadow: 0 0 15px rgba(34, 197, 94, 0.3); }
+        .glow-amber { box-shadow: 0 0 20px rgba(245, 158, 11, 0.35); }
+
         /* VERTICAL TRACK STYLING */
         .rail-track-line {
             width: 6px;
@@ -65,6 +70,150 @@
             70% { box-shadow: 0 0 0 10px rgba(248, 113, 113, 0); }
             100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); }
         }
+
+        @keyframes pulseTrainGreen {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        @keyframes pulseTrainAmber {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+
+        .anim-express-train {
+            animation: pulseTrainGreen 2.5s infinite;
+        }
+
+        .anim-freight-train {
+            animation: pulseTrainAmber 3s infinite;
+        }
+
+        /* Night Shift Controller Mode (Dark Theme) Styles */
+        body.dark {
+            background-color: #0F172A !important;
+            color: #F8FAFC !important;
+        }
+
+        /* Standard Daylight Mode (Light Theme) Styles */
+        body.light {
+            background-color: #F1F5F9 !important;
+            color: #0F172A !important;
+        }
+        body.light .cris-card {
+            background-color: #FFFFFF !important;
+            border: 1px solid #E2E8F0 !important;
+            color: #0F172A !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+        }
+        body.light .cris-sub-header {
+            background-color: #0F2744 !important;
+            border-color: #334155 !important;
+        }
+        body.light .bg-slate-900,
+        body.light .bg-slate-900\/80,
+        body.light .bg-slate-900\/70 {
+            background-color: #F8FAFC !important;
+            color: #0F172A !important;
+            border-color: #E2E8F0 !important;
+        }
+        body.light .bg-slate-800 {
+            background-color: #E2E8F0 !important;
+            color: #0F172A !important;
+            border-color: #CBD5E1 !important;
+        }
+        body.light .border-slate-700,
+        body.light .border-slate-700\/80 {
+            border-color: #E2E8F0 !important;
+        }
+        body.light .text-white {
+            color: #0F172A !important;
+        }
+        body.light .cris-header .text-white,
+        body.light .cris-sub-header .text-white,
+        body.light .cris-btn-primary,
+        body.light .cris-btn-primary *,
+        body.light button.bg-amber-500,
+        body.light span.bg-amber-500,
+        body.light .station-node,
+        body.light .bg-emerald-600,
+        body.light .bg-red-500,
+        body.light .bg-red-600,
+        body.light .bg-sky-600 {
+            color: #FFFFFF !important;
+        }
+        body.light .cris-header h1.text-white {
+            color: #FFFFFF !important;
+        }
+        body.light button.bg-amber-500,
+        body.light span.bg-amber-500 {
+            color: #0F172A !important;
+        }
+        body.light .text-slate-200,
+        body.light .text-slate-300 {
+            color: #334155 !important;
+        }
+        body.light .text-slate-400 {
+            color: #64748B !important;
+        }
+        body.light .cris-header .text-slate-300,
+        body.light .cris-sub-header .text-slate-300 {
+            color: #CBD5E1 !important;
+        }
+        body.light .bg-emerald-950\/40,
+        body.light .bg-emerald-950\/60,
+        body.light .bg-emerald-950\/80 {
+            background-color: #ECFDF5 !important;
+            border-color: #A7F3D0 !important;
+            color: #065F46 !important;
+        }
+        body.light .bg-amber-950\/80 {
+            background-color: #FFFBEB !important;
+            border-color: #FDE68A !important;
+            color: #92400E !important;
+        }
+        body.light .bg-red-950\/60 {
+            background-color: #FEF2F2 !important;
+            border-color: #FECACA !important;
+            color: #991B1B !important;
+        }
+        body.light select option {
+            background-color: #FFFFFF !important;
+            color: #0F172A !important;
+        }
+        body.light .station-node {
+            background-color: #FFFFFF !important;
+        }
+        body.light .rail-track-line {
+            background-color: #94A3B8 !important;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #official-report-modal, #official-report-modal * {
+                visibility: visible;
+            }
+            #official-report-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white !important;
+                color: #0f172a !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+        .touch-target { min-height: 44px; min-width: 44px; }
+        .touch-scroll { -webkit-overflow-scrolling: touch; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -86,10 +235,56 @@
                 </div>
             </div>
             
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3">
                 <span id="api-status-badge" class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full font-extrabold border border-emerald-500/40">
                     ● Live Python Engine Connected
                 </span>
+                <!-- Export Official Block Schedule Dropdown -->
+                <div class="relative inline-block text-left" id="export-dropdown-container">
+                    <button id="export-schedule-btn" onclick="toggleExportMenu(event)" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl font-bold text-xs transition-all flex items-center gap-2 shadow border border-emerald-500/50 cursor-pointer" title="Export official block schedule report for shift handover">
+                        <i class="fa-solid fa-file-export"></i>
+                        <span class="hidden sm:inline">Export Schedule</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] ml-0.5"></i>
+                    </button>
+                    <div id="export-menu-dropdown" class="hidden absolute right-0 mt-2 w-72 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl py-2 z-50 text-xs text-white backdrop-blur-lg">
+                        <div class="px-4 py-2 border-b border-slate-800 flex justify-between items-center">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-amber-400">Official Shift Handover</span>
+                            <span class="bg-emerald-500/20 text-emerald-300 text-[9px] px-1.5 py-0.5 rounded font-bold">1-Click</span>
+                        </div>
+                        <button onclick="exportScheduleCSV()" class="w-full text-left px-4 py-3 hover:bg-slate-800 flex items-center gap-3 transition-colors cursor-pointer">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm border border-emerald-500/30">
+                                <i class="fa-solid fa-file-excel"></i>
+                            </div>
+                            <div>
+                                <p class="font-black text-slate-100">Download Excel / CSV Report</p>
+                                <p class="text-[10px] text-slate-400">Approved joint windows & metrics</p>
+                            </div>
+                        </button>
+                        <button onclick="exportSchedulePDF()" class="w-full text-left px-4 py-3 hover:bg-slate-800 flex items-center gap-3 transition-colors border-t border-slate-800/80 cursor-pointer">
+                            <div class="w-8 h-8 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center text-sm border border-red-500/30">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <div>
+                                <p class="font-black text-slate-100">Print / Export PDF Shift Report</p>
+                                <p class="text-[10px] text-slate-400">Printable sheet with signature boxes</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="theme-toggle-btn" onclick="toggleTheme()" class="bg-slate-800 hover:bg-slate-700 text-amber-300 px-3 py-1.5 rounded-xl font-bold text-xs border border-slate-700 transition-all flex items-center gap-1.5 shadow cursor-pointer" title="Toggle Night Shift / Daylight Mode">
+                    <i class="fa-solid fa-moon"></i>
+                    <span class="hidden sm:inline">Night Shift</span>
+                </button>
+
+                <button id="audio-toggle-btn" onclick="toggleAudio()" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 px-3 py-1.5 rounded-xl font-bold text-xs border border-slate-700 transition-all flex items-center gap-1.5 shadow cursor-pointer" title="Toggle audio feedback for AI alerts">
+                    <i id="audio-icon" class="fa-solid fa-volume-high"></i>
+                    <span id="audio-status-label" class="hidden sm:inline">Audio: ON</span>
+                </button>
+
+                <button id="mobile-menu-btn" onclick="toggleMobileDrawer()" aria-label="Open Mobile Menu" class="md:hidden bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 p-2.5 rounded-xl text-lg flex items-center justify-center min-h-[44px] min-w-[44px] shadow transition-colors cursor-pointer" title="Open Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
             </div>
         </div>
 
@@ -98,77 +293,158 @@
             <div class="max-w-6xl mx-auto flex justify-around text-center text-xs font-black text-slate-300">
                 <button onclick="switchCrisTab('dashboard')" id="tab-dashboard" class="flex-1 py-3 border-b-4 border-amber-500 text-amber-400 flex justify-center items-center gap-2">
                     <i class="fa-solid fa-gauge-high text-sm"></i>
-                    <span>SECTION CONTROLLER MAP</span>
+                    <span>DISPATCH CONSOLE</span>
                 </button>
                 <button onclick="switchCrisTab('blocks')" id="tab-blocks" class="flex-1 py-3 border-b-4 border-transparent hover:text-white flex justify-center items-center gap-2">
                     <i class="fa-solid fa-layer-group text-sm"></i>
-                    <span>JOINT MAINTENANCE BLOCKS (42.9%)</span>
+                    <span>MAINTENANCE BLOCKS</span>
                 </button>
                 <button onclick="switchCrisTab('siding')" id="tab-siding" class="flex-1 py-3 border-b-4 border-transparent hover:text-white flex justify-center items-center gap-2">
-                    <i class="fa-solid fa-route text-sm"></i>
-                    <span>AI OVERTAKE & SIDING DIRECTIVES</span>
+                    <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                    <span>AI DISPATCH & SIDING</span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- ========================================================================= -->
-    <!-- DYNAMIC ROUTE & DIVISION SELECTOR CARD                                    -->
+    <!-- MOBILE NAVIGATION DRAWER & ROUTE PICKER (ISSUE #17)                       -->
     <!-- ========================================================================= -->
-    <div class="max-w-6xl mx-auto w-full px-4 py-5">
-        <div class="cris-card rounded-2xl p-5 shadow-xl space-y-4">
-            
-            <div class="flex justify-between items-center border-b border-slate-700 pb-3">
-                <span class="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-sliders"></i> Active Section & Corridor Selection
-                </span>
-                <span class="text-xs text-slate-400 font-bold">Northern Railway (NR) / North Central Railway (NCR)</span>
-            </div>
-
-            <!-- From & To Station Row -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-                
-                <!-- From Station -->
-                <div class="md:col-span-5 bg-slate-900 p-3 rounded-xl border border-slate-700 flex items-center gap-3">
-                    <i class="fa-solid fa-circle text-emerald-400 text-xs"></i>
-                    <div class="flex-1">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase block">Source Station</label>
-                        <select id="select-from" onchange="onRouteChanged()" class="bg-transparent font-black text-sm text-white w-full focus:outline-none cursor-pointer">
-                            <option value="NDLS" class="bg-slate-900">[NDLS] New Delhi</option>
-                            <option value="FDB" class="bg-slate-900">[FDB] Faridabad</option>
-                            <option value="MTJ" class="bg-slate-900">[MTJ] Mathura Jn</option>
-                            <option value="AGC" class="bg-slate-900">[AGC] Agra Cantt</option>
-                        </select>
+    <div id="mobile-nav-drawer" class="fixed inset-0 z-50 flex hidden">
+        <!-- Backdrop Overlay -->
+        <div onclick="toggleMobileDrawer()" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity"></div>
+        
+        <!-- Drawer Slide-Over Panel -->
+        <div class="relative w-4/5 max-w-xs bg-slate-900 border-r border-slate-700 h-full p-5 flex flex-col justify-between z-10 overflow-y-auto">
+            <div class="space-y-6">
+                <!-- Drawer Header -->
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-amber-500 text-slate-950 p-2 rounded-lg font-black text-sm shadow">
+                            <i class="fa-solid fa-train"></i>
+                        </span>
+                        <span class="font-black text-white text-sm tracking-wide uppercase">RailBlock-AI</span>
                     </div>
-                </div>
-
-                <!-- Swap Button -->
-                <div class="md:col-span-2 text-center">
-                    <button onclick="swapStations()" class="bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-amber-400 p-3 rounded-full font-bold shadow-md transition-all border border-slate-700">
-                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    <button onclick="toggleMobileDrawer()" class="text-slate-400 hover:text-white p-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer" title="Close Menu">
+                        <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
                 </div>
 
-                <!-- To Station -->
-                <div class="md:col-span-5 bg-slate-900 p-3 rounded-xl border border-slate-700 flex items-center gap-3">
-                    <i class="fa-solid fa-location-dot text-red-400 text-xs"></i>
-                    <div class="flex-1">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase block">Destination Station</label>
-                        <select id="select-to" onchange="onRouteChanged()" class="bg-transparent font-black text-sm text-white w-full focus:outline-none cursor-pointer">
-                            <option value="GWL" class="bg-slate-900" selected>[GWL] Gwalior Jn</option>
-                            <option value="MTJ" class="bg-slate-900">[MTJ] Mathura Jn</option>
-                            <option value="AGC" class="bg-slate-900">[AGC] Agra Cantt</option>
-                            <option value="JHS" class="bg-slate-900">[JHS] Jhansi Jn</option>
-                        </select>
+                <!-- Mobile Route Selector -->
+                <div class="space-y-3 bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+                    <h3 class="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-route"></i> Select Route
+                    </h3>
+                    <div class="space-y-2.5">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-400 uppercase">From (Source)</label>
+                            <select id="mobile-select-from" onchange="syncMobileRoute('from')" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-xs font-bold text-white focus:ring-2 focus:ring-amber-500 focus:outline-none min-h-[44px]">
+                                <option value="NDLS">[NDLS] New Delhi</option>
+                                <option value="FDB">[FDB] Faridabad</option>
+                                <option value="PWL">[PWL] Palwal Jn</option>
+                                <option value="MTJ">[MTJ] Mathura Jn</option>
+                                <option value="AGC">[AGC] Agra Cantt</option>
+                                <option value="GWL">[GWL] Gwalior Jn</option>
+                                <option value="JHS">[JHS] Jhansi Jn</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-400 uppercase">To (Destination)</label>
+                            <select id="mobile-select-to" onchange="syncMobileRoute('to')" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-xs font-bold text-white focus:ring-2 focus:ring-amber-500 focus:outline-none min-h-[44px]">
+                                <option value="NDLS">[NDLS] New Delhi</option>
+                                <option value="FDB">[FDB] Faridabad</option>
+                                <option value="PWL">[PWL] Palwal Jn</option>
+                                <option value="MTJ">[MTJ] Mathura Jn</option>
+                                <option value="AGC">[AGC] Agra Cantt</option>
+                                <option value="GWL" selected>[GWL] Gwalior Jn</option>
+                                <option value="JHS">[JHS] Jhansi Jn</option>
+                            </select>
+                        </div>
+                        <button onclick="applyMobileRoute()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow min-h-[44px] cursor-pointer">
+                            <i class="fa-solid fa-arrows-rotate"></i> Recompute Route
+                        </button>
                     </div>
                 </div>
 
+                <!-- Navigation Links -->
+                <div class="space-y-2">
+                    <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider px-1">Console Views</h3>
+                    
+                    <button onclick="switchCrisTab('dashboard'); toggleMobileDrawer();" class="w-full text-left bg-slate-800/80 hover:bg-slate-800 text-white font-bold p-3.5 rounded-xl text-xs flex items-center justify-between border border-slate-700 min-h-[44px] cursor-pointer">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-gauge-high text-amber-400 text-sm"></i> Dispatch Console
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
+                    </button>
+
+                    <button onclick="switchCrisTab('blocks'); toggleMobileDrawer();" class="w-full text-left bg-slate-800/80 hover:bg-slate-800 text-white font-bold p-3.5 rounded-xl text-xs flex items-center justify-between border border-slate-700 min-h-[44px] cursor-pointer">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-layer-group text-sky-400 text-sm"></i> Maintenance Blocks
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
+                    </button>
+
+                    <button onclick="switchCrisTab('siding'); toggleMobileDrawer();" class="w-full text-left bg-slate-800/80 hover:bg-slate-800 text-white font-bold p-3.5 rounded-xl text-xs flex items-center justify-between border border-slate-700 min-h-[44px] cursor-pointer">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-wand-magic-sparkles text-purple-400 text-sm"></i> AI Dispatch & Siding
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-500 text-xs"></i>
+                    </button>
+                </div>
             </div>
 
-            <!-- Recalculate Button -->
-            <button onclick="onRouteChanged()" class="w-full cris-btn-primary font-black py-3 rounded-xl text-xs uppercase tracking-wider flex justify-center items-center gap-2 shadow-lg">
-                <i class="fa-solid fa-network-wired"></i>
-                <span>CALCULATE SECTION BLOCK DEDUCTION & DISPATCH</span>
+            <!-- Drawer Footer -->
+            <div class="pt-4 border-t border-slate-800 text-center text-[11px] text-slate-500 font-medium">
+                Smart India Hackathon 2026 • SIH26027
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- DYNAMIC CORRIDOR ROUTE SELECTOR                                           -->
+    <!-- ========================================================================= -->
+    <div class="bg-slate-950 border-b border-slate-800 py-3.5 px-4 shadow-inner">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2 w-full md:w-auto">
+                <span class="text-xs font-black uppercase text-amber-400 tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-route"></i> Corridor Route:
+                </span>
+            </div>
+            
+            <div class="flex items-center gap-2 w-full md:w-auto flex-1 max-w-xl">
+                <div class="flex-1">
+                    <label class="text-[10px] text-slate-400 font-bold block mb-1">FROM STATION</label>
+                    <select id="select-from" onchange="onRouteChanged()" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 text-xs font-bold focus:border-amber-500 outline-none min-h-[44px]">
+                        <option value="NDLS">New Delhi (NDLS)</option>
+                        <option value="FDB">Faridabad (FDB)</option>
+                        <option value="PWL">Palwal Junction (PWL)</option>
+                        <option value="MTJ">Mathura Junction (MTJ)</option>
+                        <option value="AGC">Agra Cantt (AGC)</option>
+                        <option value="GWL">Gwalior Junction (GWL)</option>
+                        <option value="JHS">Jhansi Junction (JHS)</option>
+                    </select>
+                </div>
+
+                <button onclick="swapStations()" class="mt-4 p-2.5 bg-slate-800 hover:bg-slate-700 text-amber-400 rounded-lg border border-slate-700 transition-colors" title="Swap Stations">
+                    <i class="fa-solid fa-right-left"></i>
+                </button>
+
+                <div class="flex-1">
+                    <label class="text-[10px] text-slate-400 font-bold block mb-1">TO STATION</label>
+                    <select id="select-to" onchange="onRouteChanged()" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 text-xs font-bold focus:border-amber-500 outline-none min-h-[44px]">
+                        <option value="NDLS">New Delhi (NDLS)</option>
+                        <option value="FDB">Faridabad (FDB)</option>
+                        <option value="PWL">Palwal Junction (PWL)</option>
+                        <option value="MTJ">Mathura Junction (MTJ)</option>
+                        <option value="AGC">Agra Cantt (AGC)</option>
+                        <option value="GWL" selected>Gwalior Junction (GWL)</option>
+                        <option value="JHS">Jhansi Junction (JHS)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="onRouteChanged()" class="w-full md:w-auto cris-btn-primary font-black px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg min-h-[44px] cursor-pointer">
+                <i class="fa-solid fa-arrows-rotate"></i> Recompute Route
             </button>
         </div>
     </div>
@@ -210,13 +486,46 @@
 
             <!-- DYNAMIC VERTICAL TRACK MAP CONTAINER -->
             <div class="cris-card rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                <h3 class="font-black text-white text-sm mb-6 flex items-center gap-2 border-b border-slate-700 pb-3">
-                    <i class="fa-solid fa-map-location-dot text-sky-400"></i> Live Section Track Interlocking & Station Nodes
-                </h3>
+                <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-6 flex-wrap gap-2">
+                    <h3 class="font-black text-white text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot text-sky-400"></i> Live Section Track Interlocking & Station Nodes
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-slate-400 font-bold hidden sm:inline">Click node to inspect station</span>
+                        <div class="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700 text-xs font-bold gap-1">
+                            <button onclick="zoomTrackMap(1.15)" class="px-2 py-0.5 hover:bg-slate-700 rounded text-slate-200 transition-colors cursor-pointer" title="Zoom In">
+                                <i class="fa-solid fa-magnifying-glass-plus"></i>
+                            </button>
+                            <button onclick="zoomTrackMap(0.85)" class="px-2 py-0.5 hover:bg-slate-700 rounded text-slate-200 transition-colors cursor-pointer" title="Zoom Out">
+                                <i class="fa-solid fa-magnifying-glass-minus"></i>
+                            </button>
+                            <button onclick="resetTrackMapZoom()" class="px-2 py-0.5 hover:bg-slate-700 rounded text-slate-400 hover:text-white transition-colors text-[10px] cursor-pointer" title="Reset Zoom">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                <!-- Track Container -->
-                <div id="dynamic-track-timeline" class="relative space-y-10 py-2">
-                    <!-- Dynamically rendered via JS -->
+                <!-- Live Train Marker Track Legend -->
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800 mb-6 text-xs font-bold">
+                    <span class="text-slate-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-tower-broadcast text-sky-400"></i> Active Train Positions:
+                    </span>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="bg-emerald-950/80 text-emerald-300 px-2.5 py-1 rounded-full text-[11px] font-black border border-emerald-500/40 shadow-sm flex items-center gap-1">
+                            <i class="fa-solid fa-bolt text-emerald-400"></i> 12952 Rajdhani (Main Line 1)
+                        </span>
+                        <span class="bg-amber-950/80 text-amber-300 px-2.5 py-1 rounded-full text-[11px] font-black border border-amber-500/40 shadow-sm flex items-center gap-1">
+                            <i class="fa-solid fa-truck-ramp-box text-amber-400"></i> G-501 Goods (PWL Siding)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Track Container with zoom wrapper -->
+                <div id="dynamic-track-map" class="transition-transform duration-200 origin-top overflow-hidden">
+                    <div id="dynamic-track-timeline" class="relative space-y-10 py-2">
+                        <!-- Dynamically rendered via JS -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -224,7 +533,7 @@
         <!-- TAB 2: JOINT MAINTENANCE BLOCKS (FEATURE 1) -->
         <div id="view-blocks" class="hidden space-y-5">
             
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="cris-card p-4 rounded-xl shadow-md border-t-4 border-t-emerald-500">
                     <span class="text-[10px] font-bold text-slate-400 uppercase">Section Capacity Recovery</span>
                     <h3 id="card-metric-capacity" class="text-2xl font-black text-emerald-400 mt-1">42.9%</h3>
@@ -247,6 +556,88 @@
                 </div>
             </div>
 
+            <!-- 24-HOUR INTERACTIVE GANTT CHART TIMELINE VISUALIZER -->
+            <div class="cris-card rounded-2xl p-6 space-y-5 shadow-xl">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-700 pb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-sky-500/20 text-sky-300 text-xs font-black px-2.5 py-0.5 rounded border border-sky-500/40 uppercase tracking-wider">24-Hour Timeline</span>
+                            <h3 class="font-black text-white text-lg">Joint Block Schedule Gantt Visualizer</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-0.5">Interactive comparison of isolated BDMS shutdowns vs AI Consolidated joint windows across 24 hours.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 text-xs font-bold">
+                        <span class="flex items-center gap-1.5 text-slate-300">
+                            <span class="w-3 h-3 rounded bg-red-500 inline-block"></span> Isolated BDMS Blocks (Unoptimized)
+                        </span>
+                        <span class="flex items-center gap-1.5 text-slate-300">
+                            <span class="w-3 h-3 rounded bg-emerald-500 inline-block glow-green"></span> AI Consolidated Joint Windows
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 24-Hour Timeline Header & Rows Container -->
+                <div class="space-y-4 overflow-x-auto pb-2">
+                    <!-- Time Axis Header (00:00 to 24:00) -->
+                    <div class="min-w-[700px]">
+                        <div class="flex justify-between text-[11px] font-extrabold text-slate-400 px-1 border-b border-slate-700 pb-1.5">
+                            <span>00:00</span>
+                            <span>02:00</span>
+                            <span>04:00</span>
+                            <span>06:00</span>
+                            <span>08:00</span>
+                            <span>10:00</span>
+                            <span>12:00</span>
+                            <span>14:00</span>
+                            <span>16:00</span>
+                            <span>18:00</span>
+                            <span>20:00</span>
+                            <span>22:00</span>
+                            <span>24:00</span>
+                        </div>
+
+                        <!-- Gantt Rows Container -->
+                        <div class="mt-3 space-y-4">
+                            <!-- Row 1: Unoptimized Isolated Requests -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between items-center text-xs font-bold text-slate-300">
+                                    <span class="flex items-center gap-1.5 text-red-400">
+                                        <i class="fa-solid fa-triangle-exclamation text-red-500"></i> Unoptimized Isolated Shutdowns (14 Hours Downtime)
+                                    </span>
+                                    <span class="text-[11px] text-slate-400 font-medium">Multiple redundant track closures</span>
+                                </div>
+                                <div id="gantt-unoptimized-bar" class="relative h-9 bg-slate-900/80 rounded-xl border border-slate-700 overflow-hidden min-w-[700px]">
+                                    <!-- Dynamic Unoptimized Bars Injected Here -->
+                                </div>
+                            </div>
+
+                            <!-- Row 2: AI Consolidated Joint Windows -->
+                            <div class="space-y-1.5">
+                                <div class="flex justify-between items-center text-xs font-bold text-slate-300">
+                                    <span class="flex items-center gap-1.5 text-emerald-400">
+                                        <i class="fa-solid fa-circle-check text-emerald-500"></i> RailBlock-AI Consolidated Joint Windows (8 Hours Downtime)
+                                    </span>
+                                    <span class="text-xs font-black text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/40">
+                                        <i class="fa-solid fa-bolt"></i> 42.9% Line Capacity Reclaimed
+                                    </span>
+                                </div>
+                                <div id="gantt-optimized-bar" class="relative h-10 bg-slate-900/80 rounded-xl border border-emerald-500/50 overflow-hidden min-w-[700px]">
+                                    <!-- Dynamic Optimized Bars Injected Here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gantt Hover / Click Info Banner -->
+                <div id="gantt-info-banner" class="bg-slate-900/70 border border-slate-700 rounded-xl p-3 text-xs flex flex-wrap justify-between items-center gap-2 text-slate-300">
+                    <span class="font-bold text-slate-300">
+                        <i class="fa-solid fa-circle-info text-sky-400 mr-1"></i> Hover or tap any bar in the Gantt timeline to inspect schedule details.
+                    </span>
+                    <span class="text-[11px] text-slate-400 font-medium">24-Hour Time Window Scale</span>
+                </div>
+            </div>
+
             <!-- SCHEDULE COMPARISON GRID -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
@@ -256,7 +647,12 @@
                         <span class="font-black text-red-400 text-xs uppercase tracking-wider flex items-center gap-2">
                             <i class="fa-solid fa-triangle-exclamation text-red-500"></i> Unoptimized BDMS Requests
                         </span>
-                        <span id="unopt-badge" class="bg-red-500/20 text-red-300 text-xs px-2.5 py-0.5 rounded font-bold border border-red-500/40">5 Shutdowns (14h)</span>
+                        <div class="flex items-center gap-2">
+                            <span id="unopt-badge" class="bg-red-500/20 text-red-300 text-xs px-2.5 py-0.5 rounded font-bold border border-red-500/40">5 Shutdowns (14h)</span>
+                            <button onclick="openRequestDrawer()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-2.5 py-1 rounded-lg shadow flex items-center gap-1.5 transition-colors cursor-pointer border border-blue-400/40" title="Submit new departmental track closure request">
+                                <i class="fa-solid fa-plus text-amber-300"></i> New Request
+                            </button>
+                        </div>
                     </div>
                     <div id="unoptimized-container" class="space-y-3"></div>
                 </div>
@@ -272,6 +668,20 @@
                     <div id="optimized-container" class="space-y-3"></div>
                 </div>
 
+            </div>
+
+            <!-- HUMAN-IN-THE-LOOP CONTROLLER AUDIT LOG DRAWER -->
+            <div class="cris-card rounded-2xl shadow-xl p-5 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-sky-400 text-base"></i>
+                        <h3 class="font-black text-white text-sm">Human-in-the-Loop Controller Audit Log</h3>
+                    </div>
+                    <span class="text-xs font-bold text-slate-400">Official Action History & CRIS Locks</span>
+                </div>
+                <div id="audit-log-container" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    <!-- Dynamic Audit Log Entries Injected Here -->
+                </div>
             </div>
         </div>
 
@@ -290,6 +700,85 @@
                 </div>
             </div>
 
+            <!-- LIVE SIMULATION CONTROLS & TIMELINE CLOCK (ISSUE #15) -->
+            <div id="sim-control-bar" class="cris-card p-4 rounded-2xl border space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <span id="sim-status-dot" class="w-3.5 h-3.5 rounded-full bg-amber-500"></span>
+                        <div>
+                            <h3 class="font-black text-sm text-slate-800 dark:text-slate-100 uppercase tracking-wide flex items-center gap-2">
+                                Live Rail Traffic Simulation
+                                <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-300 text-[10px] px-2 py-0.5 rounded font-extrabold border border-blue-300 dark:border-blue-700">SIH ACCELERATED</span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">Real-time clock progression & dynamic train movement playback</p>
+                        </div>
+                    </div>
+
+                    <!-- Real-Time Digital Clock -->
+                    <div class="bg-slate-900 text-white px-4 py-2 rounded-xl font-mono border border-slate-700 shadow flex items-center gap-2">
+                        <i class="fa-solid fa-clock text-amber-400 text-xs"></i>
+                        <span id="sim-clock-display" class="text-base font-black tracking-wider text-amber-300">10:00:00 IST</span>
+                        <span id="sim-speed-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-500/40">10x SPEED</span>
+                    </div>
+                </div>
+
+                <!-- Simulation Control Buttons & Progress Bar -->
+                <div class="flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <button id="sim-play-btn" onclick="toggleSimPlay()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition-colors cursor-pointer">
+                            <i id="sim-play-icon" class="fa-solid fa-play"></i>
+                            <span id="sim-play-text">Play Simulation</span>
+                        </button>
+                        <button onclick="setSimSpeed(1)" class="sim-speed-btn bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer">
+                            1x
+                        </button>
+                        <button onclick="setSimSpeed(10)" class="sim-speed-btn bg-amber-500 text-slate-950 font-black px-3 py-2 rounded-xl text-xs shadow border border-amber-400 transition-colors cursor-pointer">
+                            10x
+                        </button>
+                        <button onclick="setSimSpeed(60)" class="sim-speed-btn bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer">
+                            60x Max
+                        </button>
+                        <button onclick="resetSim()" class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold px-3 py-2 rounded-xl text-xs border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer" title="Reset Simulation">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                        </button>
+                    </div>
+
+                    <!-- Overall Section Movement Progress Bar -->
+                    <div class="flex-1 min-w-[200px] space-y-1">
+                        <div class="flex justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                            <span>Simulated Section Progress</span>
+                            <span id="sim-pct-display" class="font-mono text-blue-700 dark:text-blue-400 font-black">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                            <div id="sim-progress-bar" class="bg-gradient-to-r from-blue-600 to-emerald-500 h-full w-0 transition-all duration-200 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRESENTATION AUDIO FEEDBACK ALERTS CONTROL BAR -->
+            <div class="cris-card rounded-2xl p-4 shadow-sm flex flex-wrap justify-between items-center gap-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-base border border-amber-500/30 shadow-sm">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-black text-slate-100 uppercase tracking-wide">Presentation Audio Feedback Alerts</h4>
+                        <p class="text-[11px] text-slate-400 font-semibold">Synthesized Web Audio API sound cues for Indian Railways live audience demos</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button onclick="playRailwayChime(true)" class="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 px-3.5 py-2 rounded-xl font-black text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer" title="Play AI overtake chime">
+                        <i class="fa-solid fa-bell text-emerald-400"></i>
+                        <span>Play AI Overtake Chime</span>
+                    </button>
+                    <button onclick="playHighPriorityAlert(true)" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 px-3.5 py-2 rounded-xl font-black text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer" title="Play cascading delay audio alert">
+                        <i class="fa-solid fa-triangle-exclamation text-red-400"></i>
+                        <span>Play Cascading Delay Alert (&gt;30m)</span>
+                    </button>
+                </div>
+            </div>
+
             <!-- TRAIN LIST CONTAINER -->
             <div id="train-cards-list" class="space-y-4">
                 <!-- Dynamically rendered via JS -->
@@ -303,18 +792,110 @@
         INDIAN RAILWAYS • CRIS Block Control Portal • RailBlock-AI Engine (SIH26027)
     </footer>
 
-    <!-- DYNAMIC STATIONS & ROUTE LOGIC -->
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
     <script>
+        function copyToClipboard(text, btn) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalHTML = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> Copied!';
+                    setTimeout(() => { btn.innerHTML = originalHTML; }, 1500);
+                }).catch(() => {
+                    alert("Copied: " + text);
+                });
+            } else {
+                alert("Copied: " + text);
+            }
+        }
+
         const ALL_STATIONS = {
-            "NDLS": { code: "NDLS", name: "New Delhi", km: 0, pf: "16" },
-            "FDB":  { code: "FDB",  name: "Faridabad", km: 28, pf: "2" },
-            "PWL":  { code: "PWL",  name: "Palwal Junction", km: 60, pf: "2 (Loop Siding)" },
-            "MTJ":  { code: "MTJ",  name: "Mathura Junction", km: 141, pf: "1" },
-            "AGC":  { code: "AGC",  name: "Agra Cantt", km: 195, pf: "3" },
-            "GWL":  { code: "GWL",  name: "Gwalior Junction", km: 313, pf: "4" },
-            "JHS":  { code: "JHS",  name: "Jhansi Junction", km: 410, pf: "1" }
+            "NDLS": {
+                code: "NDLS",
+                name: "New Delhi",
+                km: 0,
+                pf: "16",
+                division: "Delhi Division (NR)",
+                platforms: "16 Platforms • 24 Tracks",
+                speed_limit: "130 km/h (MPS Mainline)",
+                gradient: "1 in 200 Level Grade",
+                signaling: "Automatic Block Signaling (ABS) • Green Wave Active",
+                loops: ["Main Line 1 (UP Express)", "Main Line 2 (DN Express)", "Loop Line 1 (Siding A)", "Loop Line 2 (Siding B)"]
+            },
+            "FDB": {
+                code: "FDB",
+                name: "Faridabad",
+                km: 28,
+                pf: "2",
+                division: "Delhi Division (NR)",
+                platforms: "4 Platforms • 6 Tracks",
+                speed_limit: "120 km/h (Sectional Speed)",
+                gradient: "1 in 180 Level Grade",
+                signaling: "Automatic Block Signaling (ABS)",
+                loops: ["Main Line 1", "Main Line 2", "Loop Line 1 (Goods Hold)"]
+            },
+            "PWL": {
+                code: "PWL",
+                name: "Palwal Junction",
+                km: 60,
+                pf: "2 (Loop Siding)",
+                division: "Delhi Division (NR)",
+                platforms: "5 Platforms • 8 Tracks",
+                speed_limit: "110 km/h",
+                gradient: "1 in 150 Level Grade",
+                signaling: "Electronic Interlocking (EI) • Siding Active",
+                loops: ["Main Line 1 (Overtake Path)", "Main Line 2", "Loop Line 1 (Passenger Hold)", "Loop Line 2 (AI Freight Overtake Siding)"]
+            },
+            "MTJ": {
+                code: "MTJ",
+                name: "Mathura Junction",
+                km: 141,
+                pf: "1",
+                division: "Agra Division (NCR)",
+                platforms: "10 Platforms • 14 Tracks",
+                speed_limit: "130 km/h (MPS)",
+                gradient: "1 in 200 Level Grade",
+                signaling: "Route Relay Interlocking (RRI) • ABS Active",
+                loops: ["Main Line 1", "Main Line 2", "Platform Loop 3", "Branch Divergence Line (Aligarh/Kota)"]
+            },
+            "AGC": {
+                code: "AGC",
+                name: "Agra Cantt",
+                km: 195,
+                pf: "3",
+                division: "Agra Division (NCR)",
+                platforms: "6 Platforms • 10 Tracks",
+                speed_limit: "130 km/h (Semi-High Speed)",
+                gradient: "1 in 220 Level Grade",
+                signaling: "Automatic Block Signaling (ABS)",
+                loops: ["Main Line 1", "Main Line 2", "Gatimaan Reversal Siding", "Loop Line 3"]
+            },
+            "GWL": {
+                code: "GWL",
+                name: "Gwalior Junction",
+                km: 313,
+                pf: "4",
+                division: "Jhansi Division (NCR)",
+                platforms: "6 Platforms • 9 Tracks",
+                speed_limit: "130 km/h",
+                gradient: "1 in 200 Level Grade",
+                signaling: "Electronic Interlocking (EI)",
+                loops: ["Main Line 1", "Main Line 2", "Broad Gauge Platform Loop", "Narrow Gauge Heritage Line"]
+            },
+            "JHS": {
+                code: "JHS",
+                name: "Jhansi Junction",
+                km: 410,
+                pf: "1",
+                division: "Jhansi Division (NCR)",
+                platforms: "8 Platforms • 12 Tracks",
+                speed_limit: "120 km/h",
+                gradient: "1 in 200 Level Grade",
+                signaling: "Route Relay Interlocking (RRI)",
+                loops: ["Main Line 1", "Main Line 2", "Yard Reversal Loop", "Loco Shed Feeder Siding"]
+            }
         };
 
+        const STATIONS = ALL_STATIONS;
         const STATION_ORDER = ["NDLS", "FDB", "PWL", "MTJ", "AGC", "GWL", "JHS"];
 
         function switchCrisTab(tab) {
@@ -322,19 +903,73 @@
             document.getElementById('view-blocks').classList.add('hidden');
             document.getElementById('view-siding').classList.add('hidden');
 
-            document.getElementById('tab-dashboard').className = "flex-1 py-3 border-b-4 border-transparent hover:text-white flex justify-center items-center gap-2";
-            document.getElementById('tab-blocks').className = "flex-1 py-3 border-b-4 border-transparent hover:text-white flex justify-center items-center gap-2";
-            document.getElementById('tab-siding').className = "flex-1 py-3 border-b-4 border-transparent hover:text-white flex justify-center items-center gap-2";
+            document.getElementById('tab-dashboard').className = "flex-1 py-3 border-b-4 border-transparent hover:text-white flex justify-center items-center gap-2 cursor-pointer";
+            document.getElementById('tab-blocks').className = "flex-1 py-3 border-b-4 border-transparent hover:text-white flex justify-center items-center gap-2 cursor-pointer";
+            document.getElementById('tab-siding').className = "flex-1 py-3 border-b-4 border-transparent hover:text-white flex justify-center items-center gap-2 cursor-pointer";
 
             if (tab === 'dashboard') {
                 document.getElementById('view-dashboard').classList.remove('hidden');
-                document.getElementById('tab-dashboard').className = "flex-1 py-3 border-b-4 border-amber-500 text-amber-400 flex justify-center items-center gap-2";
+                document.getElementById('tab-dashboard').className = "flex-1 py-3 border-b-4 border-amber-500 text-amber-400 flex justify-center items-center gap-2 cursor-pointer";
             } else if (tab === 'blocks') {
                 document.getElementById('view-blocks').classList.remove('hidden');
-                document.getElementById('tab-blocks').className = "flex-1 py-3 border-b-4 border-amber-500 text-amber-400 flex justify-center items-center gap-2";
+                document.getElementById('tab-blocks').className = "flex-1 py-3 border-b-4 border-amber-500 text-amber-400 flex justify-center items-center gap-2 cursor-pointer";
             } else if (tab === 'siding') {
                 document.getElementById('view-siding').classList.remove('hidden');
-                document.getElementById('tab-siding').className = "flex-1 py-3 border-b-4 border-amber-500 text-amber-400 flex justify-center items-center gap-2";
+                document.getElementById('tab-siding').className = "flex-1 py-3 border-b-4 border-amber-500 text-amber-400 flex justify-center items-center gap-2 cursor-pointer";
+                playRailwayChime();
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('railblock-theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'light') {
+                setTheme(false);
+            } else if (savedTheme === 'dark') {
+                setTheme(true);
+            } else {
+                setTheme(prefersDark !== false);
+            }
+        }
+
+        function toggleTheme() {
+            const isLight = document.body.classList.contains('light');
+            setTheme(isLight);
+        }
+
+        function setTheme(isDark) {
+            if (isDark) {
+                document.body.classList.remove('light');
+                document.body.classList.add('dark');
+                localStorage.setItem('railblock-theme', 'dark');
+                updateThemeToggleUI(true);
+            } else {
+                document.body.classList.remove('dark');
+                document.body.classList.add('light');
+                localStorage.setItem('railblock-theme', 'light');
+                updateThemeToggleUI(false);
+            }
+        }
+
+        function updateThemeToggleUI(isDark) {
+            const iconClass = isDark ? 'fa-solid fa-moon text-amber-300' : 'fa-solid fa-sun text-amber-500';
+            const labelText = isDark ? 'Night Shift' : 'Daylight Mode';
+            const btnTitle = isDark ? 'Switch to Standard Daylight Mode' : 'Switch to Night Shift Controller Mode';
+            const btnClass = isDark
+                ? 'bg-slate-800 hover:bg-slate-700 text-amber-300 px-3 py-1.5 rounded-xl font-bold text-xs border border-slate-700 transition-all flex items-center gap-1.5 shadow cursor-pointer'
+                : 'bg-amber-100 hover:bg-amber-200 text-amber-900 px-3 py-1.5 rounded-xl font-bold text-xs border border-amber-300 transition-all flex items-center gap-1.5 shadow cursor-pointer';
+
+            const btn = document.getElementById('theme-toggle-btn');
+            if (btn) {
+                btn.className = btnClass;
+                btn.title = btnTitle;
+                btn.innerHTML = `<i class="${iconClass}"></i> <span class="hidden sm:inline">${labelText}</span>`;
+            }
+            const btnWelcome = document.getElementById('theme-toggle-btn-welcome');
+            if (btnWelcome) {
+                btnWelcome.className = btnClass;
+                btnWelcome.title = btnTitle;
+                btnWelcome.innerHTML = `<i class="${iconClass}"></i> <span class="hidden sm:inline">${labelText}</span>`;
             }
         }
 
@@ -347,6 +982,72 @@
             onRouteChanged();
         }
 
+        function showGanttDetail(id, dept, section, start, end, duration, isOptimized) {
+            const banner = document.getElementById('gantt-info-banner');
+            if (!banner) return;
+            if (isOptimized) {
+                banner.className = "bg-emerald-950/60 border border-emerald-500/50 rounded-xl p-3 text-xs flex flex-wrap justify-between items-center gap-2";
+                banner.innerHTML = `
+                    <div class="flex items-center gap-2 text-emerald-200 font-bold">
+                        <span class="bg-emerald-600 text-white px-2 py-0.5 rounded text-[10px] font-black">${id} JOINT BLOCK</span>
+                        <span>${section}</span>
+                        <span class="text-emerald-400">(${start}:00 to ${end}:00 • ${duration} Hours)</span>
+                    </div>
+                    <span class="text-xs font-black text-emerald-300 bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-500/40">
+                        Departments Covered: ${dept}
+                    </span>
+                `;
+            } else {
+                banner.className = "bg-red-950/60 border border-red-500/50 rounded-xl p-3 text-xs flex flex-wrap justify-between items-center gap-2";
+                banner.innerHTML = `
+                    <div class="flex items-center gap-2 text-red-200 font-bold">
+                        <span class="bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-black">${id} UNOPTIMIZED</span>
+                        <span>${section}</span>
+                        <span class="text-red-400">(${start}:00 to ${end}:00 • ${duration} Hours)</span>
+                    </div>
+                    <span class="text-xs font-bold text-red-300 bg-red-900/60 px-2 py-0.5 rounded border border-red-500/40">
+                        Department: ${dept}
+                    </span>
+                `;
+            }
+        }
+
+        /* MOBILE NAVIGATION DRAWER & TOUCH LOGIC */
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobile-nav-drawer');
+            if (drawer) {
+                drawer.classList.toggle('hidden');
+            }
+        }
+
+        function syncMobileRoute(source) {
+            if (source === 'from') {
+                const val = document.getElementById('mobile-select-from').value;
+                document.getElementById('select-from').value = val;
+            } else if (source === 'to') {
+                const val = document.getElementById('mobile-select-to').value;
+                document.getElementById('select-to').value = val;
+            }
+        }
+
+        function applyMobileRoute() {
+            const from = document.getElementById('mobile-select-from').value;
+            const to = document.getElementById('mobile-select-to').value;
+            document.getElementById('select-from').value = from;
+            document.getElementById('select-to').value = to;
+            onRouteChanged();
+            toggleMobileDrawer();
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const drawer = document.getElementById('mobile-nav-drawer');
+                if (drawer && !drawer.classList.contains('hidden')) {
+                    drawer.classList.add('hidden');
+                }
+            }
+        });
+
         function onRouteChanged() {
             const fromCode = document.getElementById('select-from').value;
             const toCode = document.getElementById('select-to').value;
@@ -357,6 +1058,431 @@
             }
             renderDynamicRoute(fromCode, toCode);
         }
+
+        /* TRACK MAP ZOOM LOGIC */
+        let trackMapZoom = 1.0;
+
+        let currentFromCode = "NDLS";
+        let currentToCode = "GWL";
+        let activeUnoptimizedData = [
+            { id: "REQ-01", department: "P-Way (Engineering)", section: "Delhi-Mathura Section", start: 10, duration: 3, preferred_start_hour: 10, duration_hours: 3 },
+            { id: "REQ-02", department: "TRD (Electrification)", section: "Delhi-Mathura Section", start: 11, duration: 2, preferred_start_hour: 11, duration_hours: 2 },
+            { id: "REQ-03", department: "S&T (Signals)", section: "Delhi-Mathura Section", start: 12, duration: 2, preferred_start_hour: 12, duration_hours: 2 },
+            { id: "REQ-04", department: "P-Way (Engineering)", section: "Agra-Gwalior Section", start: 14, duration: 4, preferred_start_hour: 14, duration_hours: 4 },
+            { id: "REQ-05", department: "TRD (Electrification)", section: "Agra-Gwalior Section", start: 15, duration: 3, preferred_start_hour: 15, duration_hours: 3 }
+        ];
+        let activeOptimizedData = null;
+
+        const ROUTE_DATA = {
+            "NDLS-GWL": {
+                get unoptimized() { return activeUnoptimizedData; },
+                set unoptimized(val) { activeUnoptimizedData = val; },
+                get optimized() { return activeOptimizedData; },
+                set optimized(val) { activeOptimizedData = val; }
+            }
+        };
+
+        function openRequestDrawer() {
+            const backdrop = document.getElementById('request-drawer-backdrop');
+            const drawer = document.getElementById('request-drawer');
+            if (backdrop && drawer) {
+                backdrop.classList.remove('hidden');
+                setTimeout(() => {
+                    backdrop.classList.remove('opacity-0');
+                    drawer.classList.remove('translate-x-full');
+                }, 10);
+            }
+        }
+
+        function closeRequestDrawer() {
+            const backdrop = document.getElementById('request-drawer-backdrop');
+            const drawer = document.getElementById('request-drawer');
+            if (backdrop && drawer) {
+                drawer.classList.add('translate-x-full');
+                backdrop.classList.add('opacity-0');
+                setTimeout(() => {
+                    backdrop.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function updateStartSliderLabel(val) {
+            const label = document.getElementById('slider-start-label');
+            if (label) {
+                const hour = String(val).padStart(2, '0');
+                label.innerText = `${hour}:00 IST`;
+            }
+        }
+
+        function submitDepartmentalRequest(e) {
+            e.preventDefault();
+            const form = document.getElementById('dept-request-form');
+            const dept = form.querySelector('input[name="req_dept"]:checked').value;
+            const section = document.getElementById('req-section').value;
+            const start = parseInt(document.getElementById('req-start-slider').value) || 10;
+            const duration = parseInt(form.querySelector('input[name="req_duration"]:checked').value) || 2;
+            const priority = parseInt(document.getElementById('req-priority').value) || 2;
+
+            const newId = `REQ-0${activeUnoptimizedData.length + 1}`;
+
+            activeUnoptimizedData.push({
+                id: newId,
+                department: dept,
+                section: section,
+                start: start,
+                duration: duration,
+                preferred_start_hour: start,
+                duration_hours: duration,
+                priority: priority
+            });
+
+            reoptimizeLocalRouteData();
+            renderDynamicRoute(currentFromCode, currentToCode);
+            closeRequestDrawer();
+
+            if (typeof showCrisToast === 'function') {
+                showCrisToast(`New ${dept} request submitted (${start}:00 - ${start + duration}:00). AI Joint Schedule re-optimized!`);
+            }
+            if (typeof addAuditLog === 'function') {
+                addAuditLog("NEW REQUEST", newId, section, `${dept} requested ${duration}h shutdown at ${start}:00 IST • AI Re-optimized`, "bg-purple-500/20 text-purple-300 border-purple-500/40");
+            }
+        }
+
+        function reoptimizeLocalRouteData(route) {
+            const unopt = (route && route.unoptimized) ? route.unoptimized : activeUnoptimizedData;
+            const sections = {};
+            unopt.forEach(r => {
+                const sec = r.section;
+                if (!sections[sec]) sections[sec] = [];
+                sections[sec].push(r);
+            });
+
+            const newOptimized = [];
+            let blockCounter = 1;
+
+            Object.keys(sections).forEach(sec => {
+                const reqs = sections[sec];
+                reqs.sort((a, b) => {
+                    const startA = a.preferred_start_hour !== undefined ? a.preferred_start_hour : a.start;
+                    const startB = b.preferred_start_hour !== undefined ? b.preferred_start_hour : b.start;
+                    return startA - startB;
+                });
+                let i = 0;
+                while (i < reqs.length) {
+                    const group = [reqs[i]];
+                    const start = reqs[i].preferred_start_hour !== undefined ? reqs[i].preferred_start_hour : reqs[i].start;
+                    const dur = reqs[i].duration_hours !== undefined ? reqs[i].duration_hours : reqs[i].duration;
+                    let maxEnd = start + dur;
+                    let j = i + 1;
+                    while (j < reqs.length) {
+                        const nextStart = reqs[j].preferred_start_hour !== undefined ? reqs[j].preferred_start_hour : reqs[j].start;
+                        const nextDur = reqs[j].duration_hours !== undefined ? reqs[j].duration_hours : reqs[j].duration;
+                        if (nextStart <= (maxEnd + 1)) {
+                            group.push(reqs[j]);
+                            maxEnd = Math.max(maxEnd, nextStart + nextDur);
+                            j++;
+                        } else {
+                            break;
+                        }
+                    }
+                    const consolidatedDuration = maxEnd - start;
+                    const depts = Array.from(new Set(group.map(g => g.department.split(' ')[0]))).sort();
+                    const sumIndividual = group.reduce((s, g) => s + (g.duration_hours !== undefined ? g.duration_hours : g.duration), 0);
+                    const timeSaved = group.length > 1 ? (sumIndividual - consolidatedDuration) : 0.5;
+
+                    newOptimized.push({
+                        block_id: `BLK-00${blockCounter}`,
+                        section: sec,
+                        start_hour: start,
+                        end_hour: maxEnd,
+                        start: start,
+                        end: maxEnd,
+                        duration_hours: consolidatedDuration,
+                        departments_covered: depts,
+                        depts: depts,
+                        time_saved_hours: parseFloat(timeSaved.toFixed(1)),
+                        saved: parseFloat(timeSaved.toFixed(1))
+                    });
+                    blockCounter++;
+                    i = j > i ? j : i + 1;
+                }
+            });
+
+            if (route) {
+                route.optimized = newOptimized;
+            }
+            activeOptimizedData = newOptimized;
+            return newOptimized;
+        }
+
+        function renderRoute(fromCode, toCode) {
+            renderDynamicRoute(fromCode, toCode);
+        }
+
+        let activeBlockData = null;
+        const controllerAuditLogs = [
+            {
+                time: "10:15:00 IST",
+                controller: "CTRL-NDLS-04",
+                action: "APPROVED",
+                block: "BLK-001 • Delhi-Mathura Section",
+                details: "Joint Window Approved (10:00 - 14:00) & Synced to CRIS",
+                badgeClass: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+            },
+            {
+                time: "09:45:12 IST",
+                controller: "CTRL-NDLS-04",
+                action: "SYSTEM AI SUGGESTION",
+                block: "BLK-002 • Agra-Gwalior Section",
+                details: "Joint Window Suggested (14:00 - 18:00) - Pending Controller Lock",
+                badgeClass: "bg-amber-500/20 text-amber-300 border-amber-500/40"
+            }
+        ];
+
+        function openControllerModal(id, section, start, end, savedHours, deptsStr) {
+            const depts = deptsStr ? deptsStr.split(',') : ["P-Way", "TRD", "S&T"];
+            activeBlockData = { id, section, start, end, duration: end - start, savedHours, depts };
+
+            document.getElementById('modal-block-id').innerText = `${id} INTEGRATED WINDOW`;
+            document.getElementById('modal-time-saved').innerHTML = `<i class="fa-solid fa-shield-halved mr-1"></i> ${savedHours}h Capacity Saved`;
+            document.getElementById('modal-section-name').innerText = section;
+            document.getElementById('modal-window-time').innerText = `Proposed Window: ${start}:00 - ${end}:00 IST (${end - start}.0 Hours Duration)`;
+            document.getElementById('modal-depts-list').innerHTML = depts.map(d => `<span class="bg-slate-800 text-slate-200 text-[11px] font-bold px-2 py-0.5 rounded border border-slate-700">${d}</span>`).join('');
+            
+            document.getElementById('modify-start-hour').value = start;
+            document.getElementById('modify-duration').value = end - start;
+            document.getElementById('modal-modify-form').classList.add('hidden');
+            document.getElementById('controller-modal').classList.remove('hidden');
+        }
+
+        function closeControllerModal() {
+            document.getElementById('controller-modal').classList.add('hidden');
+        }
+
+        function toggleModifyForm() {
+            document.getElementById('modal-modify-form').classList.toggle('hidden');
+        }
+
+        function applyWindowModification() {
+            if (!activeBlockData) return;
+            const newStart = parseInt(document.getElementById('modify-start-hour').value) || 0;
+            const newDuration = parseInt(document.getElementById('modify-duration').value) || 2;
+            const newEnd = (newStart + newDuration) % 24;
+
+            activeBlockData.start = newStart;
+            activeBlockData.end = newEnd;
+            activeBlockData.duration = newDuration;
+
+            document.getElementById('modal-window-time').innerText = `Modified Window: ${newStart}:00 - ${newEnd}:00 IST (${newDuration}.0 Hours Duration)`;
+            
+            addAuditLog("MODIFIED", activeBlockData.id, activeBlockData.section, `Window adjusted to ${newStart}:00 - ${newEnd}:00 (${newDuration}h)`, "bg-sky-500/20 text-sky-300 border-sky-500/40");
+            showCrisToast(`Joint Block ${activeBlockData.id} window modified to ${newStart}:00 - ${newEnd}:00 by Controller CTRL-NDLS-04.`);
+            document.getElementById('modal-modify-form').classList.add('hidden');
+        }
+
+        function approveControllerSlot() {
+            if (!activeBlockData) return;
+            addAuditLog("APPROVED", activeBlockData.id, activeBlockData.section, `Approved & Locked (${activeBlockData.start}:00 - ${activeBlockData.end}:00) • CRIS Sync Complete`, "bg-emerald-500/20 text-emerald-300 border-emerald-500/40");
+            showCrisToast(`Official CRIS System Sync Complete: Joint Block ${activeBlockData.id} approved by Controller CTRL-NDLS-04.`);
+            closeControllerModal();
+        }
+
+        function rejectControllerSlot() {
+            if (!activeBlockData) return;
+            addAuditLog("REJECTED", activeBlockData.id, activeBlockData.section, `Joint Slot Rejected by Controller • Restored to Individual Requests`, "bg-red-500/20 text-red-300 border-red-500/40");
+            showCrisToast(`Slot Rejected: Joint Block ${activeBlockData.id} rejected by Controller CTRL-NDLS-04.`);
+            closeControllerModal();
+        }
+
+        function addAuditLog(action, blockId, section, details, badgeClass) {
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0] + ' IST';
+            controllerAuditLogs.unshift({
+                time: timeStr,
+                controller: "CTRL-NDLS-04",
+                action: action,
+                block: `${blockId} • ${section}`,
+                details: details,
+                badgeClass: badgeClass
+            });
+            renderAuditLog();
+        }
+
+        function renderAuditLog() {
+            const container = document.getElementById('audit-log-container');
+            if (!container) return;
+            container.innerHTML = controllerAuditLogs.map(log => `
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2 text-xs">
+                    <div class="space-y-0.5">
+                        <div class="flex items-center gap-2">
+                            <span class="${log.badgeClass} font-black text-[10px] px-2 py-0.5 rounded border uppercase">${log.action}</span>
+                            <span class="font-extrabold text-white">${log.block}</span>
+                        </div>
+                        <p class="text-slate-300 font-semibold text-[11px]">${log.details}</p>
+                    </div>
+                    <div class="text-right text-[11px] text-slate-400 font-bold">
+                        <span>${log.controller}</span>
+                        <p class="text-[10px] font-mono text-slate-400">${log.time}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showCrisToast(msg) {
+            const toast = document.getElementById('cris-toast');
+            const toastMsg = document.getElementById('toast-message');
+            const toastTime = document.getElementById('toast-timestamp');
+            if (!toast) return;
+
+            const now = new Date();
+            toastTime.innerText = now.toTimeString().split(' ')[0];
+            toastMsg.innerText = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 4500);
+        }
+
+        /* LIVE TRAIN SIMULATION CONTROLS (ISSUE #15) */
+        let simRunning = false;
+        let simSpeed = 10;
+        let simTimer = null;
+        let simTimeSeconds = 36000; // 10:00:00 AM (10 * 3600)
+        const SIM_START_SECONDS = 36000; // 10:00 AM
+        const SIM_END_SECONDS = 50400;   // 02:00 PM (14 * 3600)
+
+        function toggleSimPlay() {
+            simRunning = !simRunning;
+            const playBtn = document.getElementById('sim-play-btn');
+            const playIcon = document.getElementById('sim-play-icon');
+            const playText = document.getElementById('sim-play-text');
+            const dot = document.getElementById('sim-status-dot');
+
+            if (simRunning) {
+                if (playBtn) playBtn.className = "bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition-colors cursor-pointer";
+                if (playIcon) playIcon.className = "fa-solid fa-pause";
+                if (playText) playText.innerText = "Pause Simulation";
+                if (dot) dot.className = "w-3.5 h-3.5 rounded-full bg-emerald-500 animate-pulse";
+                startSimTimer();
+            } else {
+                if (playBtn) playBtn.className = "bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition-colors cursor-pointer";
+                if (playIcon) playIcon.className = "fa-solid fa-play";
+                if (playText) playText.innerText = "Resume Simulation";
+                if (dot) dot.className = "w-3.5 h-3.5 rounded-full bg-amber-500";
+                stopSimTimer();
+            }
+        }
+
+        function setSimSpeed(speed) {
+            simSpeed = speed;
+            const speedBadge = document.getElementById('sim-speed-badge');
+            if (speedBadge) speedBadge.innerText = `${speed}x SPEED`;
+        }
+
+        function resetSim() {
+            simTimeSeconds = SIM_START_SECONDS;
+            if (simRunning) toggleSimPlay();
+            updateSimUI();
+        }
+
+        function startSimTimer() {
+            stopSimTimer();
+            simTimer = setInterval(() => {
+                simTimeSeconds += (simSpeed * 2);
+                if (simTimeSeconds >= SIM_END_SECONDS) {
+                    simTimeSeconds = SIM_END_SECONDS;
+                    toggleSimPlay();
+                }
+                updateSimUI();
+            }, 250);
+        }
+
+        function stopSimTimer() {
+            if (simTimer) {
+                clearInterval(simTimer);
+                simTimer = null;
+            }
+        }
+
+        function updateSimUI() {
+            const hours = Math.floor(simTimeSeconds / 3600);
+            const mins = Math.floor((simTimeSeconds % 3600) / 60);
+            const secs = Math.floor(simTimeSeconds % 60);
+            const clockStr = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')} IST`;
+            
+            const clockDisplay = document.getElementById('sim-clock-display');
+            if (clockDisplay) clockDisplay.innerText = clockStr;
+
+            const totalDuration = SIM_END_SECONDS - SIM_START_SECONDS;
+            const elapsed = simTimeSeconds - SIM_START_SECONDS;
+            const pct = Math.min(100, Math.max(0, Math.round((elapsed / totalDuration) * 100)));
+
+            const progressBar = document.getElementById('sim-progress-bar');
+            const pctDisplay = document.getElementById('sim-pct-display');
+            if (progressBar) progressBar.style.width = `${pct}%`;
+            if (pctDisplay) pctDisplay.innerText = `${pct}%`;
+        }
+
+        function zoomTrackMap(factor) {
+            trackMapZoom = Math.max(0.7, Math.min(2.0, trackMapZoom * factor));
+            applyTrackMapZoom();
+        }
+
+        function resetTrackMapZoom() {
+            trackMapZoom = 1.0;
+            applyTrackMapZoom();
+        }
+
+        function applyTrackMapZoom() {
+            const map = document.getElementById('dynamic-track-map') || document.getElementById('dynamic-track-timeline');
+            if (map) {
+                map.style.transform = `scale(${trackMapZoom})`;
+            }
+        }
+
+        /* STATION INSPECTOR MODAL LOGIC */
+        function openStationModal(code) {
+            const stn = ALL_STATIONS[code] || STATIONS[code] || ALL_STATIONS.NDLS;
+            if (!stn) return;
+            document.getElementById('stn-modal-code-badge').innerText = stn.code;
+            document.getElementById('stn-modal-name').innerText = stn.name;
+            document.getElementById('stn-modal-division').innerText = stn.division || "Northern Railway";
+            document.getElementById('stn-modal-platforms').innerText = stn.platforms || (stn.pf ? `${stn.pf} Platforms` : "8 Platforms");
+            document.getElementById('stn-modal-speed').innerHTML = `<i class="fa-solid fa-gauge-high"></i> ${stn.speed_limit || '130 km/h (MPS)'}`;
+            document.getElementById('stn-modal-gradient').innerHTML = `<i class="fa-solid fa-mountain-city"></i> ${stn.gradient || '1 in 200 Level'}`;
+            document.getElementById('stn-modal-signaling').innerHTML = `<i class="fa-solid fa-signal text-emerald-400"></i> ${stn.signaling || 'Automatic Block Signaling (ABS)'}`;
+
+            const loopsContainer = document.getElementById('stn-modal-loops');
+            if (loopsContainer) {
+                const loops = stn.loops || ["Main Line 1", "Main Line 2", "Loop Line 1"];
+                loopsContainer.innerHTML = loops.map(l => `
+                    <div class="bg-slate-800/80 p-2.5 rounded-lg border border-slate-700/80 flex items-center justify-between text-[11px]">
+                        <span class="font-bold text-slate-300 flex items-center gap-2">
+                            <i class="fa-solid fa-code-branch text-sky-400"></i> ${l}
+                        </span>
+                        <span class="bg-emerald-500/20 text-emerald-300 text-[10px] font-black px-2 py-0.5 rounded border border-emerald-500/40">CLEAR / AVAILABLE</span>
+                    </div>
+                `).join('');
+            }
+
+            const modal = document.getElementById('station-details-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeStationModal() {
+            const modal = document.getElementById('station-details-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeStationModal();
+            }
+        });
 
         async function fetchLivePipeline() {
             try {
@@ -376,6 +1502,11 @@
         }
 
         async function renderDynamicRoute(fromCode, toCode) {
+            fromCode = fromCode || currentFromCode;
+            toCode = toCode || currentToCode;
+            currentFromCode = fromCode;
+            currentToCode = toCode;
+
             const idx1 = STATION_ORDER.indexOf(fromCode);
             const idx2 = STATION_ORDER.indexOf(toCode);
             
@@ -390,27 +1521,25 @@
 
             document.getElementById('route-title-bar').innerText = `${fromStn.name} (${fromStn.code}) → ${toStn.name} (${toStn.code})`;
 
+            const mFrom = document.getElementById('mobile-select-from');
+            const mTo = document.getElementById('mobile-select-to');
+            if (mFrom) mFrom.value = fromCode;
+            if (mTo) mTo.value = toCode;
+
             // Attempt to fetch from live Python backend API
             const apiData = await fetchLivePipeline();
 
-            // Dynamic Unoptimized vs Optimized calculations
-            const unoptimizedData = [
-                { id: "REQ-01", department: "P-Way (Engineering)", section: `${fromStn.code}-${toStn.code} Main Section`, start: 10, duration: 3 },
-                { id: "REQ-02", department: "TRD (Electrification)", section: `${fromStn.code}-${toStn.code} Main Section`, start: 11, duration: 2 },
-                { id: "REQ-03", department: "S&T (Signals)", section: `${fromStn.code}-${toStn.code} Main Section`, start: 12, duration: 2 },
-                { id: "REQ-04", department: "P-Way (Engineering)", section: `${toStn.code} Sub-Corridor`, start: 14, duration: 4 },
-                { id: "REQ-05", department: "TRD (Electrification)", section: `${toStn.code} Sub-Corridor`, start: 15, duration: 3 }
-            ];
+            if (!activeOptimizedData) {
+                reoptimizeLocalRouteData();
+            }
 
-            const optimizedData = [
-                { block_id: "BLK-001", section: `${fromStn.code}-${toStn.code} Main Section`, start: 10, end: 14, depts: ["P-Way", "TRD", "S&T"], saved: 3.0 },
-                { block_id: "BLK-002", section: `${toStn.code} Sub-Corridor`, start: 14, end: 18, depts: ["P-Way", "TRD"], saved: 3.0 }
-            ];
+            const unoptimizedData = activeUnoptimizedData;
+            const optimizedData = activeOptimizedData;
 
-            const totalUnoptHours = 14;
-            const totalOptHours = 8;
-            const savedHours = 6.0;
-            const capPercent = "42.9%";
+            const totalUnoptHours = unoptimizedData.reduce((acc, r) => acc + ((r.duration_hours !== undefined ? r.duration_hours : r.duration) || 0), 0);
+            const totalOptHours = optimizedData.reduce((acc, b) => acc + ((b.duration_hours !== undefined ? b.duration_hours : (b.end - b.start)) || 0), 0);
+            const savedHours = parseFloat(Math.max(0, totalUnoptHours - totalOptHours).toFixed(1));
+            const capPercent = totalUnoptHours > 0 ? `${((savedHours / totalUnoptHours) * 100).toFixed(1)}%` : "0.0%";
 
             // Update Metrics
             document.getElementById('metric-capacity').innerText = capPercent;
@@ -434,22 +1563,26 @@
                     const isPWL = code === 'PWL';
                     
                     return `
-                        <div class="flex items-center justify-between relative z-10">
+                        <div class="flex items-center justify-between relative z-10 group">
                             <div class="w-5/12 text-right pr-4">
-                                <span class="text-xs font-black text-slate-200 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${stn.code} • ${Math.abs(stn.km - fromStn.km)} KM</span>
+                                <span onclick="openStationModal('${stn.code}')" class="text-xs font-black text-slate-200 bg-slate-800 hover:bg-sky-700 cursor-pointer px-2 py-0.5 rounded border border-slate-700 transition-colors shadow-sm" title="Click to inspect ${stn.name} (${stn.code})">${stn.code} • ${Math.abs(stn.km - fromStn.km)} KM</span>
                                 ${isPWL ? '<p class="text-[10px] font-black text-amber-400 mt-1 uppercase">AI OVERTAKE SIDING</p>' : ''}
                             </div>
-                            <div class="station-node ${isStart || isEnd ? 'active' : (isPWL ? 'block-alert' : '')}"></div>
+                            <div onclick="openStationModal('${stn.code}')" class="station-node ${isStart || isEnd ? 'active' : (isPWL ? 'block-alert' : '')} cursor-pointer hover:scale-125 transition-transform" title="Click to inspect ${stn.name} (${stn.code})"></div>
                             <div class="w-5/12 pl-4">
-                                <h4 class="font-black text-white text-sm">${stn.name}</h4>
+                                <h4 onclick="openStationModal('${stn.code}')" class="font-black text-white hover:text-sky-400 cursor-pointer text-sm transition-colors" title="Click to inspect ${stn.name} (${stn.code})">${stn.name}</h4>
                                 <span class="text-[11px] font-bold text-slate-300">PF ${stn.pf}</span>
                             </div>
                         </div>
 
                         ${idx === 0 ? `
-                            <div class="bg-emerald-950/80 text-white p-3 rounded-xl shadow-lg max-w-md mx-auto my-2 text-xs font-bold border-l-4 border-emerald-400 flex justify-between items-center relative z-20 border border-emerald-800">
+                            <div class="anim-express-train bg-emerald-950/80 text-white p-3 rounded-xl shadow-lg max-w-md mx-auto my-2 text-xs font-bold border-l-4 border-emerald-400 flex justify-between items-center relative z-20 border border-emerald-800 cursor-pointer group hover:scale-[1.02] transition-transform" title="12952 New Delhi Rajdhani Express | 120 km/h | Priority 1 | Running on Main Line 1">
                                 <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-train text-emerald-400 text-sm"></i>
+                                    <div class="w-7 h-7 bg-emerald-600 rounded-full border-2 border-white shadow-xl flex items-center justify-center text-white text-xs glow-green shrink-0">
+                                        <svg class="w-3.5 h-3.5 text-white inline-block fill-current" viewBox="0 0 24 24">
+                                            <path d="M12 2c-4 0-8 2-8 8v7c0 1.1.9 2 2 2l-2 2v1h16v-1l-2-2c1.1 0 2-.9 2-2V10c0-6-4-8-8-8zm-4 5h8v3H8V7zm2 10c-.83 0-1.5-.67-1.5-1.5S9.17 14 10 14s1.5.67 1.5 1.5S10.83 17 10 17zm4 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                                        </svg>
+                                    </div>
                                     <div>
                                         <span class="font-black text-emerald-200">12952 • New Delhi Rajdhani Express</span>
                                         <p class="text-[10px] text-emerald-300">Speed: 120 km/h • ON TIME (0m delay)</p>
@@ -460,9 +1593,13 @@
                         ` : ''}
 
                         ${isPWL ? `
-                            <div class="bg-amber-950/80 text-white p-3 rounded-xl shadow-lg max-w-md mx-auto my-2 text-xs font-bold border-l-4 border-amber-400 flex justify-between items-center relative z-20 border border-amber-800">
+                            <div class="anim-freight-train bg-amber-950/80 text-white p-3 rounded-xl shadow-lg max-w-md mx-auto my-2 text-xs font-bold border-l-4 border-amber-400 flex justify-between items-center relative z-20 border border-amber-800 cursor-pointer group hover:scale-[1.02] transition-transform" title="G-501 Container Goods Freight | 45 km/h | Priority 3 | Siding at Palwal (PWL) Loop Line 2 for Rajdhani Overtake">
                                 <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-truck-ramp-box text-amber-400 text-sm"></i>
+                                    <div class="w-7 h-7 bg-amber-500 rounded-full border-2 border-white shadow-xl flex items-center justify-center text-slate-950 text-xs glow-amber shrink-0">
+                                        <svg class="w-3.5 h-3.5 text-slate-950 inline-block fill-current" viewBox="0 0 24 24">
+                                            <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-1.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H18V9.5h3l2 3z"/>
+                                        </svg>
+                                    </div>
                                     <div>
                                         <span class="font-black text-amber-200">G-501 • Container Goods Freight</span>
                                         <p class="text-[10px] text-amber-300">Sided on PWL Loop Line 2 for 12 mins</p>
@@ -473,31 +1610,95 @@
                         ` : ''}
                     `;
                 }).join('')}
-            `;
+
+
+            // Render Gantt Chart Bars
+            const ganttUnopt = document.getElementById('gantt-unoptimized-bar');
+            if (ganttUnopt) {
+                ganttUnopt.innerHTML = unoptimizedData.map(r => {
+                    const startH = (r.preferred_start_hour !== undefined ? r.preferred_start_hour : r.start) || 0;
+                    const durH = (r.duration_hours !== undefined ? r.duration_hours : r.duration) || 1;
+                    const leftPct = (startH / 24) * 100;
+                    const widthPct = (durH / 24) * 100;
+                    const endHour = startH + durH;
+                    const color = r.department.includes('P-Way') ? 'bg-red-500' : (r.department.includes('TRD') ? 'bg-rose-500' : 'bg-amber-500');
+                    return `
+                        <div class="absolute top-1 bottom-1 ${color} text-white text-[10px] font-bold rounded-lg px-2 flex items-center justify-between border border-white/40 shadow-sm cursor-pointer hover:brightness-110 transition-all"
+                             style="left: ${leftPct}%; width: ${widthPct}%;"
+                             onclick="showGanttDetail('${r.id}', '${r.department}', '${r.section}', ${startH}, ${endHour}, ${durH}, false)"
+                             title="${r.department}: ${startH}:00 - ${endHour}:00 (${durH}h)">
+                            <span class="truncate">${r.department.split(' ')[0]}</span>
+                            <span class="hidden sm:inline font-mono">${startH}-${endHour}h</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const ganttOpt = document.getElementById('gantt-optimized-bar');
+            if (ganttOpt) {
+                ganttOpt.innerHTML = optimizedData.map(b => {
+                    const startH = (b.start_hour !== undefined ? b.start_hour : b.start) || 0;
+                    const endH = (b.end_hour !== undefined ? b.end_hour : b.end) || (startH + 1);
+                    const duration = (b.duration_hours !== undefined ? b.duration_hours : (endH - startH));
+                    const deptsStr = Array.isArray(b.departments_covered) ? b.departments_covered.join(', ') : (Array.isArray(b.depts) ? b.depts.join(', ') : '');
+                    const leftPct = (startH / 24) * 100;
+                    const widthPct = (duration / 24) * 100;
+                    return `
+                        <div class="absolute top-1 bottom-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-black rounded-lg px-2.5 flex items-center justify-between border-2 border-emerald-400 shadow-md cursor-pointer glow-green transition-all"
+                             style="left: ${leftPct}%; width: ${widthPct}%;"
+                             onclick="showGanttDetail('${b.block_id}', '${deptsStr}', '${b.section}', ${startH}, ${endH}, ${duration}, true)"
+                             title="${b.block_id}: ${startH}:00 - ${endH}:00 (${duration}h Joint Block)">
+                            <span class="truncate"><i class="fa-solid fa-layer-group text-amber-300 mr-1"></i> ${b.block_id}</span>
+                            <span class="font-mono text-[10px] bg-emerald-800/80 px-1.5 py-0.5 rounded border border-emerald-400/50">${startH}:00 - ${endH}:00</span>
+                        </div>
+                    `;
+                }).join('');
+            }
 
             // Render Feature 1 Lists
-            document.getElementById('unoptimized-container').innerHTML = unoptimizedData.map(r => `
+            document.getElementById('unoptimized-container').innerHTML = unoptimizedData.map(r => {
+                const startH = (r.preferred_start_hour !== undefined ? r.preferred_start_hour : r.start) || 0;
+                const durH = (r.duration_hours !== undefined ? r.duration_hours : r.duration) || 1;
+                return `
                 <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
                     <div>
                         <span class="font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">${r.department}</span>
-                        <p class="font-bold text-slate-200 mt-1"><i class="fa-solid fa-train text-slate-400 mr-1"></i> ${r.section} (${r.start}:00 - ${r.start + r.duration}:00)</p>
+                        <p class="font-bold text-slate-200 mt-1"><i class="fa-solid fa-train text-slate-400 mr-1"></i> ${r.section} (${startH}:00 - ${startH + durH}:00)</p>
                     </div>
-                    <span class="font-bold bg-red-500/20 text-red-300 px-2.5 py-1 rounded border border-red-500/40">${r.duration}h Stop</span>
+                    <span class="font-bold bg-red-500/20 text-red-300 px-2.5 py-1 rounded border border-red-500/40">${durH}h Stop</span>
                 </div>
-            `).join('');
+            `;
+            }).join('');
 
-            document.getElementById('optimized-container').innerHTML = optimizedData.map(b => `
+            document.getElementById('optimized-container').innerHTML = optimizedData.map(b => {
+                const startH = b.start_hour !== undefined ? b.start_hour : b.start;
+                const endH = b.end_hour !== undefined ? b.end_hour : b.end;
+                const savedH = b.time_saved_hours !== undefined ? b.time_saved_hours : (b.saved !== undefined ? b.saved : 3.0);
+                const deptsList = b.departments_covered || b.depts || ["P-Way", "TRD"];
+                const deptsStr = Array.isArray(deptsList) ? deptsList.join(',') : deptsList;
+                return `
                 <div class="bg-emerald-950/40 p-3.5 rounded-xl border border-emerald-500/40 space-y-2 text-xs">
                     <div class="flex justify-between items-center">
-                        <span class="font-black text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30">${b.block_id} INTEGRATED WINDOW</span>
-                        <span class="font-bold text-emerald-400"><i class="fa-solid fa-clock"></i> ${b.saved}h Saved</span>
+                        <div class="flex items-center gap-2">
+                            <span class="font-black text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded border border-emerald-500/30">${b.block_id} INTEGRATED WINDOW</span>
+                            <button onclick="copyToClipboard('${b.block_id}', this)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-2 py-0.5 rounded text-[10px] font-bold border border-slate-700 flex items-center gap-1 transition-all">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <span class="font-bold text-emerald-400"><i class="fa-solid fa-clock"></i> ${savedH}h Saved</span>
                     </div>
-                    <p class="font-black text-white text-sm"><i class="fa-solid fa-route text-emerald-400 mr-1"></i> ${b.section} (${b.start}:00 - ${b.end}:00)</p>
-                    <div class="flex flex-wrap gap-1">
-                        ${b.depts.map(d => `<span class="bg-slate-800 text-slate-200 text-[11px] px-2 py-0.5 rounded font-bold border border-slate-700">${d}</span>`).join('')}
+                    <p class="font-black text-white text-sm"><i class="fa-solid fa-route text-emerald-400 mr-1"></i> ${b.section} (${startH}:00 - ${endH}:00)</p>
+                    <div class="flex justify-between items-center flex-wrap gap-2 pt-1 border-t border-emerald-500/30">
+                        <div class="flex flex-wrap gap-1">
+                            ${deptsList.map(d => `<span class="bg-slate-800 text-slate-200 text-[11px] px-2 py-0.5 rounded font-bold border border-slate-700">${d}</span>`).join('')}
+                        </div>
+                        <button onclick="openControllerModal('${b.block_id}', '${b.section}', ${startH}, ${endH}, ${savedH}, '${deptsStr}')" class="bg-sky-600 hover:bg-sky-500 text-white font-black text-xs px-3 py-1.5 rounded-lg shadow flex items-center gap-1.5 transition-colors cursor-pointer">
+                            <i class="fa-solid fa-user-check text-amber-300"></i> Review & Approve
+                        </button>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
 
             // Render Feature 2 Train Cards
             const trainCardsContainer = document.getElementById('train-cards-list');
@@ -532,9 +1733,16 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                        <div class="bg-red-500/10 border border-red-500/30 p-3 rounded-xl">
-                            <span class="font-bold text-red-400 uppercase text-[10px]">❌ Before (Unoptimized BDMS):</span>
-                            <p class="font-bold text-red-200 mt-1">${t.before}</p>
+                        <div class="bg-red-500/10 border border-red-500/30 p-3 rounded-xl flex justify-between items-start gap-2">
+                            <div>
+                                <span class="font-bold text-red-400 uppercase text-[10px]">❌ Before (Unoptimized BDMS):</span>
+                                <p class="font-bold text-red-200 mt-1">${t.before}</p>
+                            </div>
+                            ${parseInt(t.before) >= 30 ? `
+                            <button onclick="playHighPriorityAlert(true)" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/40 px-2.5 py-1 rounded-lg text-[10px] font-black shrink-0 transition-colors flex items-center gap-1 shadow-sm cursor-pointer" title="Play cascading delay audio alert">
+                                <i class="fa-solid fa-triangle-exclamation text-red-400"></i> Delay Alert
+                            </button>
+                            ` : ''}
                         </div>
                         <div class="bg-emerald-500/10 border border-emerald-500/30 p-3 rounded-xl">
                             <span class="font-bold text-emerald-400 uppercase text-[10px]">✅ After (RailBlock-AI Optimized):</span>
@@ -542,15 +1750,799 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl text-xs font-bold text-sky-300 flex items-center gap-2">
-                        <i class="fa-solid fa-wand-magic-sparkles text-sky-400"></i>
-                        <span>${t.action}</span>
+                    <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl text-xs font-bold text-sky-300 flex justify-between items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-sky-400"></i>
+                            <span>${t.action}</span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button onclick="playRailwayChime(true)" class="bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 px-2.5 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer" title="Play AI overtake chime">
+                                <i class="fa-solid fa-bell text-sky-400"></i> AI Chime
+                            </button>
+                            <button onclick="copyToClipboard('${t.action.replace(/'/g, "\\'")}', this)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-2 py-1 rounded text-[10px] font-bold border border-slate-700 flex items-center gap-1 transition-all cursor-pointer">
+                                <i class="fa-regular fa-copy"></i> Copy Log
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
+
+            renderAuditLog();
+        }
+
+        function toggleExportMenu(e) {
+            if (e) e.stopPropagation();
+            const dropdown = document.getElementById('export-menu-dropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
+        }
+
+        function closeExportMenu() {
+            const dropdown = document.getElementById('export-menu-dropdown');
+            if (dropdown && !dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const container = document.getElementById('export-dropdown-container');
+            if (container && !container.contains(e.target)) {
+                closeExportMenu();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeOfficialReportModal();
+                closeExportMenu();
+            }
+        });
+
+        function exportScheduleCSV() {
+            closeExportMenu();
+            const fromCode = document.getElementById('select-from') ? document.getElementById('select-from').value : 'NDLS';
+            const toCode = document.getElementById('select-to') ? document.getElementById('select-to').value : 'GWL';
+            const fromStation = ALL_STATIONS[fromCode] || { name: 'New Delhi', code: 'NDLS' };
+            const toStation = ALL_STATIONS[toCode] || { name: 'Gwalior Jn', code: 'GWL' };
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-IN');
+            const timeStr = now.toLocaleTimeString('en-IN');
+
+            const unoptHours = 14;
+            const optHours = 8;
+            const savedHours = 6.0;
+            const capSaved = "42.9";
+
+            let csv = "\uFEFF"; // UTF-8 BOM
+            csv += "INDIAN RAILWAYS - OFFICIAL BLOCK SCHEDULE REPORT\n";
+            csv += "Ministry of Railways - RailBlock-AI Engine (SIH26027)\n";
+            csv += `Shift Report Generated:,"${dateStr} ${timeStr}"\n`;
+            csv += `Selected Route:,"${fromStation.name} (${fromStation.code}) to ${toStation.name} (${toStation.code})"\n`;
+            csv += `Line Capacity Reclaimed:,"${capSaved}%"\n`;
+            csv += `Total Maintenance Downtime Saved:,"${savedHours} Hours"\n`;
+            csv += "\n";
+            csv += "APPROVED CONSOLIDATED JOINT MAINTENANCE WINDOWS\n";
+            csv += "Block ID,Track Section,Approved Time Window,Duration (Hours),Departments Included,Line Capacity Saved,Status\n";
+            
+            const blocks = [
+                { block_id: "BLK-001", section: `${fromStation.code}-${toStation.code} Main Section`, start: 10, end: 14, depts: ["P-Way", "TRD", "S&T"], saved: 3.0 },
+                { block_id: "BLK-002", section: `${toStation.code} Sub-Corridor`, start: 14, end: 18, depts: ["P-Way", "TRD"], saved: 3.0 }
+            ];
+
+            blocks.forEach(b => {
+                const dur = b.end - b.start;
+                const depts = b.depts.join('; ');
+                csv += `"${b.block_id}","${b.section}","${b.start}:00 - ${b.end}:00",${dur},"${depts}","${b.saved} Hours","APPROVED"\n`;
+            });
+
+            csv += "\n";
+            csv += "INDIVIDUAL DEPARTMENTAL REQUESTS (UNOPTIMIZED BDMS)\n";
+            csv += "Request ID,Department,Track Section,Preferred Start Time,Duration (Hours)\n";
+            
+            const unopt = [
+                { id: "REQ-01", department: "P-Way (Engineering)", section: `${fromStation.code}-${toStation.code} Main Section`, start: 10, duration: 3 },
+                { id: "REQ-02", department: "TRD (Electrification)", section: `${fromStation.code}-${toStation.code} Main Section`, start: 11, duration: 2 },
+                { id: "REQ-03", department: "S&T (Signals)", section: `${fromStation.code}-${toStation.code} Main Section`, start: 12, duration: 2 },
+                { id: "REQ-04", department: "P-Way (Engineering)", section: `${toStation.code} Sub-Corridor`, start: 14, duration: 4 },
+                { id: "REQ-05", department: "TRD (Electrification)", section: `${toStation.code} Sub-Corridor`, start: 15, duration: 3 }
+            ];
+
+            unopt.forEach(r => {
+                csv += `"${r.id}","${r.department}","${r.section}","${r.start}:00 - ${r.start + r.duration}:00",${r.duration}\n`;
+            });
+
+            csv += "\n";
+            csv += "TRAIN-BY-TRAIN PASSAGE & SIDING DIRECTIVES\n";
+            csv += "Train Number,Train Name,Category,Priority,Maintenance Zone,AI Dispatcher Directive,Delay Status\n";
+            
+            const trains = [
+                { no: "12952", name: "New Delhi Rajdhani Express", cat: "Rajdhani / Vande Bharat", prio: "Priority 1 (Top Priority)", section: "Main Line 1", action: "Overtook Goods Freight G-501 at Palwal Siding on Main Line 1", after: "0 Mins Delay (ON TIME)" },
+                { no: "G-501", name: "Container Goods Freight", cat: "Goods Freight", prio: "Priority 3 (Freight)", section: "Palwal Siding (PWL Loop Line 2)", action: "Held on PWL Loop Line 2 for 12 mins to allow Rajdhani to overtake", after: "Sided 12 Mins (Saved 50 Mins for Express)" }
+            ];
+
+            trains.forEach(t => {
+                csv += `"${t.no}","${t.name}","${t.cat}","${t.prio}","${t.section}","${t.action}","${t.after}"\n`;
+            });
+
+            csv += "\n";
+            csv += `Section Controller Signature: ____________________, Shift: General/Morning, Date: ${dateStr}\n`;
+
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `RailBlock_Official_Schedule_${fromStation.code}_to_${toStation.code}_${now.toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportSchedulePDF() {
+            closeExportMenu();
+            const fromCode = document.getElementById('select-from') ? document.getElementById('select-from').value : 'NDLS';
+            const toCode = document.getElementById('select-to') ? document.getElementById('select-to').value : 'GWL';
+            const fromStation = ALL_STATIONS[fromCode] || { name: 'New Delhi', code: 'NDLS' };
+            const toStation = ALL_STATIONS[toCode] || { name: 'Gwalior Jn', code: 'GWL' };
+            const now = new Date();
+
+            const savedHours = 6.0;
+            const capSaved = "42.9";
+
+            document.getElementById('report-doc-id').innerText = `IR-BLK-${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}-01`;
+            document.getElementById('report-generated-timestamp').innerText = `${now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}, ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`;
+            document.getElementById('report-route-title').innerText = `${fromStation.name} (${fromStation.code}) → ${toStation.name} (${toStation.code})`;
+            const totalDistance = Math.abs(toStation.km - fromStation.km);
+            document.getElementById('report-route-dist').innerText = `${totalDistance || 313} KM • Corridor`;
+
+            document.getElementById('report-metric-cap').innerText = `${capSaved}%`;
+            document.getElementById('report-metric-det').innerText = `${savedHours.toFixed(1)} Hours`;
+            
+            const blocks = [
+                { block_id: "BLK-001", section: `${fromStation.code}-${toStation.code} Main Section`, start: 10, end: 14, depts: ["P-Way", "TRD", "S&T"], saved: 3.0 },
+                { block_id: "BLK-002", section: `${toStation.code} Sub-Corridor`, start: 14, end: 18, depts: ["P-Way", "TRD"], saved: 3.0 }
+            ];
+            document.getElementById('report-metric-blocks').innerText = `${blocks.length} Joint Windows`;
+
+            // Render Blocks table
+            document.getElementById('report-blocks-tbody').innerHTML = blocks.map(b => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-2.5 font-bold font-mono text-emerald-800">${b.block_id}</td>
+                    <td class="p-2.5 font-bold text-slate-800">${b.section}</td>
+                    <td class="p-2.5 font-semibold text-slate-700">${b.start}:00 - ${b.end}:00 (${b.end - b.start}h)</td>
+                    <td class="p-2.5 font-semibold text-slate-600">${b.depts.join(', ')}</td>
+                    <td class="p-2.5 font-bold text-emerald-700">${b.saved}h saved</td>
+                    <td class="p-2.5 font-extrabold text-emerald-800 uppercase text-[10px]">APPROVED</td>
+                </tr>
+            `).join('');
+
+            // Render Train Impacts table
+            const trains = [
+                { no: "12952", name: "New Delhi Rajdhani Express", prio: "Priority 1 (Top Priority)", section: "Main Line 1", action: "Overtook Goods Freight G-501 at Palwal Siding on Main Line 1", after: "0 Mins Delay (ON TIME)" },
+                { no: "G-501", name: "Container Goods Freight", prio: "Priority 3 (Freight)", section: "Palwal Siding (PWL Loop Line 2)", action: "Held on PWL Loop Line 2 for 12 mins to allow Rajdhani overtake", after: "Sided 12 Mins (Saved 50 Mins for Express)" }
+            ];
+
+            document.getElementById('report-trains-tbody').innerHTML = trains.map(t => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-2.5 font-bold text-slate-900">${t.no} • ${t.name}</td>
+                    <td class="p-2.5 font-semibold text-slate-600">${t.prio}</td>
+                    <td class="p-2.5 font-semibold text-slate-700">${t.section}</td>
+                    <td class="p-2.5 font-bold text-blue-900 text-[11px]">${t.action}</td>
+                    <td class="p-2.5 font-bold text-emerald-700">${t.after}</td>
+                </tr>
+            `).join('');
+
+            document.getElementById('official-report-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOfficialReportModal() {
+            document.getElementById('official-report-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function printOfficialReport() {
+            window.print();
+        }
+
+        // =========================================================================
+        // WEB AUDIO API ENGINE FOR AI ALERT SOUNDS & RAILWAY CHIMES
+        // =========================================================================
+        let audioCtx = null;
+        let audioEnabled = true;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function showAudioToast(message, iconClass) {
+            const toast = document.getElementById('audio-toast');
+            const toastMsg = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
+            if (!toast || !toastMsg) return;
+            
+            toastMsg.innerText = message;
+            if (toastIcon && iconClass) {
+                toastIcon.className = iconClass;
+            }
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            
+            clearTimeout(window.audioToastTimer);
+            window.audioToastTimer = setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 2500);
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            try {
+                localStorage.setItem('railblock_audio_enabled', audioEnabled ? 'true' : 'false');
+            } catch(e) {}
+            
+            updateAudioUI();
+            
+            if (audioEnabled) {
+                playTone(660, 0.08, 'sine', 0.15);
+                showAudioToast("Audio Alerts Enabled", "fa-solid fa-volume-high text-emerald-400");
+            } else {
+                showAudioToast("Audio Alerts Muted", "fa-solid fa-volume-xmark text-slate-400");
+            }
+        }
+
+        function updateAudioUI() {
+            const btn = document.getElementById('audio-toggle-btn');
+            const icon = document.getElementById('audio-icon');
+            const label = document.getElementById('audio-status-label');
+            if (!btn || !icon || !label) return;
+            
+            if (audioEnabled) {
+                btn.classList.remove('text-slate-400', 'border-slate-800');
+                btn.classList.add('text-emerald-400', 'border-slate-700');
+                icon.className = 'fa-solid fa-volume-high';
+                label.innerText = 'Audio: ON';
+            } else {
+                btn.classList.remove('text-emerald-400', 'border-slate-700');
+                btn.classList.add('text-slate-400', 'border-slate-800');
+                icon.className = 'fa-solid fa-volume-xmark';
+                label.innerText = 'Audio: OFF';
+            }
+        }
+
+        function playTone(freq, duration, type = 'sine', volume = 0.2, startTimeOffset = 0) {
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            
+            try {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime + startTimeOffset);
+                
+                const startTime = ctx.currentTime + startTimeOffset;
+                gain.gain.setValueAtTime(0.001, startTime);
+                gain.gain.linearRampToValueAtTime(volume, startTime + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start(startTime);
+                osc.stop(startTime + duration);
+            } catch(e) {
+                console.warn("Audio playback interrupted:", e);
+            }
+        }
+
+        // 1. Subtle Railway Chime (Indian Railways station 3-note harmonic bell)
+        function playRailwayChime(force = false) {
+            if (!audioEnabled && !force) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            // Harmonic notes: D5 (587.33Hz) -> F#5 (739.99Hz) -> A5 (880Hz)
+            playTone(587.33, 0.45, 'sine', 0.22, 0);
+            playTone(739.99, 0.45, 'sine', 0.25, 0.22);
+            playTone(880.00, 0.75, 'sine', 0.28, 0.44);
+
+            showAudioToast("Railway Chime: AI Overtake Directive", "fa-solid fa-bell text-amber-400");
+        }
+
+        // 2. High-Priority Alert Sound (Two rapid urgent dual-tone beeps for delays > 30 mins)
+        function playHighPriorityAlert(force = false) {
+            if (!audioEnabled && !force) return;
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            // Dual-tone urgent alert pulses
+            playTone(880, 0.16, 'triangle', 0.35, 0);
+            playTone(587.33, 0.16, 'triangle', 0.35, 0);
+
+            playTone(880, 0.22, 'triangle', 0.35, 0.22);
+            playTone(587.33, 0.22, 'triangle', 0.35, 0.22);
+
+            showAudioToast("High-Priority Alert: Cascading Delay Risk > 30 Mins", "fa-solid fa-triangle-exclamation text-red-400");
+        }
+
+        function initAudio() {
+            try {
+                const storedAudio = localStorage.getItem('railblock_audio_enabled');
+                if (storedAudio === 'false') {
+                    audioEnabled = false;
+                }
+            } catch(e) {}
+            updateAudioUI();
         }
 
         renderDynamicRoute("NDLS", "GWL");
+        initTheme();
+        initAudio();
     </script>
+    <!-- ========================================================================= -->
+    <!-- STATION OPERATIONS & TRACK DETAILS MODAL                                  -->
+    <!-- ========================================================================= -->
+    <div id="station-details-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden text-slate-100">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-5 flex justify-between items-center border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-lg shadow">
+                        <i class="fa-solid fa-building-user"></i>
+                    </div>
+                    <div>
+                        <span id="stn-modal-code-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-extrabold px-2 py-0.5 rounded border border-amber-500/40 uppercase tracking-wider">NDLS</span>
+                        <h3 id="stn-modal-name" class="text-base font-black">New Delhi</h3>
+                    </div>
+                </div>
+                <button onclick="closeStationModal()" class="text-slate-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-5 text-xs">
+                <!-- Station Details Grid -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <span class="text-slate-400 font-bold block text-[10px] uppercase">Platforms Available</span>
+                        <span id="stn-modal-pf" class="font-black text-white text-sm">16 Platforms</span>
+                    </div>
+                    <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                        <span class="text-slate-400 font-bold block text-[10px] uppercase">Route KM Distance</span>
+                        <span id="stn-modal-km" class="font-black text-amber-400 text-sm">0 KM</span>
+                    </div>
+                </div>
+
+                <!-- Interlocking & Signalling Status -->
+                <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700 space-y-1">
+                    <span class="text-slate-400 font-bold block text-[10px] uppercase">Signalling & Route Interlocking</span>
+                    <p class="font-extrabold text-emerald-400 text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-signal text-emerald-400"></i> Automatic Block Signaling (ABS) • All Signals Green
+                    </p>
+                </div>
+
+                <!-- Active Loop Lines & Sidings -->
+                <div class="space-y-2">
+                    <h4 class="font-black text-slate-200 text-xs uppercase tracking-wider">Active Station Loop Lines & Sidings</h4>
+                    <div id="stn-modal-loops" class="space-y-1.5">
+                        <!-- Dynamic Loop Line List -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-slate-950 p-4 border-t border-slate-800 flex justify-end">
+                <button onclick="closeStationModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition-colors cursor-pointer">
+                    Close Station Inspector
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION CONTROLLER CLICK-APPROVAL MODAL                                   -->
+    <!-- ========================================================================= -->
+    <div id="controller-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden text-slate-100">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-blue-900 to-slate-900 text-white p-5 flex justify-between items-center border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-lg shadow">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <div>
+                        <span class="bg-amber-500/20 text-amber-300 text-[10px] font-extrabold px-2 py-0.5 rounded border border-amber-500/40 uppercase tracking-wider">Human-in-the-Loop Authority</span>
+                        <h3 class="text-base font-black">Section Controller Click-Approval</h3>
+                    </div>
+                </div>
+                <button onclick="closeControllerModal()" class="text-slate-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-5 text-slate-100">
+                <!-- Block Summary Banner -->
+                <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span id="modal-block-id" class="bg-emerald-500/20 text-emerald-300 text-xs font-black px-2.5 py-1 rounded-lg border border-emerald-500/40">BLK-001 INTEGRATED WINDOW</span>
+                        <span id="modal-time-saved" class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-shield-halved mr-1"></i> 3.0h Capacity Saved</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 id="modal-section-name" class="text-base font-black text-white">Delhi-Mathura Section</h4>
+                        <p id="modal-window-time" class="text-xs text-slate-300 font-semibold">Proposed Window: 10:00 - 14:00 IST (4.0 Hours Duration)</p>
+                    </div>
+                    <div id="modal-depts-list" class="flex flex-wrap gap-1.5 pt-1">
+                        <!-- Dynamic department badges -->
+                    </div>
+                </div>
+
+                <!-- Controller Meta Information -->
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                        <span class="text-slate-400 font-bold block text-[10px] uppercase">Active Controller</span>
+                        <span class="font-extrabold text-sky-400">CTRL-NDLS-04 (Northern Rly)</span>
+                    </div>
+                    <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                        <span class="text-slate-400 font-bold block text-[10px] uppercase">CRIS Sync Status</span>
+                        <span class="font-extrabold text-amber-400">Pending Controller Lock</span>
+                    </div>
+                </div>
+
+                <!-- Modifiable Window Form -->
+                <div id="modal-modify-form" class="hidden bg-amber-950/40 border border-amber-500/40 p-4 rounded-2xl space-y-3">
+                    <h5 class="text-xs font-black text-amber-300 uppercase tracking-wider">Modify Window Parameters</h5>
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <label class="font-bold text-slate-300 block mb-1">Start Hour (0-23)</label>
+                            <input id="modify-start-hour" type="number" min="0" max="23" value="10" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 font-bold text-white focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-300 block mb-1">Duration (Hours)</label>
+                            <input id="modify-duration" type="number" min="1" max="12" value="4" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 font-bold text-white focus:outline-none">
+                        </div>
+                    </div>
+                    <button onclick="applyWindowModification()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2 rounded-lg text-xs transition-colors shadow cursor-pointer">
+                        Apply Time Adjustments
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Action Footer Buttons -->
+            <div class="bg-slate-950 p-4 border-t border-slate-800 flex flex-wrap gap-2 justify-end">
+                <button onclick="rejectControllerSlot()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 font-bold px-4 py-2.5 rounded-xl text-xs transition-colors border border-red-500/40 cursor-pointer">
+                    <i class="fa-solid fa-xmark mr-1"></i> Reject Slot
+                </button>
+                <button onclick="toggleModifyForm()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-4 py-2.5 rounded-xl text-xs transition-colors border border-slate-700 cursor-pointer">
+                    <i class="fa-solid fa-sliders mr-1"></i> Modify Window
+                </button>
+                <button onclick="approveControllerSlot()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-5 py-2.5 rounded-xl text-xs transition-colors shadow-md flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-check"></i> Approve & Dispatch
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CRIS SYSTEM SYNC TOAST NOTIFICATION -->
+    <div id="cris-toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 max-w-md bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border-l-4 border-emerald-500 border border-slate-700 flex items-start gap-3 pointer-events-none">
+        <div class="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl">
+            <i class="fa-solid fa-circle-check text-xl"></i>
+        </div>
+        <div class="flex-1 space-y-0.5">
+            <div class="flex justify-between items-center">
+                <h4 class="font-black text-xs text-emerald-400 uppercase tracking-wider">CRIS System Synchronized</h4>
+                <span id="toast-timestamp" class="text-[10px] text-slate-400 font-bold">Just now</span>
+            </div>
+            <p id="toast-message" class="text-xs text-slate-200 font-semibold">Joint Block BLK-001 approved by Controller CTRL-NDLS-04.</p>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- ========================================================================= -->
+    <!-- OFFICIAL BLOCK SCHEDULE REPORT MODAL (FOR PDF EXPORT & SHIFT HANDOVER)   -->
+    <!-- ========================================================================= -->
+    <div id="official-report-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/80 backdrop-blur-sm p-4 sm:p-6 flex justify-center items-start">
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-300 w-full max-w-4xl my-6 p-6 sm:p-8 space-y-6 text-slate-900">
+            
+            <!-- Modal Actions Bar (hidden on print) -->
+            <div class="flex justify-between items-center border-b border-slate-200 pb-4 no-print">
+                <div class="flex items-center gap-2">
+                    <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-black border border-emerald-300">
+                        <i class="fa-solid fa-file-pdf mr-1 text-red-600"></i> Official Document Ready
+                    </span>
+                    <span class="text-xs text-slate-500 font-semibold">Press 'Print / Save PDF' to generate official handover record.</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="printOfficialReport()" class="bg-blue-700 hover:bg-blue-600 text-white font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition-all cursor-pointer">
+                        <i class="fa-solid fa-print"></i> Print / Save as PDF
+                    </button>
+                    <button onclick="closeOfficialReportModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1 transition-all cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i> Close
+                    </button>
+                </div>
+            </div>
+
+            <!-- Official Report Printable Paper Header -->
+            <div class="border-b-2 border-slate-800 pb-5 space-y-3">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-blue-950 text-white rounded-xl flex items-center justify-center text-2xl font-black shadow">
+                            <i class="fa-solid fa-train"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-black uppercase tracking-wider text-slate-950">INDIAN RAILWAYS</h2>
+                            <p class="text-xs font-bold text-slate-700">Ministry of Railways • Central Operating Division</p>
+                            <p class="text-[11px] text-slate-500 font-semibold">RailBlock-AI Optimization Engine • Problem Statement SIH26027</p>
+                        </div>
+                    </div>
+                    <div class="text-right text-xs">
+                        <span class="bg-slate-100 text-slate-800 px-3 py-1 rounded border border-slate-300 font-black inline-block mb-1">
+                            CONTROL ROOM SHIFT HANDOVER
+                        </span>
+                        <p class="text-slate-600 font-semibold">Handover Doc ID: <strong id="report-doc-id" class="text-slate-900 font-mono">IR-BLK-2026-0923</strong></p>
+                        <p class="text-slate-600 font-semibold">Generated: <strong id="report-generated-timestamp" class="text-slate-900">23 Sep 2026, 11:00 AM</strong></p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex flex-wrap justify-between items-center text-xs gap-3">
+                    <div>
+                        <span class="text-slate-500 font-bold uppercase text-[10px]">Active Track Route</span>
+                        <p id="report-route-title" class="font-black text-slate-900 text-sm">New Delhi (NDLS) → Gwalior Jn (GWL)</p>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 font-bold uppercase text-[10px]">Route Distance</span>
+                        <p id="report-route-dist" class="font-extrabold text-slate-800">313 KM • Corridor</p>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 font-bold uppercase text-[10px]">Shift Handover Status</span>
+                        <p class="font-extrabold text-emerald-700"><i class="fa-solid fa-circle-check text-emerald-600"></i> AI Verified & Coordinated</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Shift Summary Metrics -->
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div class="bg-emerald-50 border border-emerald-300 p-3 rounded-xl">
+                    <span class="text-[10px] font-bold uppercase text-emerald-800">Capacity Recovery</span>
+                    <h3 id="report-metric-cap" class="text-2xl font-black text-emerald-700">42.9%</h3>
+                    <p class="text-[10px] text-emerald-600 font-semibold">Line Capacity Reclaimed</p>
+                </div>
+                <div class="bg-blue-50 border border-blue-300 p-3 rounded-xl">
+                    <span class="text-[10px] font-bold uppercase text-blue-800">Track Shutdown Saved</span>
+                    <h3 id="report-metric-det" class="text-2xl font-black text-blue-800">6.0 Hours</h3>
+                    <p class="text-[10px] text-blue-600 font-semibold">Detention Downtime Eliminated</p>
+                </div>
+                <div class="bg-amber-50 border border-amber-300 p-3 rounded-xl">
+                    <span class="text-[10px] font-bold uppercase text-amber-800">Joint Block Windows</span>
+                    <h3 id="report-metric-blocks" class="text-2xl font-black text-amber-700">2 Windows</h3>
+                    <p class="text-[10px] text-amber-600 font-semibold">Multi-Dept Consolidated</p>
+                </div>
+            </div>
+
+            <!-- Approved Joint Maintenance Windows Table -->
+            <div class="space-y-2">
+                <h4 class="text-sm font-black text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+                    <i class="fa-solid fa-list-check text-emerald-600"></i> Approved Joint Maintenance Windows (Optimized)
+                </h4>
+                <div class="border border-slate-300 rounded-xl overflow-hidden">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-slate-100 text-slate-700 border-b border-slate-300 font-black">
+                            <tr>
+                                <th class="p-2.5">Block ID</th>
+                                <th class="p-2.5">Track Section</th>
+                                <th class="p-2.5">Approved Time</th>
+                                <th class="p-2.5">Participating Departments</th>
+                                <th class="p-2.5">Capacity Saved</th>
+                                <th class="p-2.5">Authorization</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-blocks-tbody" class="divide-y divide-slate-200">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Priority Train Impact Directives -->
+            <div class="space-y-2">
+                <h4 class="text-sm font-black text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+                    <i class="fa-solid fa-train text-blue-600"></i> Dispatcher Directives & Train Precedence
+                </h4>
+                <div class="border border-slate-300 rounded-xl overflow-hidden">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-slate-100 text-slate-700 border-b border-slate-300 font-black">
+                            <tr>
+                                <th class="p-2.5">Train</th>
+                                <th class="p-2.5">Priority</th>
+                                <th class="p-2.5">Maintenance Zone</th>
+                                <th class="p-2.5">AI Dispatch Directive</th>
+                                <th class="p-2.5">Delay Outcome</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-trains-tbody" class="divide-y divide-slate-200">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Shift Handover Sign-Off Boxes -->
+            <div class="pt-4 border-t-2 border-slate-800 grid grid-cols-3 gap-6 text-xs text-slate-700">
+                <div class="border border-slate-300 rounded-xl p-3 space-y-4">
+                    <p class="font-black text-slate-900">Relieving Section Controller</p>
+                    <div class="h-8 border-b border-dashed border-slate-400"></div>
+                    <div class="flex justify-between text-[11px] text-slate-500">
+                        <span>Sign / Employee ID</span>
+                        <span>Date & Time</span>
+                    </div>
+                </div>
+                <div class="border border-slate-300 rounded-xl p-3 space-y-4">
+                    <p class="font-black text-slate-900">Incoming Section Controller</p>
+                    <div class="h-8 border-b border-dashed border-slate-400"></div>
+                    <div class="flex justify-between text-[11px] text-slate-500">
+                        <span>Sign / Employee ID</span>
+                        <span>Date & Time</span>
+                    </div>
+                </div>
+                <div class="border border-slate-300 rounded-xl p-3 space-y-4">
+                    <p class="font-black text-slate-900">Chief Controller Verification</p>
+                    <div class="h-8 border-b border-dashed border-slate-400"></div>
+                    <div class="flex justify-between text-[11px] text-slate-500">
+                        <span>Official Stamp & Seal</span>
+                        <span>Approved</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-[10px] text-slate-400 text-center">
+                System-generated shift handover document • Ministry of Railways • RailBlock-AI Automated Block Deduction Engine
+            </p>
+
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- DEPARTMENTAL REQUEST SUBMISSION SLIDE-OVER DRAWER FORM                    -->
+    <!-- ========================================================================= -->
+    <div id="request-drawer-backdrop" onclick="closeRequestDrawer()" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden transition-opacity duration-300 opacity-0"></div>
+    <div id="request-drawer" class="fixed inset-y-0 right-0 max-w-md w-full bg-slate-900 border-l border-slate-700 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between text-slate-100">
+        <!-- Drawer Header -->
+        <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-5 flex justify-between items-center border-b border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-lg shadow">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div>
+                    <span class="bg-amber-500/20 text-amber-300 text-[10px] font-extrabold px-2 py-0.5 rounded border border-amber-500/40 uppercase tracking-wider">BDMS Maintenance Input</span>
+                    <h3 class="text-base font-black">Submit Departmental Request</h3>
+                </div>
+            </div>
+            <button onclick="closeRequestDrawer()" class="text-slate-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Drawer Body & Form -->
+        <form id="dept-request-form" onsubmit="submitDepartmentalRequest(event)" class="p-6 space-y-5 flex-1 overflow-y-auto text-xs text-slate-100">
+            
+            <!-- Department Selection -->
+            <div class="space-y-2">
+                <label class="font-black text-slate-200 uppercase tracking-wider block">1. Maintenance Department</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_dept" value="P-Way (Engineering)" checked class="peer sr-only">
+                        <div class="p-2.5 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-bold peer-checked:border-blue-500 peer-checked:bg-blue-600/20 peer-checked:text-blue-300 transition-all shadow-xs">
+                            P-Way
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_dept" value="TRD (Electrification)" class="peer sr-only">
+                        <div class="p-2.5 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-bold peer-checked:border-amber-500 peer-checked:bg-amber-500/20 peer-checked:text-amber-300 transition-all shadow-xs">
+                            TRD
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_dept" value="S&T (Signals)" class="peer sr-only">
+                        <div class="p-2.5 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-bold peer-checked:border-purple-500 peer-checked:bg-purple-600/20 peer-checked:text-purple-300 transition-all shadow-xs">
+                            S&T
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Route Track Section -->
+            <div class="space-y-1.5">
+                <label class="font-black text-slate-200 uppercase tracking-wider block">2. Target Track Section</label>
+                <select id="req-section" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 font-bold text-white focus:outline-none focus:border-sky-500">
+                    <option value="Delhi-Mathura Section">Delhi-Mathura Section (KM 0 - KM 141)</option>
+                    <option value="Agra-Gwalior Section">Agra-Gwalior Section (KM 195 - KM 313)</option>
+                </select>
+            </div>
+
+            <!-- Preferred Start Hour Slider -->
+            <div class="space-y-2">
+                <div class="flex justify-between items-center">
+                    <label class="font-black text-slate-200 uppercase tracking-wider">3. Preferred Start Time</label>
+                    <span id="slider-start-label" class="font-black font-mono text-sky-300 bg-sky-950/80 px-2 py-0.5 rounded border border-sky-800">10:00 IST</span>
+                </div>
+                <input id="req-start-slider" type="range" min="0" max="23" value="10" oninput="updateStartSliderLabel(this.value)" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                <div class="flex justify-between text-[10px] font-bold text-slate-400">
+                    <span>00:00</span>
+                    <span>06:00</span>
+                    <span>12:00</span>
+                    <span>18:00</span>
+                    <span>23:00</span>
+                </div>
+            </div>
+
+            <!-- Requested Duration -->
+            <div class="space-y-1.5">
+                <label class="font-black text-slate-200 uppercase tracking-wider block">4. Shutdown Duration (Hours)</label>
+                <div class="grid grid-cols-4 gap-2">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_duration" value="1" class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-extrabold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-300">
+                            1 Hour
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_duration" value="2" checked class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-extrabold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-300">
+                            2 Hours
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_duration" value="3" class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-extrabold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-300">
+                            3 Hours
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="req_duration" value="4" class="peer sr-only">
+                        <div class="p-2 rounded-xl border border-slate-700 bg-slate-800/80 text-center font-extrabold peer-checked:border-emerald-500 peer-checked:bg-emerald-500/20 peer-checked:text-emerald-300">
+                            4 Hours
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Priority Selector -->
+            <div class="space-y-1.5">
+                <label class="font-black text-slate-200 uppercase tracking-wider block">5. Work Priority</label>
+                <select id="req-priority" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 font-bold text-white focus:outline-none focus:border-sky-500">
+                    <option value="1">Priority 1 (Emergency Track Work)</option>
+                    <option value="2" selected>Priority 2 (Routine Scheduled Maintenance)</option>
+                </select>
+            </div>
+
+            <!-- Drawer Submit Footer -->
+            <div class="pt-4 border-t border-slate-800 flex gap-2">
+                <button type="button" onclick="closeRequestDrawer()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl transition-colors cursor-pointer text-center border border-slate-700">
+                    Cancel
+                </button>
+                <button type="submit" class="flex-2 bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-xl shadow-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> Submit & Re-Optimize
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Floating Audio Notification Toast -->
+    <div id="audio-toast" class="fixed bottom-6 right-6 z-50 hidden bg-slate-900/95 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-2xl border border-slate-700 items-center gap-2.5 backdrop-blur-md transition-all">
+        <i id="toast-icon" class="fa-solid fa-bell text-amber-400 text-sm"></i>
+        <span id="toast-msg">Audio Alert Notification</span>
+    </div>
 </body>
 </html>

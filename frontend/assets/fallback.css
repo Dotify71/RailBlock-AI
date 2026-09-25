@@ -1,0 +1,65 @@
+/* =========================================================================
+   RailBlock-AI Offline Presentation & Air-Gapped Fallback Stylesheet
+   Ensures layout, font-stack, and icon rendering remain intact during offline judging.
+   ========================================================================= */
+
+/* 1. Offline System Font Stack Fallback */
+body, button, input, select, textarea {
+    font-family: 'Public Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* 2. Core Layout & Container Fallbacks */
+.min-h-screen { min-height: 100vh; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-1 { flex: 1 1 0%; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.hidden { display: none; }
+
+@media (min-width: 768px) {
+    .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .md\:flex-row { flex-direction: row; }
+}
+
+/* 3. Railway Theme Colors & Styling */
+.ir-header-blue { background-color: #0b2545; }
+.glow-green { box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); }
+.glow-amber { box-shadow: 0 0 20px rgba(245, 158, 11, 0.25); }
+
+/* 4. FontAwesome Offline Symbol Fallbacks */
+/* If FontAwesome CDN is unreachable, provide symbol fallbacks so icons do not render as missing glyphs */
+.fa-train::before { content: "🚆 "; }
+.fa-layer-group::before { content: "🥞 "; }
+.fa-wand-magic-sparkles::before { content: "✨ "; }
+.fa-arrow-right::before { content: " →"; }
+.fa-rotate::before, .fa-sync::before { content: "🔄 "; }
+.fa-plus::before { content: "+ "; }
+.fa-filter::before { content: "🔍 "; }
+.fa-check::before { content: "✓ "; }
+.fa-clock::before { content: "⏱ "; }
+.fa-triangle-exclamation::before, .fa-exclamation-triangle::before { content: "⚠️ "; }
+.fa-circle-exclamation::before { content: "ℹ️ "; }
+.fa-shield-halved::before { content: "🛡️ "; }
+.fa-chart-pie::before { content: "📊 "; }
+.fa-list-check::before { content: "📋 "; }
+
+/* 5. Utility Class Fallbacks */
+.bg-slate-100 { background-color: #f1f5f9; }
+.bg-slate-900 { background-color: #0f172a; }
+.bg-white { background-color: #ffffff; }
+.text-slate-900 { color: #0f172a; }
+.text-slate-600 { color: #475569; }
+.text-slate-300 { color: #cbd5e1; }
+.text-white { color: #ffffff; }
+.text-blue-700 { color: #1d4ed8; }
+.text-blue-800 { color: #1e40af; }
+.text-amber-500 { color: #f59e0b; }
+.text-emerald-700 { color: #047857; }
+.rounded-xl { border-radius: 0.75rem; }
+.rounded-2xl { border-radius: 1rem; }
+.rounded-3xl { border-radius: 1.5rem; }
+.shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
