@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  railblock-ai:
+    build: .
+    container_name: railblock_ai_server
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
