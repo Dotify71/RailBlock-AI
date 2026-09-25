@@ -38,6 +38,7 @@ try:
         MaintenanceRequest,
         TrainStatus
     )
+    import database
 except ImportError:
     from .optimizer import (
         RailBlockDualEngine,
@@ -46,6 +47,12 @@ except ImportError:
         MaintenanceRequest,
         TrainStatus
     )
+    from . import database
+
+# Initialize SQLite database and sync in-memory state
+database.init_db()
+DEMO_MAINTENANCE_REQUESTS[:] = database.get_maintenance_requests()
+DEMO_LIVE_TRAINS[:] = database.get_train_statuses()
 
 FRONTEND_DIR = os.path.join(BASE_DIR, "..", "frontend")
 FRONTEND_INDEX = os.path.join(FRONTEND_DIR, "index.html")
@@ -292,19 +299,25 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         elif self.path == '/api/optimize':
             with DATA_LOCK:
-                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                reqs = database.get_maintenance_requests()
+                trains = database.get_train_statuses()
+                engine = RailBlockDualEngine(reqs, trains)
                 result = engine.optimize_maintenance()
             self._respond_json(result)
 
         elif self.path == '/api/dispatch':
             with DATA_LOCK:
-                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                reqs = database.get_maintenance_requests()
+                trains = database.get_train_statuses()
+                engine = RailBlockDualEngine(reqs, trains)
                 result = engine.optimize_dispatching()
             self._respond_json(result)
 
         elif self.path.startswith('/api/full-pipeline'):
             with DATA_LOCK:
-                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                reqs = database.get_maintenance_requests()
+                trains = database.get_train_statuses()
+                engine = RailBlockDualEngine(reqs, trains)
                 result = engine.run_full_pipeline()
             self._respond_json(result)
 
@@ -364,17 +377,21 @@ class RequestHandler(BaseHTTPRequestHandler):
                 return
 
             with DATA_LOCK:
+                existing_reqs = database.get_maintenance_requests()
                 new_req = MaintenanceRequest(
-                    id=f"REQ-{len(DEMO_MAINTENANCE_REQUESTS)+1:02d}",
+                    id=f"REQ-{len(existing_reqs)+1:02d}",
                     department=str(data.get("department", "P-Way (Engineering)")),
                     section=str(data.get("section", "Delhi-Mathura Section")),
                     preferred_start_hour=preferred_start,
                     duration_hours=duration,
                     priority=priority
                 )
+                database.add_maintenance_request(new_req)
                 DEMO_MAINTENANCE_REQUESTS.append(new_req)
                 
-                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                reqs = database.get_maintenance_requests()
+                trains = database.get_train_statuses()
+                engine = RailBlockDualEngine(reqs, trains)
                 result = engine.run_full_pipeline()
             self._respond_json(result, status_code=201)
 
@@ -398,17 +415,19 @@ class RequestHandler(BaseHTTPRequestHandler):
                 return
 
             with DATA_LOCK:
+                current_trains = database.get_train_statuses()
                 found = False
-                for t in DEMO_LIVE_TRAINS:
+                for t in current_trains:
                     if t.train_number == train_no:
                         t.delay_minutes = delay
                         t.speed_kmh = speed
                         t.priority = priority
+                        database.upsert_train_status(t)
                         found = True
                         break
                 
                 if not found:
-                    DEMO_LIVE_TRAINS.append(TrainStatus(
+                    new_train = TrainStatus(
                         train_number=train_no,
                         train_name=str(data.get("train_name", "Express Special")),
                         category=str(data.get("category", "Superfast Express")),
@@ -417,9 +436,13 @@ class RequestHandler(BaseHTTPRequestHandler):
                         delay_minutes=delay,
                         speed_kmh=speed,
                         priority=priority
-                    ))
+                    )
+                    database.upsert_train_status(new_train)
+                    DEMO_LIVE_TRAINS.append(new_train)
 
-                engine = RailBlockDualEngine(list(DEMO_MAINTENANCE_REQUESTS), list(DEMO_LIVE_TRAINS))
+                reqs = database.get_maintenance_requests()
+                trains = database.get_train_statuses()
+                engine = RailBlockDualEngine(reqs, trains)
                 result = engine.run_full_pipeline()
             self._respond_json(result, status_code=200)
 
