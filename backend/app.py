@@ -120,6 +120,101 @@ class RateLimiter:
 RATE_LIMITER = RateLimiter()
 
 
+OPENAPI_SPEC = {
+    "openapi": "3.0.3",
+    "info": {
+        "title": "RailBlock-AI API Specification",
+        "description": "REST API for Joint Maintenance Window Clustering & AI Train Dispatcher Engine (SIH26027).",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/optimize": {
+            "get": {
+                "summary": "Run Joint Maintenance Window Clustering",
+                "responses": {"200": {"description": "Optimized maintenance blocks"}}
+            }
+        },
+        "/api/dispatch": {
+            "get": {
+                "summary": "Run AI Train Dispatcher & Overtake Engine",
+                "responses": {"200": {"description": "Dispatch recommendations"}}
+            }
+        },
+        "/api/full-pipeline": {
+            "get": {
+                "summary": "Run Joint Maintenance & Dispatching Pipeline",
+                "responses": {"200": {"description": "Integrated optimization results"}}
+            }
+        },
+        "/api/requests": {
+            "post": {
+                "summary": "Add or Update Maintenance Block Request",
+                "requestBody": {
+                    "required": True,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "department": {"type": "string"},
+                                    "section": {"type": "string"},
+                                    "preferred_start_hour": {"type": "integer"},
+                                    "duration_hours": {"type": "integer"},
+                                    "priority": {"type": "integer"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {"201": {"description": "Request created"}}
+            }
+        },
+        "/api/trains": {
+            "post": {
+                "summary": "Add or Update Live Train Telemetry",
+                "requestBody": {
+                    "required": True,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "train_number": {"type": "string"},
+                                    "train_name": {"type": "string"},
+                                    "delay_minutes": {"type": "integer"},
+                                    "speed_kmh": {"type": "integer"},
+                                    "priority": {"type": "integer"}
+                                },
+                                "required": ["train_number"]
+                            }
+                        }
+                    }
+                },
+                "responses": {"200": {"description": "Train updated"}}
+            }
+        }
+    }
+}
+
+SWAGGER_UI_HTML = """<!DOCTYPE html>
+<html>
+<head>
+    <title>RailBlock-AI API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+</head>
+<body style="margin: 0; padding: 0;">
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+    <script>
+        SwaggerUIBundle({
+            url: '/api/openapi.json',
+            dom_id: '#swagger-ui'
+        });
+    </script>
+</body>
+</html>"""
+
+
 class RequestHandler(BaseHTTPRequestHandler):
     def _check_rate_limit(self) -> bool:
         client_ip = self.client_address[0] if self.client_address else "127.0.0.1"
@@ -204,6 +299,16 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         elif self.path == '/healthz' or self.path == '/api/health':
             self._respond_json({"status": "healthy", "service": "RailBlock-AI Core Engine"}, status_code=200)
+
+        elif self.path == '/api/openapi.json':
+            self._respond_json(OPENAPI_SPEC)
+
+        elif self.path == '/api/docs' or self.path == '/api/docs/':
+            self.send_response(200)
+            self._send_cors_headers()
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(SWAGGER_UI_HTML.encode('utf-8'))
 
         else:
             self.send_response(404)
