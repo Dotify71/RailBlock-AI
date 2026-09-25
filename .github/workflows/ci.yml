@@ -24,13 +24,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest flake8
 
-      - name: Lint with flake8
+      - name: Check for residual git conflict markers
         run: |
-          # stop the build if there are Python syntax errors or undefined names
+          echo "Scanning codebase for unresolved git conflict markers..."
+          if git grep -n -E '^(<|>|=){7}( |$)'; then
+            echo "ERROR: Unresolved git conflict markers found in codebase!"
+            exit 1
+          else
+            echo "Clean codebase: No git conflict markers found."
+          fi
+
+      - name: Lint Python with flake8
+        run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-      - name: Run unit tests with pytest
+      - name: Run unit test suite (unittest)
+        run: |
+          python -m unittest discover -s tests
+
+      - name: Run test suite with pytest
         run: |
           pytest
