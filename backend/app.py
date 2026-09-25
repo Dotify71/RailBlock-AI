@@ -10,6 +10,7 @@ Provides endpoints for:
 """
 
 import json
+import logging
 import os
 import sys
 import threading
@@ -17,6 +18,13 @@ from http.server import HTTPServer, ThreadingHTTPServer, BaseHTTPRequestHandler
 
 # Mutex lock protecting shared in-memory state across concurrent request threads
 DATA_LOCK = threading.Lock()
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger("RailBlock-AI")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if BASE_DIR not in sys.path:
@@ -446,7 +454,7 @@ def run_server(start_port=8080):
         try:
             server_address = ('', port)
             httpd = _Server(server_address, RequestHandler)
-            print(f"RailBlock-AI server running at http://localhost:{port}")
+            logger.info(f"🚆 RailBlock-AI Server running at http://localhost:{port}")
             httpd.serve_forever()
             break
         except OSError as e:
