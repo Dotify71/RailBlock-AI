@@ -804,8 +804,19 @@
         INDIAN RAILWAYS • CRIS Block Control Portal • RailBlock-AI Engine (SIH26027)
     </footer>
 
-    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
     <script>
+        function onDivisionChange() {
+            const select = document.getElementById('wimt-division');
+            if (!select) return;
+            const selectedText = select.options[select.selectedIndex].text;
+            console.log("Active Zonal Division updated:", selectedText);
+            if (typeof onRouteChanged === 'function') {
+                onRouteChanged();
+            } else if (typeof renderDynamicRoute === 'function') {
+                renderDynamicRoute("NDLS", "GWL");
+            }
+        }
+
         function copyToClipboard(text, btn) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(() => {
