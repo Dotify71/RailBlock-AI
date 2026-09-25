@@ -798,8 +798,10 @@
             if (!select) return;
             const selectedText = select.options[select.selectedIndex].text;
             console.log("Active Zonal Division updated:", selectedText);
-            if (typeof updateWimtRoute === 'function') {
-                updateWimtRoute();
+            if (typeof onRouteChanged === 'function') {
+                onRouteChanged();
+            } else if (typeof renderDynamicRoute === 'function') {
+                renderDynamicRoute("NDLS", "GWL");
             }
         }
 
@@ -909,7 +911,6 @@
 
         function switchCrisTab(tab) {
             document.getElementById('view-dashboard').classList.add('hidden');
->>>>>>> origin/main
             document.getElementById('view-blocks').classList.add('hidden');
             document.getElementById('view-siding').classList.add('hidden');
 
